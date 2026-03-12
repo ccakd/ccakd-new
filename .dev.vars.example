@@ -1,0 +1,6 @@
+AZURE_AI_ENDPOINT=https://your-endpoint.openai.azure.com
+AZURE_AI_API_KEY=your-key-here
+HIEVENTS_API_URL=https://events.ccakd.ca/api
+KEYSTATIC_GITHUB_CLIENT_ID=
+KEYSTATIC_GITHUB_CLIENT_SECRET=
+KEYSTATIC_SECRET=
