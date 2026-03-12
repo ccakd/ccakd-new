@@ -732,7 +732,7 @@ git commit -m "feat: configure Keystatic CMS with trilingual content schemas"
 - Create: `src/lib/content.ts`
 - Create: `src/lib/hievents.ts`
 
-- [ ] **Step 1: Create content localization helper**
+- [x] **Step 1: Create content localization helper**
 
 Create `src/lib/content.ts`:
 ```typescript
@@ -751,7 +751,7 @@ export function localized<T>(entry: Record<string, T>, field: string, locale: Lo
 }
 ```
 
-- [ ] **Step 2: Create hi.events API client**
+- [x] **Step 2: Create hi.events API client**
 
 Create `src/lib/hievents.ts`:
 ```typescript
@@ -780,7 +780,7 @@ export async function getUpcomingEvents(limit = 3): Promise<HiEvent[]> {
 }
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/lib/
