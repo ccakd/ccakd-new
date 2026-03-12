@@ -797,7 +797,7 @@ git commit -m "feat: add content localization helper and hi.events API client"
 - Create: `src/components/Layout.astro`
 - Create: `src/components/SEOHead.astro`
 
-- [ ] **Step 1: Create SEOHead component**
+- [x] **Step 1: Create SEOHead component**
 
 Create `src/components/SEOHead.astro`:
 ```astro
@@ -851,7 +851,7 @@ const langMap: Record<Locale, string> = { en: 'en', zh: 'zh-Hans', 'zh-tw': 'zh-
 <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
 ```
 
-- [ ] **Step 2: Create base Layout component**
+- [x] **Step 2: Create base Layout component**
 
 Create `src/components/Layout.astro`:
 ```astro
@@ -893,7 +893,7 @@ const langMap: Record<Locale, string> = { en: 'en', zh: 'zh-Hans', 'zh-tw': 'zh-
 </html>
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/Layout.astro src/components/SEOHead.astro
