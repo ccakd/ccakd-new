@@ -1182,6 +1182,31 @@ git add src/pages/
 git commit -m "feat: add root redirect and skeleton pages for all routes and locales"
 ```
 
+- [ ] **Step 7: First Cloudflare deployment**
+
+This is the first point where the site is meaningfully navigable. Deploy and verify:
+
+```bash
+npx wrangler deploy
+```
+
+Before deploying, ensure the following environment variables are set in the Cloudflare dashboard (Workers → ccakd-website → Settings → Variables):
+- `KEYSTATIC_GITHUB_CLIENT_ID`
+- `KEYSTATIC_GITHUB_CLIENT_SECRET`
+- `KEYSTATIC_SECRET`
+- `HIEVENTS_API_URL`
+- `AZURE_AI_ENDPOINT` (can be set later)
+- `AZURE_AI_API_KEY` (can be set later)
+
+Verify:
+- `https://ccakd.ca/` → redirects to `/en/`
+- `/en/`, `/zh/`, `/zh-tw/` → show homepage skeletons
+- `/en/about`, `/en/events`, `/en/programs` → show skeleton pages
+- Language switcher works across locales
+- `/keystatic` → loads CMS admin UI
+
+> **NOTE:** From this task onward, every task should end with `npx wrangler deploy` and a quick verify on the live site.
+
 ---
 
 ## Chunk 3: Frontend Design
