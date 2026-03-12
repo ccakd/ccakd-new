@@ -907,7 +907,7 @@ git commit -m "feat: add base Layout with SEO head and trilingual hreflang"
 **Files:**
 - Create: `src/components/Nav.astro`
 
-- [ ] **Step 1: Create Nav component**
+- [x] **Step 1: Create Nav component**
 
 Create `src/components/Nav.astro`:
 ```astro
@@ -1011,7 +1011,7 @@ const localeLabels: { code: Locale; label: string }[] = [
 </header>
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/Nav.astro
