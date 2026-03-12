@@ -1111,7 +1111,7 @@ git commit -m "feat: add Footer and SocialLinks components"
 - Create: `src/pages/en/events.astro` (and zh/, zh-tw/ copies)
 - Create: `src/pages/en/programs.astro` (and zh/, zh-tw/ copies)
 
-- [ ] **Step 1: Create root redirect**
+- [x] **Step 1: Create root redirect**
 
 Create `src/pages/index.astro`:
 ```astro
@@ -1120,7 +1120,7 @@ return Astro.redirect('/en/', 302);
 ---
 ```
 
-- [ ] **Step 2: Create English homepage skeleton**
+- [x] **Step 2: Create English homepage skeleton**
 
 Create `src/pages/en/index.astro`:
 ```astro
@@ -1141,7 +1141,7 @@ const strings = t(locale);
 </Layout>
 ```
 
-- [ ] **Step 3: Create zh/ and zh-tw/ copies**
+- [x] **Step 3: Create zh/ and zh-tw/ copies**
 
 Copy `src/pages/en/index.astro` to `src/pages/zh/index.astro` and `src/pages/zh-tw/index.astro`, changing only `const locale: Locale = 'zh'` and `'zh-tw'` respectively.
 
@@ -1149,7 +1149,7 @@ Repeat for all page files: `about.astro`, `events.astro`, `programs.astro`.
 
 Create skeleton versions of each that use `<Layout>` with the correct locale and display the page title.
 
-- [ ] **Step 4: Create skeleton gallery and announcement routes**
+- [x] **Step 4: Create skeleton gallery and announcement routes**
 
 ```
 src/pages/en/gallery/index.astro
@@ -1161,7 +1161,7 @@ src/pages/en/announcements/[slug].astro
 
 Each should be a minimal page using `<Layout>` with correct locale — content will be filled in subsequent tasks.
 
-- [ ] **Step 5: Verify all routes work**
+- [x] **Step 5: Verify all routes work**
 
 ```bash
 npm run dev
@@ -1175,7 +1175,7 @@ Test:
 - `http://localhost:4321/en/about` → shows about skeleton
 - Language switcher links navigate between locales correctly
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/pages/

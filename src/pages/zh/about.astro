@@ -1,0 +1,15 @@
+---
+import Layout from '../../components/Layout.astro';
+import type { Locale } from '../../i18n/utils';
+import { t } from '../../i18n/utils';
+
+const locale: Locale = 'zh';
+const strings = t(locale);
+---
+
+<Layout locale={locale} path="/about" title={strings.about.title}>
+  <section class="py-20 text-center">
+    <h1 class="text-4xl font-bold">{strings.about.title}</h1>
+    <p class="mt-4 text-gray-600">Content coming soon</p>
+  </section>
+</Layout>

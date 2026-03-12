@@ -1,0 +1,18 @@
+---
+import Layout from '../../../components/Layout.astro';
+import type { Locale } from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [];
+}
+
+const locale: Locale = 'zh-tw';
+const { slug } = Astro.params;
+---
+
+<Layout locale={locale} path={`/announcements/${slug}`} title={slug}>
+  <section class="py-20 text-center">
+    <h1 class="text-4xl font-bold">{slug}</h1>
+    <p class="mt-4 text-gray-600">Announcement detail — content coming soon</p>
+  </section>
+</Layout>
