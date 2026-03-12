@@ -1026,7 +1026,7 @@ git commit -m "feat: add Nav component with language switcher and mobile menu"
 - Create: `src/components/Footer.astro`
 - Create: `src/components/SocialLinks.astro`
 
-- [ ] **Step 1: Create SocialLinks component**
+- [x] **Step 1: Create SocialLinks component**
 
 Create `src/components/SocialLinks.astro`:
 ```astro
@@ -1058,7 +1058,7 @@ const strings = t(locale);
 </section>
 ```
 
-- [ ] **Step 2: Create Footer component**
+- [x] **Step 2: Create Footer component**
 
 Create `src/components/Footer.astro`:
 ```astro
@@ -1093,7 +1093,7 @@ const year = new Date().getFullYear();
 </footer>
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/Footer.astro src/components/SocialLinks.astro
