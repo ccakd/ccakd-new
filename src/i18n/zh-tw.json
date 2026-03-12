@@ -1,0 +1,57 @@
+{
+  "site": {
+    "title": "金士頓及地區華人協會",
+    "titleShort": "CCAKD"
+  },
+  "nav": {
+    "home": "首頁",
+    "events": "活動",
+    "programs": "項目",
+    "gallery": "相冊",
+    "about": "關於",
+    "membership": "會員",
+    "login": "登入",
+    "signup": "註冊"
+  },
+  "home": {
+    "announcements": "公告",
+    "upcomingEvents": "近期活動",
+    "programs": "項目",
+    "seeAllEvents": "查看所有活動",
+    "seeAllPrograms": "查看所有項目",
+    "newsletter": "訂閱我們的通訊",
+    "newsletterDesc": "每月直接將活動和項目資訊發送到您的信箱。",
+    "subscribe": "訂閱",
+    "emailPlaceholder": "您的信箱",
+    "socialLinks": "關注我們"
+  },
+  "events": {
+    "title": "活動",
+    "fallback": "請訪問 events.ccakd.ca 了解近期活動"
+  },
+  "programs": {
+    "title": "項目",
+    "moreInfo": "了解更多"
+  },
+  "gallery": {
+    "title": "相冊",
+    "photos": "張照片"
+  },
+  "about": {
+    "title": "關於",
+    "purpose": "我們的宗旨",
+    "history": "我們的歷史",
+    "executives": "理事會成員",
+    "constitution": "章程"
+  },
+  "announcements": {
+    "title": "公告",
+    "readMore": "閱讀更多",
+    "postedOn": "發佈於"
+  },
+  "footer": {
+    "copyright": "金士頓及地區華人協會",
+    "terms": "條款和條件",
+    "email": "信箱"
+  }
+}

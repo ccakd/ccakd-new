@@ -1,0 +1,57 @@
+{
+  "site": {
+    "title": "金士顿及地区华人协会",
+    "titleShort": "CCAKD"
+  },
+  "nav": {
+    "home": "首页",
+    "events": "活动",
+    "programs": "项目",
+    "gallery": "相册",
+    "about": "关于",
+    "membership": "会员",
+    "login": "登录",
+    "signup": "注册"
+  },
+  "home": {
+    "announcements": "公告",
+    "upcomingEvents": "近期活动",
+    "programs": "项目",
+    "seeAllEvents": "查看所有活动",
+    "seeAllPrograms": "查看所有项目",
+    "newsletter": "订阅我们的通讯",
+    "newsletterDesc": "每月直接将活动和项目信息发送到您的邮箱。",
+    "subscribe": "订阅",
+    "emailPlaceholder": "您的邮箱",
+    "socialLinks": "关注我们"
+  },
+  "events": {
+    "title": "活动",
+    "fallback": "请访问 events.ccakd.ca 了解近期活动"
+  },
+  "programs": {
+    "title": "项目",
+    "moreInfo": "了解更多"
+  },
+  "gallery": {
+    "title": "相册",
+    "photos": "张照片"
+  },
+  "about": {
+    "title": "关于",
+    "purpose": "我们的宗旨",
+    "history": "我们的历史",
+    "executives": "理事会成员",
+    "constitution": "章程"
+  },
+  "announcements": {
+    "title": "公告",
+    "readMore": "阅读更多",
+    "postedOn": "发布于"
+  },
+  "footer": {
+    "copyright": "金士顿及地区华人协会",
+    "terms": "条款和条件",
+    "email": "邮箱"
+  }
+}

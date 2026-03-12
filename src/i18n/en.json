@@ -1,0 +1,57 @@
+{
+  "site": {
+    "title": "Chinese Canadian Association of Kingston and District",
+    "titleShort": "CCAKD"
+  },
+  "nav": {
+    "home": "Home",
+    "events": "Events",
+    "programs": "Programs",
+    "gallery": "Gallery",
+    "about": "About",
+    "membership": "Membership",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "home": {
+    "announcements": "Announcements",
+    "upcomingEvents": "Upcoming Events",
+    "programs": "Programs",
+    "seeAllEvents": "See All Events",
+    "seeAllPrograms": "See All Programs",
+    "newsletter": "Subscribe To Our Newsletter",
+    "newsletterDesc": "Get monthly updates on all our events and programs directly to your inbox.",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "Your Email",
+    "socialLinks": "Connect With Us"
+  },
+  "events": {
+    "title": "Events",
+    "fallback": "Visit events.ccakd.ca for upcoming events"
+  },
+  "programs": {
+    "title": "Programs",
+    "moreInfo": "More Info"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "photos": "photos"
+  },
+  "about": {
+    "title": "About",
+    "purpose": "Our Purpose",
+    "history": "Our History",
+    "executives": "Our Executives",
+    "constitution": "Constitution"
+  },
+  "announcements": {
+    "title": "Announcements",
+    "readMore": "Read More",
+    "postedOn": "Posted"
+  },
+  "footer": {
+    "copyright": "Chinese Canadian Association Of Kingston And District",
+    "terms": "Terms and Conditions",
+    "email": "Email"
+  }
+}

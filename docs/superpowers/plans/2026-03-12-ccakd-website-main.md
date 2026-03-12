@@ -241,7 +241,7 @@ git commit -m "chore: initialize Astro project with CF Workers, Tailwind, Keysta
 - Create: `src/i18n/zh-tw.json`
 - Create: `src/i18n/utils.ts`
 
-- [ ] **Step 1: Create English UI strings**
+- [x] **Step 1: Create English UI strings**
 
 Create `src/i18n/en.json`:
 ```json
@@ -304,7 +304,7 @@ Create `src/i18n/en.json`:
 }
 ```
 
-- [ ] **Step 2: Create Simplified Chinese UI strings**
+- [x] **Step 2: Create Simplified Chinese UI strings**
 
 Create `src/i18n/zh.json`:
 ```json
@@ -367,7 +367,7 @@ Create `src/i18n/zh.json`:
 }
 ```
 
-- [ ] **Step 3: Create Traditional Chinese UI strings**
+- [x] **Step 3: Create Traditional Chinese UI strings**
 
 Create `src/i18n/zh-tw.json`:
 ```json
@@ -430,7 +430,7 @@ Create `src/i18n/zh-tw.json`:
 }
 ```
 
-- [ ] **Step 4: Create i18n utility functions**
+- [x] **Step 4: Create i18n utility functions**
 
 Create `src/i18n/utils.ts` — copy exact pattern from `~/personal-projects/ccakd-members/src/i18n/utils.ts`:
 
@@ -460,7 +460,7 @@ export function localePath(locale: Locale, path: string) {
 }
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/i18n/
