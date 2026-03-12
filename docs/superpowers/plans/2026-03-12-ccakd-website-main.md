@@ -476,7 +476,7 @@ git commit -m "feat: add trilingual i18n system (EN/ZH/ZH-TW)"
 - Create: `src/pages/keystatic/[...params].astro`
 - Create: `content/` directory structure with sample content
 
-- [ ] **Step 1: Create keystatic.config.ts**
+- [x] **Step 1: Create keystatic.config.ts**
 
 ```typescript
 import { config, collection, singleton, fields } from '@keystatic/core';
@@ -684,7 +684,7 @@ export default config({
 });
 ```
 
-- [ ] **Step 2: Create Keystatic admin route**
+- [x] **Step 2: Create Keystatic admin route**
 
 Create `src/pages/keystatic/[...params].astro`:
 ```astro
@@ -703,14 +703,14 @@ export const ALL = makeHandler({
 ---
 ```
 
-- [ ] **Step 3: Create sample content directories**
+- [x] **Step 3: Create sample content directories**
 
 ```bash
 mkdir -p content/announcements content/programs content/galleries
 mkdir -p public/images/announcements public/images/programs public/images/galleries public/images/hero public/images/executives public/files
 ```
 
-- [ ] **Step 4: Verify Keystatic loads in dev mode**
+- [x] **Step 4: Verify Keystatic loads in dev mode**
 
 ```bash
 npm run dev
