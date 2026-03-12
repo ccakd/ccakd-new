@@ -14,7 +14,7 @@ This is the main website for the Chinese Canadian Association of Kingston and Di
 
 ## Architecture
 
-- **Frontend:** Astro (hybrid mode, SSG default) deployed to Cloudflare Workers (via Workers Static Assets)
+- **Frontend:** Astro (`output: 'static'`, per-page `prerender = false` for SSR routes) deployed to Cloudflare Workers (via Workers Static Assets)
 - **CMS:** Keystatic (`@keystatic/astro`) — saves content as Markdown/MDX files committed to GitHub
 - **Media Pipeline:** Google Drive (volunteer uploads) → Azure Functions (Node.js + `sharp`) → Cloudflare R2 (optimized WebP)
 - **Gallery Frontend:** PhotoSwipe library for lightbox gallery rendering
@@ -42,7 +42,7 @@ Deployment is automated via GitHub Actions: content changes in Keystatic trigger
 
 ## Key Configuration Files
 
-- `astro.config.mjs` — Astro config: hybrid mode, CF adapter, i18n, integrations
+- `astro.config.mjs` — Astro config: static output, CF adapter, i18n, integrations
 - `keystatic.config.ts` — CMS content schemas (collections + singletons)
 - `wrangler.json` — Cloudflare Workers deployment config
 - `.github/workflows/` — CI/CD pipelines for content deployment and image processing
@@ -62,6 +62,10 @@ Three locales: `en` (English), `zh` (Simplified Chinese), `zh-tw` (Traditional C
 - UI strings: `src/i18n/{en,zh,zh-tw}.json` + `src/i18n/utils.ts`
 - CMS content: side-by-side trilingual fields per entry (e.g., `title_en`, `title_zh`, `title_zhtw`)
 - Pattern reference: `~/personal-projects/ccakd-members/src/i18n/` (members portal uses identical i18n approach)
+
+## Implementation Progress
+
+The plan file uses `- [x]`/`- [ ]` checkboxes to track completed steps. Check it before starting work.
 
 ## Environment Variables
 
