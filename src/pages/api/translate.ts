@@ -99,10 +99,11 @@ ${text}`;
   try {
     // CF Workers: runtime env from locals
     const env = (locals as any).runtime?.env ?? {};
-    // AZURE_AI_ENDPOINT is the full Target URI from Azure AI Foundry
-    // e.g. https://xxx.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview
-    const aiEndpoint = env.AZURE_AI_ENDPOINT || import.meta.env.AZURE_AI_ENDPOINT;
-    const apiKey = env.AZURE_AI_API_KEY || import.meta.env.AZURE_AI_API_KEY;
+    // Azure OpenAI endpoint — e.g. https://xxx.openai.azure.com
+    const aiEndpoint = env.AZURE_OPENAI_ENDPOINT || import.meta.env.AZURE_OPENAI_ENDPOINT;
+    const apiKey = env.AZURE_OPENAI_API_KEY || import.meta.env.AZURE_OPENAI_API_KEY;
+    const model = env.AZURE_OPENAI_MODEL || import.meta.env.AZURE_OPENAI_MODEL || 'gpt-5-nano';
+    const apiVersion = '2025-01-01-preview';
 
     if (!aiEndpoint || !apiKey) {
       return new Response(JSON.stringify({ error: 'Translation service not configured' }), {
@@ -111,16 +112,17 @@ ${text}`;
       });
     }
 
-    const res = await fetch(aiEndpoint, {
+    const url = `${aiEndpoint}/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': apiKey,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: env.AZURE_AI_MODEL || import.meta.env.AZURE_AI_MODEL || 'DeepSeek-V3.2',
+        model,
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.3,
+        max_completion_tokens: 4096,
       }),
     });
 
