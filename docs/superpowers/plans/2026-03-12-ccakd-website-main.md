@@ -1843,7 +1843,7 @@ git commit -m "feat: implement gallery index and detail pages with PhotoSwipe li
 - Modify: `src/pages/en/about.astro` (and zh/, zh-tw/)
 - Create: `src/components/ExecutiveCard.astro`
 
-- [ ] **Step 1: Create ExecutiveCard component**
+- [x] **Step 1: Create ExecutiveCard component**
 
 Create `src/components/ExecutiveCard.astro`:
 ```astro
@@ -1878,13 +1878,13 @@ const title = localized(executive, 'title', locale);
 </div>
 ```
 
-- [ ] **Step 2: Implement about page**
+- [x] **Step 2: Implement about page**
 
 Create `src/pages/en/about.astro` — fetches `reader.singletons.about.read()`, renders purpose/history as `DocumentRenderer`, executives as `ExecutiveCard` grid, and constitution PDF download links. Same pattern as homepage for `createReader()` and `DocumentRenderer`.
 
-- [ ] **Step 3: Copy locale variants and verify**
+- [x] **Step 3: Copy locale variants and verify**
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/ExecutiveCard.astro src/pages/*/about.astro

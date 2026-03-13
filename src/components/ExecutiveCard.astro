@@ -1,0 +1,29 @@
+---
+import type { Locale } from '../i18n/utils';
+import { localized } from '../lib/content';
+
+interface Props {
+  locale: Locale;
+  executive: Record<string, any>;
+}
+
+const { locale, executive } = Astro.props;
+const title = localized(executive, 'title', locale);
+---
+
+<div class="flex items-center gap-4 p-5 bg-white rounded-2xl border border-porcelain-border">
+  {executive.photo ? (
+    <img src={executive.photo} alt={executive.name} class="w-14 h-14 rounded-full object-cover shrink-0" />
+  ) : (
+    <div class="w-14 h-14 rounded-full bg-porcelain-section flex items-center justify-center text-porcelain-tertiary text-lg font-semibold shrink-0">
+      {executive.name?.charAt(0)}
+    </div>
+  )}
+  <div class="min-w-0">
+    <p class="font-display font-semibold text-porcelain-text">{executive.name}</p>
+    {title && <p class="text-[0.84rem] text-porcelain-secondary">{title}</p>}
+    {executive.email && (
+      <a href={`mailto:${executive.email}`} class="text-[0.82rem] text-accent hover:underline">{executive.email}</a>
+    )}
+  </div>
+</div>

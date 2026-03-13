@@ -1,15 +1,66 @@
 ---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+import { DocumentRenderer } from '@keystatic/core/renderer';
 import Layout from '../../components/Layout.astro';
+import ExecutiveCard from '../../components/ExecutiveCard.astro';
 import type { Locale } from '../../i18n/utils';
 import { t } from '../../i18n/utils';
 
 const locale: Locale = 'zh';
 const strings = t(locale);
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const about = await reader.singletons.about.read();
+
+const purposeBody = about ? (await (about as any).purpose_zh?.() || await (about as any).purpose_en?.()) : null;
+const historyBody = about ? (await (about as any).history_zh?.() || await (about as any).history_en?.()) : null;
 ---
 
 <Layout locale={locale} path="/about" title={strings.about.title}>
-  <section class="py-20 text-center">
-    <h1 class="text-4xl font-bold">{strings.about.title}</h1>
-    <p class="mt-4 text-gray-600">Content coming soon</p>
+  <section class="py-16 px-8">
+    <div class="max-w-[720px] mx-auto">
+      <h1 class="font-display text-3xl font-semibold tracking-tight mb-10">{strings.about.title}</h1>
+
+      {purposeBody && (
+        <div class="mb-12">
+          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.purpose}</h2>
+          <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+            <DocumentRenderer document={purposeBody} />
+          </div>
+        </div>
+      )}
+
+      {historyBody && (
+        <div class="mb-12">
+          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.history}</h2>
+          <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+            <DocumentRenderer document={historyBody} />
+          </div>
+        </div>
+      )}
+
+      {about?.constitution_zh_pdf && (
+        <div class="mb-12">
+          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.constitution}</h2>
+          <a href={about.constitution_zh_pdf} target="_blank" class="inline-block px-5 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors">
+            下载 PDF &rarr;
+          </a>
+        </div>
+      )}
+    </div>
   </section>
+
+  {about?.executives && about.executives.length > 0 && (
+    <section class="py-16 px-8 bg-porcelain-section">
+      <div class="max-w-[1080px] mx-auto">
+        <h2 class="font-display text-xl font-semibold mb-6">{strings.about.executives}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {about.executives.map((exec: any) => (
+            <ExecutiveCard locale={locale} executive={exec} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>
