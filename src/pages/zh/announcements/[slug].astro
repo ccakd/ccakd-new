@@ -1,18 +1,51 @@
 ---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../../keystatic.config';
+import { DocumentRenderer } from '@keystatic/core/renderer';
 import Layout from '../../../components/Layout.astro';
 import type { Locale } from '../../../i18n/utils';
+import { t, localePath } from '../../../i18n/utils';
+import { localized } from '../../../lib/content';
 
 export async function getStaticPaths() {
-  return [];
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const slugs = await reader.collections.announcements.list();
+  return slugs.map((slug) => ({ params: { slug } }));
 }
 
 const locale: Locale = 'zh';
+const strings = t(locale);
 const { slug } = Astro.params;
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const entry = await reader.collections.announcements.read(slug!);
+if (!entry) return Astro.redirect(localePath(locale, '/announcements'));
+
+const title = localized(entry as Record<string, any>, 'title', locale);
+const bodyKey = `body_${locale}`;
+const body = await (entry as any)[bodyKey]?.();
+const fallbackBody = body || await (entry as any).body_en?.();
+const dateStr = new Date(entry.date).toLocaleDateString('zh-CN', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
 ---
 
-<Layout locale={locale} path={`/announcements/${slug}`} title={slug}>
-  <section class="py-20 text-center">
-    <h1 class="text-4xl font-bold">{slug}</h1>
-    <p class="mt-4 text-gray-600">Announcement detail — content coming soon</p>
-  </section>
+<Layout locale={locale} path={`/announcements/${slug}`} title={title} type="article">
+  <article class="py-16 px-8">
+    <div class="max-w-[720px] mx-auto">
+      <a href={localePath(locale, '/announcements')} class="text-accent text-sm font-medium hover:underline mb-6 inline-block">
+        &larr; {strings.announcements.title}
+      </a>
+      {entry.feature_image && (
+        <img src={entry.feature_image} alt={title} class="w-full rounded-2xl mb-8" loading="eager" />
+      )}
+      <div class="text-[0.78rem] text-porcelain-tertiary font-medium uppercase tracking-wide">
+        {strings.announcements.postedOn} {dateStr}
+      </div>
+      <h1 class="font-display text-3xl font-semibold tracking-tight mt-2 mb-8">{title}</h1>
+      <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+        {fallbackBody && <DocumentRenderer document={fallbackBody} />}
+      </div>
+    </div>
+  </article>
 </Layout>

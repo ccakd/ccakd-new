@@ -1618,7 +1618,7 @@ git commit -m "feat: implement programs listing page"
 - Modify: `src/pages/en/announcements/index.astro` (and zh/, zh-tw/)
 - Modify: `src/pages/en/announcements/[slug].astro` (and zh/, zh-tw/)
 
-- [ ] **Step 1: Implement announcements index page**
+- [x] **Step 1: Implement announcements index page**
 
 Create `src/pages/en/announcements/index.astro`:
 ```astro
@@ -1652,7 +1652,7 @@ const sorted = allAnnouncements.sort(
 </Layout>
 ```
 
-- [ ] **Step 2: Implement single announcement page**
+- [x] **Step 2: Implement single announcement page**
 
 Create `src/pages/en/announcements/[slug].astro`:
 ```astro
@@ -1703,7 +1703,7 @@ const date = new Date(entry.date).toLocaleDateString('en-CA', {
 
 Note: The `DocumentRenderer` usage depends on how Keystatic returns document fields. Check `@keystatic/core/renderer` docs — the exact API may involve `await entry.body_en()` to get the document AST, then rendering it. All other page implementations (programs, about, terms) follow this same pattern.
 
-- [ ] **Step 3: Copy locale variants**
+- [x] **Step 3: Copy locale variants**
 
 Create these files, each identical except for `const locale: Locale`:
 - `src/pages/zh/announcements/index.astro` (locale = 'zh')
@@ -1711,7 +1711,7 @@ Create these files, each identical except for `const locale: Locale`:
 - `src/pages/zh-tw/announcements/index.astro` (locale = 'zh-tw')
 - `src/pages/zh-tw/announcements/[slug].astro` (locale = 'zh-tw')
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/pages/*/announcements/
