@@ -115,6 +115,7 @@ ${text}`;
         'api-key': apiKey,
       },
       body: JSON.stringify({
+        model: env.AZURE_AI_MODEL || import.meta.env.AZURE_AI_MODEL || 'DeepSeek-V3.2',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.3,
       }),
