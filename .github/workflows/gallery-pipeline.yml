@@ -110,6 +110,10 @@ jobs:
           echo "::notice::Skipping pipeline — no work to do."
           exit 0
 
+      - name: Install rclone
+        if: steps.inputs.outputs.skip != 'true'
+        run: curl https://rclone.org/install.sh | sudo bash
+
       - name: Setup rclone
         if: steps.inputs.outputs.skip != 'true'
         env:
