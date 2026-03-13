@@ -54,9 +54,10 @@ jobs:
               echo "::error::Invalid gallery_slug: must be alphanumeric with hyphens/underscores only"
               exit 1
             fi
-            # Validate folder ID: only allow alphanumeric, hyphens, underscores
-            if ! echo "$INPUT_FOLDER_ID" | grep -qE '^[A-Za-z0-9_-]+$'; then
-              echo "::error::Invalid gdrive_folder_id: must be alphanumeric with hyphens/underscores only"
+            # Trim whitespace and validate folder ID
+            INPUT_FOLDER_ID=$(echo "$INPUT_FOLDER_ID" | tr -d '[:space:]')
+            if ! echo "$INPUT_FOLDER_ID" | grep -qE '^[A-Za-z0-9_.-]+$'; then
+              echo "::error::Invalid gdrive_folder_id: contains unexpected characters"
               exit 1
             fi
             echo "slug=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
