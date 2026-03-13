@@ -1,6 +1,6 @@
 ---
 import type { HiEvent } from '../lib/hievents';
-import { getCoverImage } from '../lib/hievents';
+import { getCoverImage, getLocation } from '../lib/hievents';
 import type { Locale } from '../i18n/utils';
 import { t } from '../i18n/utils';
 
@@ -28,6 +28,7 @@ const badgeMap: Record<string, { label: string; class: string }> = {
   ENDED: { label: strings.events.ended, class: 'bg-porcelain-section text-porcelain-tertiary' },
 };
 const badge = badgeMap[event.lifecycle_status] ?? badgeMap.ENDED;
+const location = getLocation(event);
 
 const ticketUrl = `https://events.ccakd.ca/event/${event.id}/${event.slug}`;
 ---
@@ -55,6 +56,12 @@ const ticketUrl = `https://events.ccakd.ca/event/${event.id}/${event.slug}`;
       <span class="text-[0.78rem] text-porcelain-tertiary">{dateStr} · {timeStr}</span>
     </div>
     <h3 class="font-display text-lg font-semibold text-porcelain-text mb-2 line-clamp-2 group-hover:text-accent transition-colors">{event.title}</h3>
+    {location && (
+      <p class="text-[0.78rem] text-porcelain-tertiary mb-1 flex items-center gap-1">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        {location}
+      </p>
+    )}
     {event.description_preview && (
       <p class="text-[0.84rem] text-porcelain-secondary line-clamp-2">{event.description_preview}</p>
     )}

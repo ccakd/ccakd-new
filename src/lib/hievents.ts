@@ -9,6 +9,22 @@ export interface HiEventImage {
   lqip_base64: string | null;
 }
 
+export interface HiEventLocationDetails {
+  venue_name: string | null;
+  address_line_1: string | null;
+  address_line_2: string | null;
+  city: string | null;
+  state_or_region: string | null;
+  country: string | null;
+  zip_or_postal_code: string | null;
+}
+
+export interface HiEventSettings {
+  location_details: HiEventLocationDetails | null;
+  is_online_event: boolean;
+  maps_url: string | null;
+}
+
 export interface HiEvent {
   id: number;
   title: string;
@@ -20,9 +36,16 @@ export interface HiEvent {
   status: string;
   lifecycle_status: string;
   timezone: string;
-  location_details: Record<string, any> | null;
+  settings: HiEventSettings | null;
   images: HiEventImage[];
   currency: string;
+}
+
+export function getLocation(event: HiEvent): string | null {
+  const loc = event.settings?.location_details;
+  if (!loc) return null;
+  const parts = [loc.venue_name, loc.address_line_1, loc.city].filter(Boolean);
+  return parts.length > 0 ? parts.join(', ') : null;
 }
 
 const HIEVENTS_API = import.meta.env.HIEVENTS_API_URL || 'https://events.ccakd.ca/api';
