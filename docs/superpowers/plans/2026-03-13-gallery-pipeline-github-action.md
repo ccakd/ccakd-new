@@ -47,13 +47,14 @@ Only one file is created. Gallery YAML files are modified in-place by the workfl
 
 Before running this workflow, the following must be set up manually:
 
-### 1. Google Cloud Service Account
+### 1. Google Cloud Service Account + Shared Drive
 
 1. Create a GCP project (or use existing).
 2. Enable the **Google Drive API**.
 3. Create a service account (e.g., `ccakd-gallery@ccakd-project.iam.gserviceaccount.com`).
 4. Download the JSON key file.
-5. Share each Google Drive folder with the service account email (Viewer access is sufficient).
+5. Add the service account email as a **Content Manager** on the CCAKD Shared Drive. This grants access to all folders — no per-folder sharing needed.
+6. Note the Shared Drive ID from its URL (`https://drive.google.com/drive/folders/{SHARED_DRIVE_ID}`).
 
 ### 2. Cloudflare R2 Bucket
 
@@ -77,6 +78,7 @@ Set these in the repo's Settings → Secrets → Actions:
 [gdrive]
 type = drive
 scope = drive.readonly
+team_drive = {shared_drive_id}
 service_account_file_contents = {"type":"service_account","project_id":"...","private_key":"...","client_email":"...","...":"..."}
 
 [r2]
@@ -88,7 +90,9 @@ secret_access_key = {r2_secret_access_key}
 no_check_bucket = true
 ```
 
-> **Note:** The `service_account_file_contents` field embeds the entire JSON key inline — no separate file needed. This is a native rclone feature for service accounts.
+> **Notes:**
+> - `service_account_file_contents` embeds the entire JSON key inline — no separate file needed. This is a native rclone feature for service accounts.
+> - `team_drive` is the Shared Drive ID (from the URL: `https://drive.google.com/drive/folders/{ID}`). With the service account as Content Manager on the Shared Drive, it can access any folder by ID without per-folder sharing.
 
 ---
 
