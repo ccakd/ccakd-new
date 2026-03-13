@@ -1,0 +1,65 @@
+name: Deploy
+
+on:
+  # Trigger on push to main (content or code changes)
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.mjs'
+      - 'keystatic.config.ts'
+      - 'package.json'
+      - 'wrangler.json'
+
+  # Allow gallery pipeline to call this workflow after committing manifest
+  workflow_call:
+
+  # Scheduled rebuild every 6 hours for fresh hi.events data
+  schedule:
+    - cron: '0 */6 * * *'
+
+  # Manual trigger
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        env:
+          AZURE_AI_ENDPOINT: ${{ secrets.AZURE_AI_ENDPOINT }}
+          AZURE_AI_API_KEY: ${{ secrets.AZURE_AI_API_KEY }}
+          HIEVENTS_API_URL: ${{ secrets.HIEVENTS_API_URL }}
+        run: npm run build
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Job summary
+        env:
+          TRIGGER: ${{ github.event_name }}
+        run: |
+          echo "## Deploy Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Trigger | $TRIGGER |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Commit | \`$(git rev-parse --short HEAD)\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Site | https://ccakd.ca |" >> "$GITHUB_STEP_SUMMARY"
