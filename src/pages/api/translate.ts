@@ -98,6 +98,7 @@ ${text}`;
     const env = (locals as any).runtime?.env ?? {};
     const endpoint = env.AZURE_AI_ENDPOINT || import.meta.env.AZURE_AI_ENDPOINT;
     const apiKey = env.AZURE_AI_API_KEY || import.meta.env.AZURE_AI_API_KEY;
+    const deploymentName = env.AZURE_AI_DEPLOYMENT || import.meta.env.AZURE_AI_DEPLOYMENT || 'gpt-4o-mini';
 
     if (!endpoint || !apiKey) {
       return new Response(JSON.stringify({ error: 'Translation service not configured' }), {
@@ -106,7 +107,7 @@ ${text}`;
       });
     }
 
-    const res = await fetch(`${endpoint}/chat/completions?api-version=2024-02-01`, {
+    const res = await fetch(`${endpoint}/openai/deployments/${deploymentName}/chat/completions?api-version=2024-10-21`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
