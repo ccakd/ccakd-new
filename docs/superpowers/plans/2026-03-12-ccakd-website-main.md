@@ -2217,27 +2217,27 @@ git commit -m "feat: add JSON-LD Organization schema to homepage"
 **Files:**
 - Create: sample content in `content/` directories
 
-- [ ] **Step 1: Create a sample announcement**
+- [x] **Step 1: Create a sample announcement**
 
 Use Keystatic local mode (`npm run dev` → `/keystatic`) to create one sample announcement with trilingual content, a feature image, and pinned=true.
 
-- [ ] **Step 2: Create a sample program**
+- [x] **Step 2: Create a sample program**
 
 Use Keystatic to create one sample program (e.g., "Tai-Chi Practice") with schedule, location, and feature image.
 
-- [ ] **Step 3: Create homepage singleton content**
+- [x] **Step 3: Create homepage singleton content**
 
 Use Keystatic to populate the homepage singleton with hero heading, CTA link, and membership promo text.
 
-- [ ] **Step 4: Create about singleton content**
+- [x] **Step 4: Create about singleton content**
 
 Use Keystatic to populate the about singleton with purpose, history, and at least 2 sample executives.
 
-- [ ] **Step 5: Create a sample gallery entry**
+- [x] **Step 5: Create a sample gallery entry**
 
 Use Keystatic to create a gallery entry with title and date. Leave `photo_manifest` empty (will be populated by Azure Function pipeline later).
 
-- [ ] **Step 6: Commit sample content**
+- [x] **Step 6: Commit sample content**
 
 ```bash
 git add content/
