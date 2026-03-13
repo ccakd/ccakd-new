@@ -1,3 +1,26 @@
 ---
-return Astro.redirect('/en/', 302);
+export const prerender = false;
+
+const acceptLang = Astro.request.headers.get('accept-language') || '';
+
+// Parse Accept-Language and find best match
+// Supported locales: en, zh (Simplified), zh-tw (Traditional)
+function detectLocale(header: string): string {
+  const parts = header.toLowerCase().split(',');
+  for (const part of parts) {
+    const lang = part.split(';')[0].trim();
+    // zh-tw, zh-hant → Traditional Chinese
+    if (lang === 'zh-tw' || lang === 'zh-hant' || lang.startsWith('zh-hant-')) {
+      return 'zh-tw';
+    }
+    // zh, zh-cn, zh-hans → Simplified Chinese
+    if (lang === 'zh' || lang === 'zh-cn' || lang === 'zh-hans' || lang.startsWith('zh-hans-') || lang.startsWith('zh-')) {
+      return 'zh';
+    }
+  }
+  return 'en';
+}
+
+const locale = detectLocale(acceptLang);
+return Astro.redirect(`/${locale}/`, 302);
 ---
