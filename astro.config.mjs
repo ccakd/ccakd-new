@@ -40,7 +40,7 @@ function keystatic() {
           new URL("keystatic-imports.js", dotAstroDir),
           `import "@keystatic/astro/ui";\nimport "@keystatic/astro/api";\nimport "@keystatic/core/ui";\n`
         );
-        // Inject only the page route — API route is handled by src/pages/api/keystatic/[...params].ts
+        // Inject the page route — API route is handled by src/pages/api/keystatic/[...params].ts
         injectRoute({
           entrypoint:
             "@keystatic/astro/internal/keystatic-astro-page.astro",

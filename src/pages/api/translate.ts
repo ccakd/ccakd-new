@@ -34,13 +34,16 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const cookie = request.headers.get('Cookie') || '';
-  const hasKeystatic = cookie.includes('keystatic-gh-access-token');
-  if (!hasKeystatic) {
-    return new Response(JSON.stringify({ error: 'Unauthorized — Keystatic login required' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  // In production (GitHub mode), require Keystatic auth cookie. In local dev, skip auth.
+  if (!import.meta.env.DEV) {
+    const cookie = request.headers.get('Cookie') || '';
+    const hasKeystatic = cookie.includes('keystatic-gh-access-token');
+    if (!hasKeystatic) {
+      return new Response(JSON.stringify({ error: 'Unauthorized — Keystatic login required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }
 
   const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || 'unknown';
