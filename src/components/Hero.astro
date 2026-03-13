@@ -1,0 +1,68 @@
+---
+import type { Locale } from '../i18n/utils';
+import { t } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  heading: string;
+  ctaLink: string;
+  images: string[];
+}
+
+const { locale, heading, ctaLink, images } = Astro.props;
+const strings = t(locale);
+
+const defaultImages = [
+  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9921.jpg',
+  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09302.jpg',
+  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg',
+];
+const heroImages = images.length > 0 ? images : defaultImages;
+---
+
+<section class="relative h-[360px] md:h-[480px] overflow-hidden bg-black">
+  <div class="hero-track flex h-full">
+    {heroImages.map((src) => (
+      <div
+        class="hero-slide min-w-full h-full bg-cover bg-center relative"
+        style={`background-image:url('${src}')`}
+      >
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+      </div>
+    ))}
+  </div>
+  <div class="absolute bottom-0 left-0 right-0 z-10 max-w-[1080px] mx-auto px-8 pb-10 md:pb-14 text-white">
+    <h1 class="font-display text-3xl md:text-[2.8rem] font-semibold leading-tight max-w-[520px] tracking-tight">
+      {heading}
+    </h1>
+    <p class="text-sm md:text-base opacity-85 font-light mt-2 max-w-[420px]">
+      {strings.home.heroSubtitle}
+    </p>
+    <a
+      href={ctaLink}
+      class="inline-block mt-5 px-6 py-2.5 bg-white text-porcelain-text rounded-pill font-medium text-sm hover:bg-white/90 transition-all"
+    >
+      {strings.home.becomeMember} &rarr;
+    </a>
+  </div>
+  <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+    {heroImages.map((_, i) => (
+      <span class:list={[
+        'block h-1.5 rounded-full',
+        i === 0 ? 'w-5 bg-white/85' : 'w-1.5 bg-white/35',
+      ]} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .hero-track {
+    animation: hero-slide 21s ease-in-out infinite;
+  }
+  @keyframes hero-slide {
+    0%, 28% { transform: translateX(0); }
+    33%, 61% { transform: translateX(-100%); }
+    66%, 94% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+  }
+</style>

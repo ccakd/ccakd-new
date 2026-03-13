@@ -15,12 +15,16 @@
   },
   "home": {
     "announcements": "Announcements",
+    "viewAll": "View All",
     "upcomingEvents": "Upcoming Events",
     "programs": "Programs",
     "seeAllEvents": "See All Events",
     "seeAllPrograms": "See All Programs",
+    "heroSubtitle": "Connecting families, celebrating culture, and building community in Kingston since 1974.",
+    "becomeMember": "Become a Member",
+    "getTickets": "Get Tickets",
     "newsletter": "Subscribe To Our Newsletter",
-    "newsletterDesc": "Get monthly updates on all our events and programs directly to your inbox.",
+    "newsletterDesc": "Monthly updates on events and programs delivered to your inbox.",
     "subscribe": "Subscribe",
     "emailPlaceholder": "Your Email",
     "socialLinks": "Connect With Us"

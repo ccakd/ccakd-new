@@ -15,12 +15,16 @@
   },
   "home": {
     "announcements": "公告",
+    "viewAll": "查看全部",
     "upcomingEvents": "近期活動",
     "programs": "項目",
     "seeAllEvents": "查看所有活動",
     "seeAllPrograms": "查看所有項目",
+    "heroSubtitle": "自1974年起，連結家庭、弘揚文化、建設金士頓華人社區。",
+    "becomeMember": "成為會員",
+    "getTickets": "獲取門票",
     "newsletter": "訂閱我們的通訊",
-    "newsletterDesc": "每月直接將活動和項目資訊發送到您的信箱。",
+    "newsletterDesc": "每月將活動和項目資訊直接發送到您的信箱。",
     "subscribe": "訂閱",
     "emailPlaceholder": "您的信箱",
     "socialLinks": "關注我們"

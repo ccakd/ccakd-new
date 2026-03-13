@@ -1,0 +1,43 @@
+---
+import type { Locale } from '../i18n/utils';
+import { localized } from '../lib/content';
+import { localePath, t } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+  entry: Record<string, any>;
+}
+
+const { locale, slug, entry } = Astro.props;
+const strings = t(locale);
+const title = localized(entry, 'title', locale);
+const dateStr = new Date(entry.date).toLocaleDateString(
+  locale === 'en' ? 'en-CA' : locale === 'zh-tw' ? 'zh-TW' : 'zh-CN',
+  { year: 'numeric', month: 'long', day: 'numeric' },
+);
+---
+
+<article class="bg-white rounded-2xl border border-porcelain-border overflow-hidden hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all">
+  {entry.feature_image && (
+    <div
+      class="h-40 bg-porcelain-section bg-cover bg-center"
+      style={`background-image:url('${entry.feature_image}')`}
+    />
+  )}
+  <div class="p-5">
+    <div class="text-[0.72rem] text-porcelain-tertiary font-medium mb-1.5 uppercase tracking-wide">
+      {dateStr}
+    </div>
+    <h3 class="font-display text-[1.05rem] font-semibold text-porcelain-text leading-snug mb-1">
+      {title}
+    </h3>
+    {entry.pinned && <span class="chip">Important</span>}
+    <a
+      href={localePath(locale, `/announcements/${slug}`)}
+      class="block mt-3 text-accent text-[0.84rem] font-medium hover:underline"
+    >
+      {strings.announcements.readMore} &rarr;
+    </a>
+  </div>
+</article>

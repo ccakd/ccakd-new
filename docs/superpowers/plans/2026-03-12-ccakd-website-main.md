@@ -1252,7 +1252,7 @@ git commit -m "feat: apply selected theme — colors, typography, and global sty
 - Create: `src/components/ProgramCard.astro`
 - Create: `src/components/NewsletterSignup.astro`
 
-- [ ] **Step 1: Create Hero carousel component**
+- [x] **Step 1: Create Hero carousel component**
 
 Create `src/components/Hero.astro`:
 ```astro
@@ -1291,7 +1291,7 @@ const { locale, heading, ctaLink, images, ctaLabel } = Astro.props;
 </section>
 ```
 
-- [ ] **Step 2: Create AnnouncementCard component**
+- [x] **Step 2: Create AnnouncementCard component**
 
 Create `src/components/AnnouncementCard.astro`:
 ```astro
@@ -1328,7 +1328,7 @@ const date = new Date(entry.date).toLocaleDateString(locale === 'en' ? 'en-CA' :
 </article>
 ```
 
-- [ ] **Step 3: Create EventCard component**
+- [x] **Step 3: Create EventCard component**
 
 Create `src/components/EventCard.astro`:
 ```astro
@@ -1360,7 +1360,7 @@ const imageUrl = event.images?.[0]?.url;
 </article>
 ```
 
-- [ ] **Step 4: Create ProgramCard component**
+- [x] **Step 4: Create ProgramCard component**
 
 Create `src/components/ProgramCard.astro`:
 ```astro
@@ -1393,7 +1393,7 @@ const location = localized(entry, 'location', locale);
 </article>
 ```
 
-- [ ] **Step 5: Create NewsletterSignup component**
+- [x] **Step 5: Create NewsletterSignup component**
 
 Create `src/components/NewsletterSignup.astro` — Listmonk subscription form with email input, ALTCHA widget, and subscribe button. Form POSTs to `lists.ccakd.ca/subscription/form`.
 
@@ -1436,7 +1436,7 @@ const strings = t(locale);
 <script src="https://lists.ccakd.ca/public/static/script.js" defer></script>
 ```
 
-- [ ] **Step 6: Assemble homepage**
+- [x] **Step 6: Assemble homepage**
 
 Update `src/pages/en/index.astro`:
 ```astro
@@ -1535,7 +1535,7 @@ const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
 </Layout>
 ```
 
-- [ ] **Step 7: Copy locale variants**
+- [x] **Step 7: Copy locale variants**
 
 Create `src/pages/zh/index.astro` and `src/pages/zh-tw/index.astro` — identical to `en/index.astro` except change `const locale: Locale = 'zh'` and `'zh-tw'` respectively. Exact files:
 - `src/pages/zh/index.astro`

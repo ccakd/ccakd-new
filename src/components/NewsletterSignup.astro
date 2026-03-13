@@ -1,0 +1,41 @@
+---
+import type { Locale } from '../i18n/utils';
+import { t } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = t(locale);
+---
+
+<section class="py-16 px-8">
+  <div class="max-w-[1080px] mx-auto">
+    <div class="bg-porcelain-section rounded-[20px] py-14 px-8 text-center">
+      <h2 class="font-display text-2xl font-semibold text-porcelain-text">{strings.home.newsletter}</h2>
+      <p class="text-porcelain-secondary text-sm mt-1.5">{strings.home.newsletterDesc}</p>
+      <form
+        method="post"
+        action="https://lists.ccakd.ca/subscription/form"
+        class="mt-6 inline-flex flex-col sm:flex-row gap-2"
+      >
+        <input type="hidden" name="nonce" />
+        <input
+          type="email"
+          name="email"
+          placeholder={strings.home.emailPlaceholder}
+          required
+          class="px-5 py-2.5 border border-porcelain-border rounded-pill text-sm min-w-[280px] font-[inherit] text-porcelain-text bg-white focus:outline-none focus:border-accent"
+        />
+        <input type="hidden" name="l" value="LISTMONK_LIST_UUID_HERE" />
+        <button
+          type="submit"
+          class="px-7 py-2.5 bg-accent text-white border-none rounded-pill font-medium text-sm cursor-pointer font-[inherit] hover:bg-accent-hover transition-colors"
+        >
+          {strings.home.subscribe}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

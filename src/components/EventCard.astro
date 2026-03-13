@@ -1,0 +1,36 @@
+---
+import type { HiEvent } from '../lib/hievents';
+import type { Locale } from '../i18n/utils';
+import { t } from '../i18n/utils';
+
+interface Props {
+  event: HiEvent;
+  locale: Locale;
+}
+
+const { event, locale } = Astro.props;
+const strings = t(locale);
+const date = new Date(event.start_date);
+const day = date.getDate().toString().padStart(2, '0');
+const month = date.toLocaleDateString('en-CA', { month: 'short' }).toUpperCase();
+---
+
+<div class="flex items-center gap-5 bg-white rounded-2xl p-5 border border-porcelain-border hover:border-porcelain-border/70 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all">
+  <div class="min-w-[52px] h-[52px] rounded-[10px] bg-accent text-white flex flex-col items-center justify-center shrink-0">
+    <span class="text-lg font-bold leading-none">{day}</span>
+    <span class="text-[0.58rem] uppercase tracking-widest opacity-85 mt-0.5">{month}</span>
+  </div>
+  <div class="flex-1 min-w-0">
+    <h3 class="font-display text-base font-semibold text-porcelain-text truncate">{event.title}</h3>
+    {event.description && (
+      <p class="text-porcelain-secondary text-[0.82rem] mt-0.5 line-clamp-1">{event.description}</p>
+    )}
+  </div>
+  <a
+    href={`https://events.ccakd.ca/event/${event.id}/${event.slug}`}
+    target="_blank"
+    class="shrink-0 text-accent text-[0.82rem] font-medium hover:underline hidden sm:block"
+  >
+    {strings.home.getTickets} &rarr;
+  </a>
+</div>

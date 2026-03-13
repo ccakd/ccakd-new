@@ -15,12 +15,16 @@
   },
   "home": {
     "announcements": "公告",
+    "viewAll": "查看全部",
     "upcomingEvents": "近期活动",
     "programs": "项目",
     "seeAllEvents": "查看所有活动",
     "seeAllPrograms": "查看所有项目",
+    "heroSubtitle": "自1974年起，连接家庭、弘扬文化、建设金士顿华人社区。",
+    "becomeMember": "成为会员",
+    "getTickets": "获取门票",
     "newsletter": "订阅我们的通讯",
-    "newsletterDesc": "每月直接将活动和项目信息发送到您的邮箱。",
+    "newsletterDesc": "每月将活动和项目信息直接发送到您的邮箱。",
     "subscribe": "订阅",
     "emailPlaceholder": "您的邮箱",
     "socialLinks": "关注我们"
