@@ -1898,7 +1898,7 @@ git commit -m "feat: implement about page with executives listing"
 **Files:**
 - Modify: `src/pages/en/events.astro` (and zh/, zh-tw/)
 
-- [ ] **Step 1: Implement events page with hi.events embed**
+- [x] **Step 1: Implement events page with hi.events embed**
 
 The events page embeds the hi.events widget:
 
@@ -1930,9 +1930,9 @@ const strings = t(locale);
 
 Note: The exact embed method depends on hi.events' widget API — this may be an iframe or a JS widget. Adjust based on what hi.events provides.
 
-- [ ] **Step 2: Copy locale variants and verify**
+- [x] **Step 2: Copy locale variants and verify**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/pages/*/events.astro

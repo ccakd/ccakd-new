@@ -8,8 +8,18 @@ const strings = t(locale);
 ---
 
 <Layout locale={locale} path="/events" title={strings.events.title}>
-  <section class="py-20 text-center">
-    <h1 class="text-4xl font-bold">{strings.events.title}</h1>
-    <p class="mt-4 text-gray-600">Content coming soon</p>
+  <section class="py-16 px-8">
+    <div class="max-w-[1080px] mx-auto">
+      <h1 class="font-display text-3xl font-semibold tracking-tight mb-8">{strings.events.title}</h1>
+      <div class="rounded-2xl border border-porcelain-border overflow-hidden bg-white">
+        <iframe
+          src="https://events.ccakd.ca/e/ccakd"
+          width="100%"
+          style="min-height: 700px; border: none;"
+          title="CCAKD Events"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
   </section>
 </Layout>
