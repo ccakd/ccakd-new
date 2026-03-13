@@ -2018,13 +2018,13 @@ git commit -m "feat: native events page with hi.events public API integration"
 **Files:**
 - Create: `src/pages/en/terms.astro` (and zh/, zh-tw/)
 
-- [ ] **Step 1: Implement terms page**
+- [x] **Step 1: Implement terms page**
 
 Fetch the `terms` singleton. Render the localized body content.
 
-- [ ] **Step 2: Copy locale variants and verify**
+- [x] **Step 2: Copy locale variants and verify**
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/pages/*/terms.astro
