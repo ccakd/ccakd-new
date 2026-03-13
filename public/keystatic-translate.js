@@ -10,9 +10,10 @@
 
   function isEditPage() {
     var path = location.pathname;
+    // In GitHub mode, Keystatic URLs include /branch/<name>/ (e.g. /keystatic/branch/main/collection/...)
     return (
-      path.includes('/keystatic/singleton/') ||
-      (path.includes('/keystatic/collection/') &&
+      path.includes('/singleton/') ||
+      (path.includes('/collection/') &&
         (path.includes('/create') || path.includes('/item/')))
     );
   }
