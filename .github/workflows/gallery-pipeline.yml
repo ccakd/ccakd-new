@@ -1,0 +1,321 @@
+name: Gallery Image Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      gallery_slug:
+        description: 'Gallery slug (matches content/galleries/{slug}.yaml)'
+        required: true
+        type: string
+      gdrive_folder_id:
+        description: 'Google Drive folder ID'
+        required: true
+        type: string
+      force:
+        description: 'Force re-process even if manifest exists'
+        required: false
+        type: boolean
+        default: false
+
+  push:
+    branches: [main]
+    paths:
+      - 'content/galleries/**'
+
+permissions:
+  contents: write
+
+jobs:
+  process-gallery:
+    runs-on: ubuntu-latest
+    # Prevent infinite loop: skip if the push was from the bot committing a manifest
+    if: github.actor != 'github-actions[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install yq
+        uses: mikefarah/yq@v4
+
+      - name: Resolve inputs
+        id: inputs
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_SLUG: ${{ inputs.gallery_slug }}
+          INPUT_FOLDER_ID: ${{ inputs.gdrive_folder_id }}
+          INPUT_FORCE: ${{ inputs.force }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            # Validate slug: only allow alphanumeric, hyphens, underscores
+            if ! echo "$INPUT_SLUG" | grep -qE '^[A-Za-z0-9_-]+$'; then
+              echo "::error::Invalid gallery_slug: must be alphanumeric with hyphens/underscores only"
+              exit 1
+            fi
+            # Validate folder ID: only allow alphanumeric, hyphens, underscores
+            if ! echo "$INPUT_FOLDER_ID" | grep -qE '^[A-Za-z0-9_-]+$'; then
+              echo "::error::Invalid gdrive_folder_id: must be alphanumeric with hyphens/underscores only"
+              exit 1
+            fi
+            echo "slug=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
+            echo "folder_id=$INPUT_FOLDER_ID" >> "$GITHUB_OUTPUT"
+            echo "force=$INPUT_FORCE" >> "$GITHUB_OUTPUT"
+          else
+            # Find which gallery YAML files changed in this push
+            CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'content/galleries/*.yaml' | head -1)
+            if [ -z "$CHANGED" ]; then
+              echo "No gallery YAML changed. Skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            # Extract slug from filename (content/galleries/{slug}.yaml)
+            SLUG=$(basename "$CHANGED" .yaml)
+            echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+
+            # Read gdrive_link from the YAML and extract folder ID
+            GDRIVE_LINK=$(yq '.gdrive_link // ""' "$CHANGED")
+            if [ -z "$GDRIVE_LINK" ] || [ "$GDRIVE_LINK" = "null" ]; then
+              echo "No gdrive_link set in $CHANGED. Skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            # Extract folder ID from Google Drive URL
+            # Supports: https://drive.google.com/drive/folders/{ID}?...
+            FOLDER_ID=$(echo "$GDRIVE_LINK" | grep -oP 'folders/\K[A-Za-z0-9_-]+')
+            if [ -z "$FOLDER_ID" ]; then
+              echo "::error::Could not extract folder ID from gdrive_link: $GDRIVE_LINK"
+              exit 1
+            fi
+            echo "folder_id=$FOLDER_ID" >> "$GITHUB_OUTPUT"
+
+            # Check if manifest already exists
+            MANIFEST=$(yq '.photo_manifest // ""' "$CHANGED")
+            if [ -n "$MANIFEST" ] && [ "$MANIFEST" != "null" ] && [ "$MANIFEST" != "''" ] && [ "$MANIFEST" != "" ]; then
+              echo "Manifest already populated. Skipping (use workflow_dispatch with force=true to re-process)."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            echo "force=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Check skip
+        if: steps.inputs.outputs.skip == 'true'
+        run: |
+          echo "::notice::Skipping pipeline — no work to do."
+          exit 0
+
+      - name: Setup rclone
+        if: steps.inputs.outputs.skip != 'true'
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
+
+      - name: Download images from Google Drive
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          FOLDER_ID="${{ steps.inputs.outputs.folder_id }}"
+          mkdir -p raw_images
+
+          echo "Downloading images from GDrive folder: $FOLDER_ID"
+          rclone copy "gdrive,root_folder_id=$FOLDER_ID:" ./raw_images \
+            --include "*.{jpg,jpeg,png,heic,JPG,JPEG,PNG,HEIC}" \
+            --progress
+
+          COUNT=$(find ./raw_images -type f | wc -l)
+          echo "Downloaded $COUNT images"
+
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::No images found in Google Drive folder $FOLDER_ID"
+            exit 1
+          fi
+
+      - name: Install image tools
+        if: steps.inputs.outputs.skip != 'true'
+        run: sudo apt-get update && sudo apt-get install -y webp imagemagick libheif-examples parallel
+
+      - name: Convert images to WebP
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          mkdir -p processed/full processed/thumb
+
+          # Pre-convert HEIC files to PNG (cwebp cannot read HEIC natively)
+          find ./raw_images -type f -iname '*.heic' -print0 | while IFS= read -r -d '' heic; do
+            name="${heic%.*}"
+            heif-convert "$heic" "${name}.png" 2>/dev/null && rm -f "$heic"
+            echo "  Converted HEIC: $(basename "$heic") → PNG"
+          done
+
+          # Build a file list (flatten any nested structure, handle spaces in names)
+          find ./raw_images -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) > /tmp/image_list.txt
+
+          echo "Processing $(wc -l < /tmp/image_list.txt) images..."
+
+          # Convert function used by parallel
+          convert_image() {
+            local img="$1"
+            local filename
+            filename=$(basename "$img")
+            local name="${filename%.*}"
+
+            # Full size: max 2000px wide, WebP q80, strip metadata
+            cwebp -q 80 -resize 2000 0 -metadata none "$img" -o "./processed/full/${name}.webp" 2>/dev/null
+
+            # Thumbnail: max 400px wide, WebP q80, strip metadata
+            cwebp -q 80 -resize 400 0 -metadata none "$img" -o "./processed/thumb/${name}.webp" 2>/dev/null
+
+            echo "  ✓ ${name}"
+          }
+          export -f convert_image
+
+          # Process in parallel (use available cores)
+          parallel -j "$(nproc)" convert_image < /tmp/image_list.txt
+
+          PROCESSED=$(ls ./processed/full/*.webp 2>/dev/null | wc -l)
+          echo "Converted $PROCESSED images to WebP"
+
+      - name: Check existing files on R2
+        if: steps.inputs.outputs.skip != 'true' && steps.inputs.outputs.force != 'true'
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+          # List existing files in R2 for this gallery
+          EXISTING=$(rclone lsf "r2:ccakd-media/galleries/${SLUG}/full/" 2>/dev/null || true)
+
+          if [ -n "$EXISTING" ]; then
+            echo "Found existing files on R2. Removing already-uploaded from local processed set."
+            while IFS= read -r existing_file; do
+              if [ -f "./processed/full/$existing_file" ]; then
+                rm -f "./processed/full/$existing_file"
+                rm -f "./processed/thumb/$existing_file"
+                echo "  Skipped: $existing_file (already on R2)"
+              fi
+            done <<< "$EXISTING"
+          fi
+
+          REMAINING=$(ls ./processed/full/*.webp 2>/dev/null | wc -l)
+          echo "$REMAINING new images to upload"
+
+      - name: Upload to Cloudflare R2
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+
+          echo "Uploading to R2: galleries/${SLUG}/"
+          rclone copy ./processed/full/ "r2:ccakd-media/galleries/${SLUG}/full/" --progress
+          rclone copy ./processed/thumb/ "r2:ccakd-media/galleries/${SLUG}/thumb/" --progress
+
+          echo "Upload complete"
+
+      - name: Generate photo manifest
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+          R2_PUBLIC_URL="${{ secrets.R2_PUBLIC_URL }}"
+
+          # List ALL full-size images on R2 for this gallery (includes previously uploaded)
+          # This ensures the manifest is complete even when only new images were uploaded
+          ALL_FILES=$(rclone lsf "r2:ccakd-media/galleries/${SLUG}/full/" 2>/dev/null | sort)
+
+          if [ -z "$ALL_FILES" ]; then
+            echo "::error::No files found on R2 after upload"
+            exit 1
+          fi
+
+          # Download all full-size images to get dimensions (we need them for PhotoSwipe)
+          # For newly processed images, they're already local; for old ones, we fetch from R2
+          mkdir -p all_full
+          rclone copy "r2:ccakd-media/galleries/${SLUG}/full/" ./all_full/ --progress
+
+          # Build manifest JSON
+          MANIFEST="["
+          FIRST=true
+          while IFS= read -r webp_file; do
+            [ -z "$webp_file" ] && continue
+
+            local_file="./all_full/${webp_file}"
+            if [ ! -f "$local_file" ]; then
+              echo "  Warning: $webp_file not found locally, skipping"
+              continue
+            fi
+
+            # Get dimensions using ImageMagick identify
+            DIMS=$(identify -format '%w %h' "$local_file" 2>/dev/null)
+            WIDTH=$(echo "$DIMS" | awk '{print $1}')
+            HEIGHT=$(echo "$DIMS" | awk '{print $2}')
+
+            if [ -z "$WIDTH" ] || [ -z "$HEIGHT" ]; then
+              echo "  Warning: Could not read dimensions for $webp_file, skipping"
+              continue
+            fi
+
+            FULL_URL="${R2_PUBLIC_URL}/galleries/${SLUG}/full/${webp_file}"
+            THUMB_URL="${R2_PUBLIC_URL}/galleries/${SLUG}/thumb/${webp_file}"
+
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              MANIFEST+=","
+            fi
+
+            MANIFEST+="{\"filename\":\"${webp_file}\",\"width\":${WIDTH},\"height\":${HEIGHT},\"fullUrl\":\"${FULL_URL}\",\"thumbUrl\":\"${THUMB_URL}\"}"
+          done <<< "$ALL_FILES"
+
+          MANIFEST+="]"
+
+          # Pretty-print and save
+          echo "$MANIFEST" | jq '.' > /tmp/manifest.json
+          echo "Generated manifest with $(echo "$MANIFEST" | jq 'length') photos"
+          cat /tmp/manifest.json
+
+      - name: Update gallery YAML and commit
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+          YAML_FILE="content/galleries/${SLUG}.yaml"
+
+          if [ ! -f "$YAML_FILE" ]; then
+            echo "::error::Gallery file not found: $YAML_FILE"
+            exit 1
+          fi
+
+          # Read the manifest as a single-line JSON string for YAML embedding
+          MANIFEST=$(cat /tmp/manifest.json | jq -c '.')
+
+          # Update the YAML fields
+          yq -i ".r2_folder = \"galleries/${SLUG}\"" "$YAML_FILE"
+          yq -i ".photo_manifest = $(echo "$MANIFEST" | jq -Rs '.')" "$YAML_FILE"
+
+          echo "Updated $YAML_FILE:"
+          cat "$YAML_FILE"
+
+          # Commit and push
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$YAML_FILE"
+
+          if git diff --cached --quiet; then
+            echo "::notice::No changes to commit (manifest unchanged)"
+          else
+            git commit -m "chore: update photo manifest for gallery '${SLUG}'"
+            git push
+          fi
+
+      - name: Job summary
+        if: steps.inputs.outputs.skip != 'true' && always()
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+          PHOTO_COUNT=$(cat /tmp/manifest.json 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
+
+          echo "## Gallery Pipeline Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Gallery | \`${SLUG}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Photos processed | ${PHOTO_COUNT} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| R2 path | \`galleries/${SLUG}/\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Trigger | ${{ github.event_name }} |" >> "$GITHUB_STEP_SUMMARY"
