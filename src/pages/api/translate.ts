@@ -140,48 +140,11 @@ ${text}`;
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Translation error:', error);
-    return new Response(JSON.stringify({ error: 'Translation failed', detail: error?.message }), {
+    return new Response(JSON.stringify({ error: 'Translation failed' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
-};
-
-// Temporary debug endpoint to test Azure AI connectivity
-export const GET: APIRoute = async ({ locals }) => {
-  const env = (locals as any).runtime?.env ?? {};
-  const aiEndpoint = env.AZURE_AI_ENDPOINT || import.meta.env.AZURE_AI_ENDPOINT;
-  const apiKey = env.AZURE_AI_API_KEY || import.meta.env.AZURE_AI_API_KEY;
-
-  const info: Record<string, any> = {
-    hasEndpoint: !!aiEndpoint,
-    endpointPreview: aiEndpoint ? aiEndpoint.slice(0, 60) + '...' : null,
-    hasApiKey: !!apiKey,
-    apiKeyPreview: apiKey ? apiKey.slice(0, 8) + '...' : null,
-  };
-
-  if (aiEndpoint && apiKey) {
-    try {
-      const res = await fetch(aiEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
-        body: JSON.stringify({
-          model: env.AZURE_AI_MODEL || 'DeepSeek-V3.2',
-          messages: [{ role: 'user', content: 'Say hello in 3 words' }],
-          temperature: 0.3,
-        }),
-      });
-      const body = await res.text();
-      info.status = res.status;
-      info.response = body.slice(0, 500);
-    } catch (e: any) {
-      info.fetchError = e?.message;
-    }
-  }
-
-  return new Response(JSON.stringify(info, null, 2), {
-    headers: { 'Content-Type': 'application/json' },
-  });
 };
