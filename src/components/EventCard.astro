@@ -22,8 +22,8 @@ const month = date.toLocaleDateString('en-CA', { month: 'short' }).toUpperCase()
   </div>
   <div class="flex-1 min-w-0">
     <h3 class="font-display text-base font-semibold text-porcelain-text truncate">{event.title}</h3>
-    {event.description && (
-      <p class="text-porcelain-secondary text-[0.82rem] mt-0.5 line-clamp-1">{event.description}</p>
+    {event.description_preview && (
+      <p class="text-porcelain-secondary text-[0.82rem] mt-0.5 line-clamp-1">{event.description_preview}</p>
     )}
   </div>
   <a

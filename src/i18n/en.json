@@ -31,6 +31,11 @@
   },
   "events": {
     "title": "Events",
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing",
+    "ended": "Ended",
+    "noEvents": "No events at this time.",
+    "getTickets": "Get Tickets",
     "fallback": "Visit events.ccakd.ca for upcoming events"
   },
   "programs": {

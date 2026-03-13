@@ -1,0 +1,65 @@
+---
+import type { HiEvent } from '../lib/hievents';
+import { getCoverImage } from '../lib/hievents';
+import type { Locale } from '../i18n/utils';
+import { t } from '../i18n/utils';
+
+interface Props {
+  event: HiEvent;
+  locale: Locale;
+}
+
+const { event, locale } = Astro.props;
+const strings = t(locale);
+const cover = getCoverImage(event);
+
+const start = new Date(event.start_date);
+const dateLocaleMap: Record<Locale, string> = { en: 'en-CA', zh: 'zh-CN', 'zh-tw': 'zh-TW' };
+const dateStr = start.toLocaleDateString(dateLocaleMap[locale], {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+const timeStr = start.toLocaleTimeString(dateLocaleMap[locale], {
+  hour: 'numeric', minute: '2-digit',
+});
+
+const badgeMap: Record<string, { label: string; class: string }> = {
+  UPCOMING: { label: strings.events.upcoming, class: 'bg-accent-bg text-accent' },
+  ONGOING: { label: strings.events.ongoing, class: 'bg-green-50 text-green-700' },
+  ENDED: { label: strings.events.ended, class: 'bg-porcelain-section text-porcelain-tertiary' },
+};
+const badge = badgeMap[event.lifecycle_status] ?? badgeMap.ENDED;
+
+const ticketUrl = `https://events.ccakd.ca/event/${event.id}/${event.slug}`;
+---
+
+<a href={ticketUrl} target="_blank" class="group block bg-white rounded-2xl border border-porcelain-border overflow-hidden hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all">
+  {cover ? (
+    <div class="aspect-[16/9] overflow-hidden">
+      <img
+        src={cover.url}
+        alt={event.title}
+        class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+        loading="lazy"
+      />
+    </div>
+  ) : (
+    <div class="aspect-[16/9] bg-porcelain-section flex items-center justify-center">
+      <span class="text-porcelain-tertiary text-4xl">📅</span>
+    </div>
+  )}
+  <div class="p-5">
+    <div class="flex items-center gap-2 mb-3">
+      <span class={`inline-block px-2.5 py-0.5 text-[0.72rem] font-medium rounded-pill ${badge.class}`}>
+        {badge.label}
+      </span>
+      <span class="text-[0.78rem] text-porcelain-tertiary">{dateStr} · {timeStr}</span>
+    </div>
+    <h3 class="font-display text-lg font-semibold text-porcelain-text mb-2 line-clamp-2 group-hover:text-accent transition-colors">{event.title}</h3>
+    {event.description_preview && (
+      <p class="text-[0.84rem] text-porcelain-secondary line-clamp-2">{event.description_preview}</p>
+    )}
+    <span class="inline-block mt-4 text-accent text-[0.82rem] font-medium group-hover:underline">
+      {strings.events.getTickets} &rarr;
+    </span>
+  </div>
+</a>

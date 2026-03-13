@@ -1,25 +1,28 @@
 ---
 import Layout from '../../components/Layout.astro';
+import EventDetailCard from '../../components/EventDetailCard.astro';
 import type { Locale } from '../../i18n/utils';
 import { t } from '../../i18n/utils';
+import { getAllEvents } from '../../lib/hievents';
 
 const locale: Locale = 'en';
 const strings = t(locale);
+const events = await getAllEvents();
 ---
 
 <Layout locale={locale} path="/events" title={strings.events.title}>
   <section class="py-16 px-8">
     <div class="max-w-[1080px] mx-auto">
-      <h1 class="font-display text-3xl font-semibold tracking-tight mb-8">{strings.events.title}</h1>
-      <div class="rounded-2xl border border-porcelain-border overflow-hidden bg-white">
-        <iframe
-          src="https://events.ccakd.ca/e/ccakd"
-          width="100%"
-          style="min-height: 700px; border: none;"
-          title="CCAKD Events"
-          loading="lazy"
-        ></iframe>
-      </div>
+      <h1 class="font-display text-3xl font-semibold tracking-tight mb-10">{strings.events.title}</h1>
+      {events.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map((event) => (
+            <EventDetailCard event={event} locale={locale} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-porcelain-secondary">{strings.events.noEvents}</p>
+      )}
     </div>
   </section>
 </Layout>

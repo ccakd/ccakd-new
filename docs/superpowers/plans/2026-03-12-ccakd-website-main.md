@@ -1893,50 +1893,122 @@ git commit -m "feat: implement about page with executives listing"
 
 ---
 
-### Task 15: Events Page
+### Task 15: Events Page (Native hi.events Integration)
 
 **Files:**
-- Modify: `src/pages/en/events.astro` (and zh/, zh-tw/)
+- Rewrite: `src/lib/hievents.ts` — full API client with auth + public endpoints
+- Create: `src/components/EventDetailCard.astro` — rich event card with image, description, dates
+- Modify: `src/pages/en/events.astro` (and zh/, zh-tw/) — native event listing replacing iframe
+- Modify: `src/components/EventCard.astro` — update to use new HiEvent fields
 
-- [x] **Step 1: Implement events page with hi.events embed**
+**Context:** hi.events provides public API endpoints at `/api/public/` that don't require auth. The organizer events endpoint returns event images, descriptions, dates, location, and status. Auth (login with email/password → bearer token) is only needed for admin operations. Reference client: `~/personal-projects/ccakd-members/src/lib/hievents-client.ts`.
 
-The events page embeds the hi.events widget:
+**hi.events Public API:**
+- `GET /api/public/organizers/{organizer_id}/events` — list published events (paginated, supports `per_page`, `sort_by`, `sort_direction`, `filter_fields`)
+- `GET /api/public/events/{event_id}` — single event detail (only `LIVE` status)
+- Response fields: `id`, `title`, `description`, `description_preview`, `start_date`, `end_date`, `slug`, `status`, `lifecycle_status`, `timezone`, `location_details`, `images[]` (with `url`, `type`, `lqip_base64`), `currency`
 
-```astro
----
-import Layout from '../../components/Layout.astro';
-import type { Locale } from '../../i18n/utils';
-import { t } from '../../i18n/utils';
+**Environment variables needed:** `HIEVENTS_API_URL`, `HIEVENTS_ORGANIZER_ID` (add to `.dev.vars` and CF Workers secrets)
 
-const locale: Locale = 'en';
-const strings = t(locale);
----
+- [x] ~~Step 1 (old): iframe embed~~ (replaced by native integration below)
 
-<Layout locale={locale} path="/events" title={strings.events.title}>
-  <section class="max-w-7xl mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold mb-8">{strings.events.title}</h1>
-    <div id="hievents-widget">
-      {/* hi.events embed widget loads here */}
-      <iframe
-        src="https://events.ccakd.ca/e/ccakd"
-        width="100%"
-        style="min-height: 600px; border: none;"
-        title="CCAKD Events"
-      ></iframe>
-    </div>
-  </section>
-</Layout>
+- [x] **Step 1: Rewrite `src/lib/hievents.ts` with public API client**
+
+Replace the current placeholder client with a proper implementation using the public organizer events endpoint:
+
+```typescript
+export interface HiEventImage {
+  id: number;
+  url: string;
+  type: string; // 'EVENT_COVER', 'EDITOR_IMAGE', etc.
+  lqip_base64: string | null;
+}
+
+export interface HiEvent {
+  id: number;
+  title: string;
+  description: string;
+  description_preview: string;
+  start_date: string;
+  end_date: string | null;
+  slug: string;
+  status: string;
+  lifecycle_status: string; // 'UPCOMING', 'ONGOING', 'ENDED'
+  timezone: string;
+  location_details: Record<string, any> | null;
+  images: HiEventImage[];
+  currency: string;
+}
+
+const HIEVENTS_API = import.meta.env.HIEVENTS_API_URL || 'https://events.ccakd.ca/api';
+const ORGANIZER_ID = import.meta.env.HIEVENTS_ORGANIZER_ID || '1';
+
+export function getCoverImage(event: HiEvent): HiEventImage | null {
+  return event.images?.find(img => img.type === 'EVENT_COVER') ?? event.images?.[0] ?? null;
+}
+
+export async function getUpcomingEvents(limit = 6): Promise<HiEvent[]> {
+  try {
+    const res = await fetch(
+      `${HIEVENTS_API}/public/organizers/${ORGANIZER_ID}/events?per_page=${limit}&sort_by=start_date&sort_direction=asc`
+    );
+    if (!res.ok) throw new Error(`hi.events API returned ${res.status}`);
+    const data = await res.json();
+    return (data.data ?? []).filter((e: HiEvent) =>
+      e.lifecycle_status === 'UPCOMING' || e.lifecycle_status === 'ONGOING'
+    );
+  } catch (error) {
+    console.error('Failed to fetch hi.events:', error);
+    return [];
+  }
+}
+
+export async function getAllEvents(page = 1, perPage = 12): Promise<{ events: HiEvent[]; total: number; lastPage: number }> {
+  try {
+    const res = await fetch(
+      `${HIEVENTS_API}/public/organizers/${ORGANIZER_ID}/events?page=${page}&per_page=${perPage}&sort_by=start_date&sort_direction=desc`
+    );
+    if (!res.ok) throw new Error(`hi.events API returned ${res.status}`);
+    const data = await res.json();
+    return {
+      events: data.data ?? [],
+      total: data.meta?.total ?? 0,
+      lastPage: data.meta?.last_page ?? 1,
+    };
+  } catch (error) {
+    console.error('Failed to fetch hi.events:', error);
+    return { events: [], total: 0, lastPage: 1 };
+  }
+}
 ```
 
-Note: The exact embed method depends on hi.events' widget API — this may be an iframe or a JS widget. Adjust based on what hi.events provides.
+- [x] **Step 2: Create `EventDetailCard.astro` component**
 
-- [x] **Step 2: Copy locale variants and verify**
+A richer event card for the events listing page (vs the compact `EventCard` used on homepage):
+- Cover image (from `EVENT_COVER` type in images array) with LQIP placeholder
+- Title, description preview, date range, location
+- "Get Tickets" CTA linking to `https://events.ccakd.ca/event/{id}/{slug}`
+- Lifecycle badge (Upcoming / Ongoing / Ended)
+- Porcelain theme styling: rounded-2xl, border, hover shadow
 
-- [x] **Step 3: Commit**
+- [x] **Step 3: Rewrite events pages for all 3 locales**
+
+Replace iframe with native event listing using `getAllEvents()` and `EventDetailCard`. Show grid of events with empty-state fallback. Include link to `events.ccakd.ca` as secondary CTA for ticket purchases.
+
+- [x] **Step 4: Update homepage EventCard to use new HiEvent fields**
+
+Update `EventCard.astro` and homepage imports to work with the new `HiEvent` interface (which now includes `description_preview`, `lifecycle_status`, `images`).
+
+- [x] **Step 5: Add i18n strings for events page**
+
+Add to all 3 locale JSON files: `events.upcoming`, `events.ongoing`, `events.ended`, `events.noEvents`, `events.viewOnHiEvents`
+
+- [x] **Step 6: Build, verify, commit**
 
 ```bash
-git add src/pages/*/events.astro
-git commit -m "feat: implement events page with hi.events embed"
+npm run build
+git add src/lib/hievents.ts src/components/EventDetailCard.astro src/components/EventCard.astro src/pages/*/events.astro src/pages/*/index.astro src/i18n/*.json
+git commit -m "feat: native events page with hi.events public API integration"
 ```
 
 ---

@@ -31,6 +31,11 @@
   },
   "events": {
     "title": "活动",
+    "upcoming": "即将举行",
+    "ongoing": "进行中",
+    "ended": "已结束",
+    "noEvents": "暂无活动。",
+    "getTickets": "获取门票",
     "fallback": "请访问 events.ccakd.ca 了解近期活动"
   },
   "programs": {
