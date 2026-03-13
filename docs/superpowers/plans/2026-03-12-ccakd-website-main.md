@@ -2248,14 +2248,14 @@ git commit -m "feat: add sample content for all collections and singletons"
 
 ### Task 20: Full Build Verification
 
-- [ ] **Step 1: Run full build**
+- [x] **Step 1: Run full build**
 
 ```bash
 npm run build
 ```
 Expected: Build succeeds, generates static pages for all 3 locales.
 
-- [ ] **Step 2: Preview built site**
+- [x] **Step 2: Preview built site**
 
 ```bash
 npx wrangler dev
@@ -2277,9 +2277,9 @@ Test all routes:
 - Language switcher works on all pages
 - Mobile responsive layout works
 
-- [ ] **Step 3: Commit any fixes**
+- [x] **Step 3: Commit any fixes**
 
-- [ ] **Step 4: Final commit**
+- [x] **Step 4: Final commit**
 
 ```bash
 git add -A
