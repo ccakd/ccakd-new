@@ -1562,7 +1562,7 @@ git commit -m "feat: implement homepage with all sections"
 **Files:**
 - Modify: `src/pages/en/programs.astro` (and zh/, zh-tw/)
 
-- [ ] **Step 1: Implement programs listing page**
+- [x] **Step 1: Implement programs listing page**
 
 Create `src/pages/en/programs.astro` — follows the same `createReader()` pattern as the announcements index (Task 12 Step 1). Differences:
 - Uses `reader.collections.programs.all()`
@@ -1599,11 +1599,11 @@ const active = allPrograms.filter((p) => p.entry.active);
 </Layout>
 ```
 
-- [ ] **Step 2: Copy locale variants**
+- [x] **Step 2: Copy locale variants**
 
 Create `src/pages/zh/programs.astro` and `src/pages/zh-tw/programs.astro` — change locale only.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/pages/en/programs.astro src/pages/zh/programs.astro src/pages/zh-tw/programs.astro

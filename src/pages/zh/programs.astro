@@ -1,15 +1,32 @@
 ---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
 import Layout from '../../components/Layout.astro';
+import ProgramCard from '../../components/ProgramCard.astro';
 import type { Locale } from '../../i18n/utils';
 import { t } from '../../i18n/utils';
 
 const locale: Locale = 'zh';
 const strings = t(locale);
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const allPrograms = await reader.collections.programs.all();
+const active = allPrograms.filter((p) => p.entry.active);
 ---
 
 <Layout locale={locale} path="/programs" title={strings.programs.title}>
-  <section class="py-20 text-center">
-    <h1 class="text-4xl font-bold">{strings.programs.title}</h1>
-    <p class="mt-4 text-gray-600">Content coming soon</p>
+  <section class="py-16 px-8">
+    <div class="max-w-[1080px] mx-auto">
+      <h1 class="font-display text-3xl font-semibold tracking-tight mb-8">{strings.programs.title}</h1>
+      {active.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {active.map(({ entry }) => (
+            <ProgramCard locale={locale} entry={entry} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-porcelain-secondary">暂无项目。</p>
+      )}
+    </div>
   </section>
 </Layout>
