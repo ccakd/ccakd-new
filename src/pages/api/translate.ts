@@ -127,11 +127,13 @@ ${text}`;
       throw new Error(`Azure AI returned ${res.status}: ${errBody.slice(0, 200)}`);
     }
     const data = await res.json() as any;
-    const content = data.choices?.[0]?.message?.content;
+    let content = data.choices?.[0]?.message?.content;
     if (!content) {
       console.error('Azure AI unexpected response:', JSON.stringify(data).slice(0, 500));
       throw new Error('No content in Azure AI response');
     }
+    // Strip markdown code fences that some models wrap around JSON
+    content = content.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
     const translations = JSON.parse(content);
 
     return new Response(JSON.stringify({ translations } satisfies TranslateResponse), {
