@@ -112,9 +112,20 @@ jobs:
 
       - name: Setup rclone
         if: steps.inputs.outputs.skip != 'true'
-        uses: AnimMouse/setup-rclone@v1
-        with:
-          rclone_config: ${{ secrets.RCLONE_CONFIG }}
+        env:
+          RCLONE_CONFIG_CONTENT: ${{ secrets.RCLONE_CONFIG }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          mkdir -p ~/.config/rclone
+
+          # Write service account key to a temp file (rclone reads it reliably from file)
+          echo "$GCP_SA_KEY" > /tmp/sa-key.json
+
+          # Decode and write rclone config
+          echo "$RCLONE_CONFIG_CONTENT" | base64 -d > ~/.config/rclone/rclone.conf
+
+          # Override the service account to use file path instead of inline contents
+          rclone config update gdrive service_account_file /tmp/sa-key.json
 
       - name: Download images from Google Drive
         if: steps.inputs.outputs.skip != 'true'

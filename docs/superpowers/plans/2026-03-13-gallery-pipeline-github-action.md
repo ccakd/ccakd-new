@@ -70,7 +70,8 @@ Set these in the repo's Settings → Secrets → Actions:
 | Secret | Value |
 |--------|-------|
 | `RCLONE_CONFIG` | Base64-encoded rclone config (see below) |
-| `R2_PUBLIC_URL` | R2 public bucket URL, e.g. `https://pub-abc123.r2.dev` |
+| `GCP_SA_KEY` | The raw JSON service account key file contents |
+| `R2_PUBLIC_URL` | R2 public bucket URL, e.g. `https://media.ccakd.ca` |
 
 **rclone config template** (encode this as base64 for `RCLONE_CONFIG`):
 
@@ -79,7 +80,6 @@ Set these in the repo's Settings → Secrets → Actions:
 type = drive
 scope = drive.readonly
 team_drive = {shared_drive_id}
-service_account_file_contents = {"type":"service_account","project_id":"...","private_key":"...","client_email":"...","...":"..."}
 
 [r2]
 type = s3
@@ -91,7 +91,7 @@ no_check_bucket = true
 ```
 
 > **Notes:**
-> - `service_account_file_contents` embeds the entire JSON key inline — no separate file needed. This is a native rclone feature for service accounts.
+> - The service account JSON key is stored as a separate `GCP_SA_KEY` secret and written to a file at runtime. The workflow overrides `service_account_file` in the rclone config automatically — no need to reference it in the config template.
 > - `team_drive` is the Shared Drive ID (from the URL: `https://drive.google.com/drive/folders/{ID}`). With the service account as Content Manager on the Shared Drive, it can access any folder by ID without per-folder sharing.
 
 ---
