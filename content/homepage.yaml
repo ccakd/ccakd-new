@@ -1,4 +1,7 @@
-hero_images: []
+hero_images:
+  - /images/hero/hero_images/0.jpg
+  - /images/hero/hero_images/1.jpeg
+  - /images/hero/hero_images/2.jpg
 hero_heading_en: Connecting Families, Celebrating Culture
 hero_heading_zh: 连接家庭，弘扬文化
 hero_heading_zhtw: 連結家庭，弘揚文化
