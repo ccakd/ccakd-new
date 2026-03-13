@@ -13,13 +13,10 @@ export default config({
   collections: {
     announcements: collection({
       label: 'Announcements',
-      slugField: 'slug',
+      slugField: 'title_en',
       path: 'content/announcements/*',
       schema: {
-        slug: fields.slug({
-          name: { label: 'Slug', description: 'URL-friendly identifier (auto-generated from English title)' },
-        }),
-        title_en: fields.text({ label: 'Title (English)', validation: { isRequired: true } }),
+        title_en: fields.slug({ name: { label: 'Title (English)', validation: { isRequired: true } } }),
         title_zh: fields.text({ label: 'Title (简体中文)' }),
         title_zhtw: fields.text({ label: 'Title (繁體中文)' }),
         body_en: fields.document({
@@ -54,13 +51,10 @@ export default config({
     }),
     programs: collection({
       label: 'Programs',
-      slugField: 'slug',
+      slugField: 'title_en',
       path: 'content/programs/*',
       schema: {
-        slug: fields.slug({
-          name: { label: 'Slug' },
-        }),
-        title_en: fields.text({ label: 'Title (English)', validation: { isRequired: true } }),
+        title_en: fields.slug({ name: { label: 'Title (English)', validation: { isRequired: true } } }),
         title_zh: fields.text({ label: 'Title (简体中文)' }),
         title_zhtw: fields.text({ label: 'Title (繁體中文)' }),
         description_en: fields.document({
@@ -97,13 +91,10 @@ export default config({
     }),
     galleries: collection({
       label: 'Galleries',
-      slugField: 'slug',
+      slugField: 'title_en',
       path: 'content/galleries/*',
       schema: {
-        slug: fields.slug({
-          name: { label: 'Slug' },
-        }),
-        title_en: fields.text({ label: 'Title (English)', validation: { isRequired: true } }),
+        title_en: fields.slug({ name: { label: 'Title (English)', validation: { isRequired: true } } }),
         title_zh: fields.text({ label: 'Title (简体中文)' }),
         title_zhtw: fields.text({ label: 'Title (繁體中文)' }),
         gdrive_link: fields.url({
