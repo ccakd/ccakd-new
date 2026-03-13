@@ -71,6 +71,8 @@ The plan file uses `- [x]`/`- [ ]` checkboxes to track completed steps. Check it
 
 - **React 19 + CF Workers:** `react-dom/server.browser` uses `MessageChannel` which doesn't exist in Workers. Fixed via Vite plugin in `astro.config.mjs` that redirects to `react-dom/server.edge`.
 - **Wrangler 4.x `.assetsignore`:** Must have `public/.assetsignore` containing `_worker.js` to prevent the worker bundle being uploaded as a public asset.
+- **Keystatic GitHub Auth requires a GitHub App (NOT an OAuth App).** OAuth Apps don't return `refresh_token`/`expires_in` which Keystatic's token schema requires. The GitHub App must have "Expire user authorization tokens" enabled. Callback URL: `https://<domain>/api/keystatic/github/oauth/callback`. Permissions: Contents (Read & Write).
+- **Keystatic route collision:** The `@keystatic/astro` integration auto-injects both `/keystatic` (UI) and `/api/keystatic` (API) routes. We use a custom integration in `astro.config.mjs` that only injects the UI route, while `src/pages/api/keystatic/[...params].ts` handles the API. The handler reads secrets from `context.locals.runtime.env` at request time (CF Worker secrets are runtime-only, not available via `import.meta.env`).
 
 ## Environment Variables
 
