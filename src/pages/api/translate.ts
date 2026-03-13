@@ -96,18 +96,19 @@ ${text}`;
   try {
     // CF Workers: runtime env from locals
     const env = (locals as any).runtime?.env ?? {};
-    const endpoint = env.AZURE_AI_ENDPOINT || import.meta.env.AZURE_AI_ENDPOINT;
+    // AZURE_AI_ENDPOINT is the full Target URI from Azure AI Foundry
+    // e.g. https://xxx.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview
+    const aiEndpoint = env.AZURE_AI_ENDPOINT || import.meta.env.AZURE_AI_ENDPOINT;
     const apiKey = env.AZURE_AI_API_KEY || import.meta.env.AZURE_AI_API_KEY;
-    const deploymentName = env.AZURE_AI_DEPLOYMENT || import.meta.env.AZURE_AI_DEPLOYMENT || 'gpt-4o-mini';
 
-    if (!endpoint || !apiKey) {
+    if (!aiEndpoint || !apiKey) {
       return new Response(JSON.stringify({ error: 'Translation service not configured' }), {
         status: 503,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    const res = await fetch(`${endpoint}/openai/deployments/${deploymentName}/chat/completions?api-version=2024-10-21`, {
+    const res = await fetch(aiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
