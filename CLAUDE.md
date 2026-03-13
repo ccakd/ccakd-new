@@ -67,6 +67,11 @@ Three locales: `en` (English), `zh` (Simplified Chinese), `zh-tw` (Traditional C
 
 The plan file uses `- [x]`/`- [ ]` checkboxes to track completed steps. Check it before starting work.
 
+## Known Gotchas
+
+- **React 19 + CF Workers:** `react-dom/server.browser` uses `MessageChannel` which doesn't exist in Workers. Fixed via Vite plugin in `astro.config.mjs` that redirects to `react-dom/server.edge`.
+- **Wrangler 4.x `.assetsignore`:** Must have `public/.assetsignore` containing `_worker.js` to prevent the worker bundle being uploaded as a public asset.
+
 ## Environment Variables
 
 Local dev uses `.dev.vars` (gitignored). Required vars: `AZURE_AI_ENDPOINT`, `AZURE_AI_API_KEY`, `HIEVENTS_API_URL`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`

@@ -1182,7 +1182,7 @@ git add src/pages/
 git commit -m "feat: add root redirect and skeleton pages for all routes and locales"
 ```
 
-- [ ] **Step 7: First Cloudflare deployment**
+- [x] **Step 7: First Cloudflare deployment**
 
 This is the first point where the site is meaningfully navigable. Deploy and verify:
 
