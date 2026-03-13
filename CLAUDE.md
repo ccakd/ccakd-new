@@ -10,13 +10,14 @@ This is the main website for the Chinese Canadian Association of Kingston and Di
 
 - **Spec:** `docs/superpowers/specs/2026-03-12-ccakd-website-redesign-design.md`
 - **Plan:** `docs/superpowers/plans/2026-03-12-ccakd-website-main.md`
-- Follow-up plans (Azure Function, GitHub Actions, content migration) to be created after main plan execution.
+- **Gallery Pipeline Plan:** `docs/superpowers/plans/2026-03-13-gallery-pipeline-github-action.md`
+- Follow-up plans (content migration) to be created after main plan execution.
 
 ## Architecture
 
 - **Frontend:** Astro (`output: 'static'`, per-page `prerender = false` for SSR routes) deployed to Cloudflare Workers (via Workers Static Assets)
 - **CMS:** Keystatic (`@keystatic/astro`) — saves content as Markdown/MDX files committed to GitHub
-- **Media Pipeline:** Google Drive (volunteer uploads) → Azure Functions (Node.js + `sharp`) → Cloudflare R2 (optimized WebP)
+- **Media Pipeline:** Google Drive (volunteer uploads) → GitHub Actions (rclone + cwebp) → Cloudflare R2 (optimized WebP) — see `.github/workflows/gallery-pipeline.yml`
 - **Gallery Frontend:** PhotoSwipe library for lightbox gallery rendering
 
 ### External Sub-Systems (separate repos/services)
@@ -38,7 +39,7 @@ npm run build
 npx wrangler deploy
 ```
 
-Deployment is automated via GitHub Actions: content changes in Keystatic trigger a commit → GitHub Action → `wrangler deploy`. Gallery changes additionally trigger the Azure Function image pipeline before building.
+Deployment is automated via GitHub Actions: content changes in Keystatic trigger a commit → GitHub Action → `wrangler deploy`. Gallery changes trigger the gallery pipeline workflow (GDrive → WebP → R2 → manifest commit).
 
 ## Key Configuration Files
 

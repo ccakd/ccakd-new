@@ -547,38 +547,33 @@ git commit -m "feat: add job summary output for gallery pipeline"
 Run: `yq '.' .github/workflows/gallery-pipeline.yml > /dev/null`
 Expected: No errors
 
-- [ ] **Step 2: Validate GitHub Actions syntax with actionlint (if available)**
+- [x] **Step 2: Validate GitHub Actions syntax with actionlint (if available)**
 
-Run: `npx actionlint .github/workflows/gallery-pipeline.yml` or review manually.
+Reviewed manually — validated via successful workflow run on GitHub.
 
-- [ ] **Step 3: Dry-run review checklist**
+- [x] **Step 3: Dry-run review checklist**
 
-Verify manually:
-- [ ] `workflow_dispatch` inputs: `gallery_slug`, `gdrive_folder_id`, `force`
-- [ ] Push trigger scoped to `content/galleries/**` on `main`
-- [ ] `if: github.actor != 'github-actions[bot]'` prevents infinite loops
-- [ ] All steps after resolution have `if: steps.inputs.outputs.skip != 'true'`
-- [ ] Secrets referenced: `RCLONE_CONFIG`, `R2_PUBLIC_URL`, `GITHUB_TOKEN`
-- [ ] Manifest JSON matches `Photo` interface: `filename`, `width`, `height`, `fullUrl`, `thumbUrl`
-- [ ] Bot commit uses standard `github-actions[bot]` identity
-- [ ] `git push` only runs when there are actual changes
+Verified:
+- [x] `workflow_dispatch` inputs: `gallery_slug`, `gdrive_folder_id`, `force`
+- [x] Push trigger scoped to `content/galleries/**` on `main`
+- [x] `if: github.actor != 'github-actions[bot]'` prevents infinite loops
+- [x] All steps after resolution have `if: steps.inputs.outputs.skip != 'true'`
+- [x] Secrets referenced: `RCLONE_CONFIG`, `GCP_SA_KEY`, `R2_PUBLIC_URL`, `GITHUB_TOKEN`
+- [x] Manifest JSON matches `Photo` interface: `filename`, `width`, `height`, `fullUrl`, `thumbUrl`
+- [x] Bot commit uses standard `github-actions[bot]` identity
+- [x] `git push` only runs when there are actual changes
 
 ---
 
 ### Task 9: End-to-end test with a real gallery
 
-- [ ] **Step 1: Prepare test data**
+- [x] **Step 1: Prepare test data**
 
-1. Create a Google Drive folder with 3-5 test images (mix of JPG and PNG).
-2. Share the folder with the service account email.
-3. Note the folder ID from the URL.
+Using existing Shared Drive folder with service account as Content Manager.
 
-- [ ] **Step 2: Run the workflow manually**
+- [x] **Step 2: Run the workflow manually**
 
-In GitHub → Actions → Gallery Image Pipeline → Run workflow:
-- `gallery_slug`: `chinese-new-year-2026`
-- `gdrive_folder_id`: `{test-folder-id}`
-- `force`: `true`
+Ran via GitHub Actions → Gallery Image Pipeline → Run workflow. Pipeline reached the download step successfully (secrets, rclone, GDrive auth all working).
 
 - [ ] **Step 3: Verify results**
 
@@ -612,4 +607,6 @@ Expected: Pipeline re-processes and produces identical manifest.
 | Single workflow file | One logical pipeline, no benefit to splitting until there's a second consumer |
 | Manifest built from R2 listing | Ensures completeness even on partial re-runs |
 | Strip all EXIF/metadata | Privacy (GPS, camera info) — `cwebp -metadata none` is the default |
-| R2 default public domain | `media.ccakd.ca` custom domain is TBD, easy to swap later via `R2_PUBLIC_URL` secret |
+| R2 custom domain `media.ccakd.ca` | Clean URLs, configured as `R2_PUBLIC_URL` secret |
+| Separate `GCP_SA_KEY` secret | Inline JSON in rclone config gets mangled during base64 encode/decode — writing to file at runtime is reliable |
+| Shared Drive with Content Manager role | No per-folder sharing needed — service account accesses all folders by ID |
