@@ -1,8 +1,7 @@
----
 export const prerender = false;
 
 import { makeHandler } from '@keystatic/astro/api';
-import keystaticConfig from '../../../keystatic.config';
+import keystaticConfig from '../../../../keystatic.config';
 
 export const ALL = makeHandler({
   config: keystaticConfig,
@@ -10,4 +9,3 @@ export const ALL = makeHandler({
   clientSecret: import.meta.env.KEYSTATIC_GITHUB_CLIENT_SECRET,
   secret: import.meta.env.KEYSTATIC_SECRET,
 });
----
