@@ -2040,7 +2040,7 @@ git commit -m "feat: implement terms and conditions page"
 **Files:**
 - Create: `src/pages/api/translate.ts`
 
-- [ ] **Step 1: Implement translation endpoint**
+- [x] **Step 1: Implement translation endpoint**
 
 Create `src/pages/api/translate.ts`:
 
@@ -2163,7 +2163,7 @@ ${text}`;
 };
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/pages/api/translate.ts
