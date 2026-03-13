@@ -1215,23 +1215,17 @@ Verify:
 
 **This task uses the `frontend-design` skill.**
 
-- [ ] **Step 1: Invoke frontend-design skill to create 3 theme options**
+- [x] **Step 1: Invoke frontend-design skill to create 3 theme options**
 
-Requirements to pass to the frontend-design skill:
-- Community non-profit website for Chinese Canadian Association of Kingston
-- Warm, welcoming, beautiful, modern
-- Must support trilingual content (English + Simplified Chinese + Traditional Chinese) — CJK typography matters
-- Inspired by current site (https://ccakd.ca) but not copying it
-- Responsive, mobile-first
-- Sections: hero carousel, announcements, events cards, programs cards, newsletter signup, social links, gallery grid
-- Not locked to current palette (#C42D14) or fonts — open to new directions
-- Present 3 distinct theme options for user to choose from
+Created 9 theme previews across 3 rounds in `docs/themes/`. Final round: Porcelain (red), Celadon (teal), Indigo Silk (blue).
 
-- [ ] **Step 2: User selects a theme**
+- [x] **Step 2: User selects a theme**
 
-- [ ] **Step 3: Apply selected theme to tailwind.config.mjs and global.css**
+User selected **Theme G (Porcelain)** — Apple.cn-inspired minimalism with red accent `#D04830`, Noto Serif SC + Roboto fonts, pill nav, frosted glass header, light borders (no heavy colored bars).
 
-Update color palette, typography, spacing, and any custom utility classes based on the chosen theme.
+- [x] **Step 3: Apply selected theme to tailwind.config.mjs and global.css**
+
+Applied Porcelain theme: updated `tailwind.config.mjs` (colors, fonts, pill radius), `global.css` (base styles, component classes), `Layout.astro` (Google Fonts), `Nav.astro` (frosted glass pill nav with logo), `Footer.astro` (light border-only style).
 
 - [ ] **Step 4: Update Layout.astro with font imports**
 

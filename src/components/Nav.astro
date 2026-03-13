@@ -4,7 +4,7 @@ import { t, localePath } from '../i18n/utils';
 
 interface Props {
   locale: Locale;
-  currentPath: string; // Path without locale prefix, e.g., '/about'
+  currentPath: string;
 }
 
 const { locale, currentPath } = Astro.props;
@@ -25,42 +25,46 @@ const localeLabels: { code: Locale; label: string }[] = [
 ];
 ---
 
-<header class="sticky top-0 z-50 bg-white shadow-sm">
-  {/* Top bar: auth links + language switcher */}
-  <div class="border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 flex justify-end items-center gap-4 py-1 text-sm">
-      <a href="https://members.ccakd.ca/en/login" class="text-gray-600 hover:text-gray-900">{strings.nav.login}</a>
-      <a href="https://members.ccakd.ca/en/register" class="text-gray-600 hover:text-gray-900">{strings.nav.signup}</a>
-      <div class="flex gap-1 border-l pl-4 ml-2">
-        {localeLabels.map(({ code, label }) => (
-          <a
-            href={localePath(code, currentPath)}
-            class:list={[
-              'px-2 py-0.5 rounded text-xs font-medium',
-              code === locale ? 'bg-amber-500 text-white' : 'text-gray-600 hover:bg-gray-100',
-            ]}
-          >
-            {label}
-          </a>
-        ))}
-      </div>
+{/* Top bar */}
+<div class="border-b border-porcelain-border text-[0.78rem] py-1 bg-white">
+  <div class="max-w-[1080px] mx-auto px-8 flex justify-end items-center gap-3">
+    <a href="https://members.ccakd.ca/en/login" class="text-porcelain-tertiary hover:text-porcelain-text transition-colors">{strings.nav.login}</a>
+    <a href="https://members.ccakd.ca/en/register" class="text-porcelain-tertiary hover:text-porcelain-text transition-colors">{strings.nav.signup}</a>
+    <div class="flex gap-0.5 ml-3">
+      {localeLabels.map(({ code, label }) => (
+        <a
+          href={localePath(code, currentPath)}
+          class:list={[
+            'px-2.5 py-0.5 rounded-pill text-[0.72rem] font-medium transition-all',
+            code === locale
+              ? 'bg-porcelain-text text-white'
+              : 'text-porcelain-tertiary hover:bg-porcelain-section',
+          ]}
+        >
+          {label}
+        </a>
+      ))}
     </div>
   </div>
+</div>
 
-  {/* Main nav */}
-  <nav class="max-w-7xl mx-auto px-4 flex items-center justify-between py-3">
+{/* Frosted glass nav */}
+<nav class="sticky top-0 z-50 bg-white/85 backdrop-blur-[20px] backdrop-saturate-[180%] border-b border-black/[0.06]">
+  <div class="max-w-[1080px] mx-auto px-8 flex items-center justify-between h-[52px]">
     <a href={localePath(locale, '/')} class="flex items-center gap-2">
-      <span class="text-lg font-bold">{strings.site.titleShort}</span>
+      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD" class="h-8" />
     </a>
 
-    {/* Desktop nav */}
-    <div class="hidden md:flex items-center gap-6">
+    {/* Desktop nav - pill style */}
+    <div class="hidden md:flex items-center gap-1">
       {navItems.map(({ label, path }) => (
         <a
           href={localePath(locale, path)}
           class:list={[
-            'text-sm font-medium transition-colors',
-            currentPath === path ? 'text-amber-600' : 'text-gray-700 hover:text-amber-600',
+            'px-3.5 py-1.5 rounded-pill text-[0.84rem] transition-all',
+            currentPath === path
+              ? 'bg-accent-bg text-accent font-medium'
+              : 'text-porcelain-secondary hover:bg-porcelain-section hover:text-porcelain-text',
           ]}
         >
           {label}
@@ -68,14 +72,14 @@ const localeLabels: { code: Locale; label: string }[] = [
       ))}
       <a
         href="https://members.ccakd.ca/en/"
-        class="text-sm font-medium text-gray-700 hover:text-amber-600"
+        class="px-3.5 py-1.5 rounded-pill text-[0.84rem] text-porcelain-secondary hover:bg-porcelain-section hover:text-porcelain-text transition-all"
         target="_blank"
       >
         {strings.nav.membership}
       </a>
     </div>
 
-    {/* Mobile hamburger - implemented via CSS checkbox trick, no JS needed */}
+    {/* Mobile hamburger */}
     <input type="checkbox" id="mobile-menu-toggle" class="hidden peer" />
     <label for="mobile-menu-toggle" class="md:hidden cursor-pointer p-2">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,15 +88,23 @@ const localeLabels: { code: Locale; label: string }[] = [
     </label>
 
     {/* Mobile menu dropdown */}
-    <div class="hidden peer-checked:flex absolute top-full left-0 right-0 bg-white shadow-lg flex-col md:hidden border-t">
+    <div class="hidden peer-checked:flex absolute top-full left-0 right-0 bg-white shadow-lg flex-col md:hidden border-t border-porcelain-border">
       {navItems.map(({ label, path }) => (
-        <a href={localePath(locale, path)} class="px-6 py-3 text-sm hover:bg-gray-50 border-b border-gray-100">
+        <a
+          href={localePath(locale, path)}
+          class:list={[
+            'px-6 py-3 text-sm border-b border-porcelain-border/50',
+            currentPath === path
+              ? 'text-accent bg-accent-bg/50 font-medium'
+              : 'text-porcelain-text hover:bg-porcelain-section',
+          ]}
+        >
           {label}
         </a>
       ))}
-      <a href="https://members.ccakd.ca/en/" class="px-6 py-3 text-sm hover:bg-gray-50" target="_blank">
+      <a href="https://members.ccakd.ca/en/" class="px-6 py-3 text-sm text-porcelain-text hover:bg-porcelain-section" target="_blank">
         {strings.nav.membership}
       </a>
     </div>
-  </nav>
-</header>
+  </div>
+</nav>

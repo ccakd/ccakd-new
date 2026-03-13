@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Roboto', 'Noto Serif SC', 'Noto Serif TC', system-ui, sans-serif;
+    color: #1D1D1F;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+}
+
+@layer components {
+  .section-heading {
+    @apply font-display text-3xl font-semibold tracking-tight text-porcelain-text;
+  }
+
+  .chip {
+    @apply inline-block px-3 py-0.5 bg-accent-bg text-accent text-xs font-medium rounded-pill;
+  }
+}
