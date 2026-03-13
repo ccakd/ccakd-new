@@ -46,3 +46,23 @@ const langMap: Record<Locale, string> = { en: 'en', zh: 'zh-Hans', 'zh-tw': 'zh-
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={pageDescription} />
 <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+{/* JSON-LD Organization schema on homepage */}
+{path === '/' && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'NGO',
+    name: 'Chinese Canadian Association of Kingston and District',
+    alternateName: 'CCAKD',
+    url: 'https://ccakd.ca',
+    email: 'info@ccakd.ca',
+    foundingDate: '1974',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Kingston',
+      addressRegion: 'ON',
+      addressCountry: 'CA',
+    },
+    sameAs: ['https://www.facebook.com/CCAKD/'],
+  })} />
+)}

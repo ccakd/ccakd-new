@@ -2177,7 +2177,7 @@ git commit -m "feat: add translation API endpoint proxying to Azure AI Foundry"
 **Files:**
 - Modify: `src/components/SEOHead.astro`
 
-- [ ] **Step 1: Add JSON-LD Organization schema**
+- [x] **Step 1: Add JSON-LD Organization schema**
 
 Add JSON-LD to SEOHead.astro, conditionally rendered when `path === '/'`:
 
@@ -2201,7 +2201,7 @@ Add JSON-LD to SEOHead.astro, conditionally rendered when `path === '/'`:
 )}
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/SEOHead.astro
