@@ -1,18 +1,48 @@
 ---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../../keystatic.config';
 import Layout from '../../../components/Layout.astro';
+import GalleryLightbox from '../../../components/GalleryLightbox.astro';
 import type { Locale } from '../../../i18n/utils';
+import { t, localePath } from '../../../i18n/utils';
+import { localized } from '../../../lib/content';
 
 export async function getStaticPaths() {
-  return [];
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const slugs = await reader.collections.galleries.list();
+  return slugs.map((slug) => ({ params: { slug } }));
 }
 
 const locale: Locale = 'en';
+const strings = t(locale);
 const { slug } = Astro.params;
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const entry = await reader.collections.galleries.read(slug!);
+if (!entry) return Astro.redirect(localePath(locale, '/gallery'));
+
+const title = localized(entry as Record<string, any>, 'title', locale);
+const photos = entry.photo_manifest ? JSON.parse(entry.photo_manifest) : [];
+const dateStr = new Date(entry.date).toLocaleDateString('en-CA', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
 ---
 
-<Layout locale={locale} path={`/gallery/${slug}`} title={slug}>
-  <section class="py-20 text-center">
-    <h1 class="text-4xl font-bold">{slug}</h1>
-    <p class="mt-4 text-gray-600">Gallery detail — content coming soon</p>
+<Layout locale={locale} path={`/gallery/${slug}`} title={title}>
+  <section class="py-16 px-8">
+    <div class="max-w-[1080px] mx-auto">
+      <a href={localePath(locale, '/gallery')} class="text-accent text-sm font-medium hover:underline mb-6 inline-block">
+        &larr; {strings.gallery.title}
+      </a>
+      <h1 class="font-display text-3xl font-semibold tracking-tight mt-2 mb-2">{title}</h1>
+      <p class="text-[0.82rem] text-porcelain-tertiary mb-8">
+        {dateStr} · {photos.length} {strings.gallery.photos}
+      </p>
+      {photos.length > 0 ? (
+        <GalleryLightbox photos={photos} />
+      ) : (
+        <p class="text-porcelain-secondary">Photos coming soon.</p>
+      )}
+    </div>
   </section>
 </Layout>

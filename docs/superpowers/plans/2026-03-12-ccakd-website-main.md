@@ -1728,7 +1728,7 @@ git commit -m "feat: implement announcements index and detail pages"
 - Create: `src/components/GalleryAlbumCard.astro`
 - Create: `src/components/GalleryLightbox.astro`
 
-- [ ] **Step 1: Create GalleryAlbumCard component**
+- [x] **Step 1: Create GalleryAlbumCard component**
 
 Create `src/components/GalleryAlbumCard.astro`:
 ```astro
@@ -1761,11 +1761,11 @@ const date = new Date(entry.date).toLocaleDateString(locale === 'en' ? 'en-CA' :
 </a>
 ```
 
-- [ ] **Step 2: Implement gallery index page**
+- [x] **Step 2: Implement gallery index page**
 
 Create `src/pages/en/gallery/index.astro` — same `createReader()` pattern as announcements. Fetches all galleries sorted by date, renders `GalleryAlbumCard` grid.
 
-- [ ] **Step 3: Create GalleryLightbox component**
+- [x] **Step 3: Create GalleryLightbox component**
 
 A component that:
 - Renders a responsive thumbnail grid from the `photo_manifest` JSON
@@ -1822,13 +1822,13 @@ const { photos } = Astro.props;
 </script>
 ```
 
-- [ ] **Step 4: Implement gallery detail page**
+- [x] **Step 4: Implement gallery detail page**
 
 Use `getStaticPaths()` for each gallery slug. Parse the `photo_manifest` JSON field. If manifest is empty/null (gallery not yet processed), show a "Photos coming soon" message. Otherwise render `GalleryLightbox`.
 
-- [ ] **Step 5: Copy locale variants and verify**
+- [x] **Step 5: Copy locale variants and verify**
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/GalleryAlbumCard.astro src/components/GalleryLightbox.astro src/pages/*/gallery/

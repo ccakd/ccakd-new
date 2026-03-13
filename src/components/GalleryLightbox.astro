@@ -1,0 +1,45 @@
+---
+interface Photo {
+  filename: string;
+  width: number;
+  height: number;
+  fullUrl: string;
+  thumbUrl: string;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2" id="gallery">
+  {photos.map((photo) => (
+    <a
+      href={photo.fullUrl}
+      data-pswp-width={photo.width}
+      data-pswp-height={photo.height}
+      target="_blank"
+      class="block overflow-hidden rounded-[10px]"
+    >
+      <img
+        src={photo.thumbUrl}
+        alt={photo.filename}
+        loading="lazy"
+        class="w-full aspect-square object-cover hover:opacity-90 hover:scale-[1.02] transition-all duration-200"
+      />
+    </a>
+  ))}
+</div>
+
+<script>
+  import 'photoswipe/dist/photoswipe.css';
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  });
+  lightbox.init();
+</script>
