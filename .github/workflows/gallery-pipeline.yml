@@ -392,9 +392,9 @@ jobs:
           echo "| R2 path | \`galleries/${SLUG}/\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Trigger | ${{ github.event_name }} |" >> "$GITHUB_STEP_SUMMARY"
 
-  # Deploy the site after gallery processing
+  # Always deploy after gallery changes (including deletions)
   deploy:
     needs: process-gallery
-    if: needs.process-gallery.result == 'success'
+    if: always() && !cancelled()
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
