@@ -1,0 +1,202 @@
+name: Auto-Translate Content
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+
+  workflow_dispatch:
+    inputs:
+      path:
+        description: 'Specific content path to translate (e.g., content/announcements/my-post.yaml)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install yq
+        uses: mikefarah/yq@v4
+
+      - name: Find changed content files
+        id: changes
+        env:
+          INPUT_PATH: ${{ inputs.path }}
+        run: |
+          if [ -n "$INPUT_PATH" ]; then
+            echo "$INPUT_PATH" > /tmp/changed_files.txt
+          else
+            git diff --name-only HEAD~1 HEAD -- 'content/**' > /tmp/changed_files.txt
+          fi
+
+          cat /tmp/changed_files.txt
+          echo "count=$(wc -l < /tmp/changed_files.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
+
+      - name: Translate content
+        if: steps.changes.outputs.count != '0'
+        env:
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_AI_ENDPOINT }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_AI_API_KEY }}
+        run: |
+          # Map of language suffixes to full names for prompts
+          declare -A LANG_NAMES=(
+            ["en"]="English"
+            ["zh"]="Simplified Chinese"
+            ["zhtw"]="Traditional Chinese"
+          )
+
+          translate_text() {
+            local text="$1"
+            local source_lang="$2"
+            local target_lang="$3"
+            local is_markdoc="$4"
+
+            local source_name="${LANG_NAMES[$source_lang]}"
+            local target_name="${LANG_NAMES[$target_lang]}"
+
+            local format_instruction=""
+            if [ "$is_markdoc" = "true" ]; then
+              format_instruction="The text is in Markdoc format. Preserve ALL Markdoc tags, image references (![alt](url)), link URLs, HTML elements, and formatting exactly as-is. Only translate the human-readable text content. Do not translate URLs, file paths, or tag names."
+            fi
+
+            local prompt="Translate the following ${source_name} text to ${target_name}. ${format_instruction} Return ONLY the translated text, no explanations or wrapping."
+
+            local response
+            response=$(curl -s -X POST \
+              "${AZURE_OPENAI_ENDPOINT}/openai/deployments/gpt-5.4/chat/completions?api-version=2025-01-01-preview" \
+              -H "Content-Type: application/json" \
+              -H "api-key: ${AZURE_OPENAI_API_KEY}" \
+              -d "$(jq -n \
+                --arg prompt "$prompt" \
+                --arg text "$text" \
+                '{messages: [{role: "system", content: $prompt}, {role: "user", content: $text}], max_completion_tokens: 4096}')")
+
+            echo "$response" | jq -r '.choices[0].message.content // empty'
+          }
+
+          # Group changes by content entry
+          ENTRIES=()
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            if [[ "$file" == *.yaml ]]; then
+              entry="${file%.yaml}"
+            else
+              entry=$(dirname "$file")
+            fi
+            if [[ ! " ${ENTRIES[*]} " =~ " ${entry} " ]]; then
+              ENTRIES+=("$entry")
+            fi
+          done < /tmp/changed_files.txt
+
+          for entry in "${ENTRIES[@]}"; do
+            echo "=== Processing: $entry ==="
+            yaml_file="${entry}.yaml"
+
+            if [ ! -f "$yaml_file" ]; then
+              echo "  No YAML file found at $yaml_file, skipping"
+              continue
+            fi
+
+            # --- Translate YAML text fields ---
+            EN_FIELDS=$(yq 'keys | .[]' "$yaml_file" 2>/dev/null | grep '_en$' || true)
+
+            for en_field in $EN_FIELDS; do
+              base="${en_field%_en}"
+              zh_field="${base}_zh"
+              zhtw_field="${base}_zhtw"
+
+              en_val=$(yq ".${en_field} // \"\"" "$yaml_file" 2>/dev/null)
+              zh_val=$(yq ".${zh_field} // \"\"" "$yaml_file" 2>/dev/null)
+              zhtw_val=$(yq ".${zhtw_field} // \"\"" "$yaml_file" 2>/dev/null)
+
+              # Skip if English is empty or if it's a slug field (contains nested value)
+              if [ "$en_val" = "null" ] || [ -z "$en_val" ]; then
+                continue
+              fi
+
+              # Translate EN→ZH if zh is empty
+              if [ -z "$zh_val" ] || [ "$zh_val" = "null" ] || [ "$zh_val" = "''" ]; then
+                echo "  Translating $en_field → $zh_field"
+                translated=$(translate_text "$en_val" "en" "zh" "false")
+                if [ -n "$translated" ]; then
+                  yq -i ".${zh_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
+                fi
+              fi
+
+              # Translate EN→ZH-TW if zhtw is empty
+              if [ -z "$zhtw_val" ] || [ "$zhtw_val" = "null" ] || [ "$zhtw_val" = "''" ]; then
+                echo "  Translating $en_field → $zhtw_field"
+                translated=$(translate_text "$en_val" "en" "zhtw" "false")
+                if [ -n "$translated" ]; then
+                  yq -i ".${zhtw_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
+                fi
+              fi
+            done
+
+            # --- Translate .mdoc document fields ---
+            if [ -d "$entry" ]; then
+              for en_mdoc in "$entry"/*_en.mdoc; do
+                [ -f "$en_mdoc" ] || continue
+                base_name=$(basename "$en_mdoc" _en.mdoc)
+
+                zh_mdoc="${entry}/${base_name}_zh.mdoc"
+                zhtw_mdoc="${entry}/${base_name}_zhtw.mdoc"
+
+                en_content=$(cat "$en_mdoc")
+                [ -z "$en_content" ] && continue
+
+                # Translate EN→ZH if zh mdoc is empty or missing
+                if [ ! -f "$zh_mdoc" ] || [ ! -s "$zh_mdoc" ]; then
+                  echo "  Translating ${base_name}_en.mdoc → ${base_name}_zh.mdoc"
+                  translated=$(translate_text "$en_content" "en" "zh" "true")
+                  if [ -n "$translated" ]; then
+                    echo "$translated" > "$zh_mdoc"
+                  fi
+                fi
+
+                # Translate EN→ZH-TW if zhtw mdoc is empty or missing
+                if [ ! -f "$zhtw_mdoc" ] || [ ! -s "$zhtw_mdoc" ]; then
+                  echo "  Translating ${base_name}_en.mdoc → ${base_name}_zhtw.mdoc"
+                  translated=$(translate_text "$en_content" "en" "zhtw" "true")
+                  if [ -n "$translated" ]; then
+                    echo "$translated" > "$zhtw_mdoc"
+                  fi
+                fi
+              done
+            fi
+
+            echo "  Done: $entry"
+          done
+
+      - name: Commit translations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/
+
+          if git diff --cached --quiet; then
+            echo "::notice::No translations needed"
+          else
+            git commit -m "chore: auto-translate content"
+            git push
+          fi
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "## Translation Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Processed $(wc -l < /tmp/changed_files.txt | tr -d ' ') changed files" >> "$GITHUB_STEP_SUMMARY"

@@ -21,10 +21,11 @@ const reader = createReader(process.cwd(), keystaticConfig);
 const homepage = await reader.singletons.homepage.read();
 
 const allAnnouncements = await reader.collections.announcements.all();
-const pinned = allAnnouncements
-  .filter((a) => a.entry.pinned)
-  .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime())
-  .slice(0, 3);
+const sorted = allAnnouncements
+  .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime());
+const pinnedItems = sorted.filter((a) => a.entry.pinned);
+const recentItems = sorted.filter((a) => !a.entry.pinned);
+const featured = [...pinnedItems, ...recentItems].slice(0, 3);
 
 const events = await getUpcomingEvents(3);
 
@@ -40,7 +41,7 @@ const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
     images={(homepage?.hero_images as string[]) || []}
   />
 
-  {pinned.length > 0 && (
+  {featured.length > 0 && (
     <section class="py-16 px-8">
       <div class="max-w-[1080px] mx-auto">
         <div class="flex items-baseline justify-between mb-8">
@@ -50,7 +51,7 @@ const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
           </a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {pinned.map(({ slug, entry }) => (
+          {featured.map(({ slug, entry }) => (
             <AnnouncementCard locale={locale} slug={slug} entry={entry} />
           ))}
         </div>

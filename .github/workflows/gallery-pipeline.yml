@@ -288,6 +288,51 @@ jobs:
           echo "Generated manifest with $(echo "$MANIFEST" | jq 'length') photos"
           cat /tmp/manifest.json
 
+      - name: Auto-select cover image
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          SLUG="${{ steps.inputs.outputs.slug }}"
+          YAML_FILE="content/galleries/${SLUG}.yaml"
+
+          # Check if cover_image is already set
+          EXISTING_COVER=$(yq '.cover_image // ""' "$YAML_FILE")
+          if [ -n "$EXISTING_COVER" ] && [ "$EXISTING_COVER" != "null" ] && [ "$EXISTING_COVER" != "''" ]; then
+            echo "Cover image already set, skipping"
+            exit 0
+          fi
+
+          # Look for feature/hero image (case-insensitive)
+          COVER_FILE=""
+          for pattern in feature hero; do
+            MATCH=$(ls ./processed/thumb/ 2>/dev/null | grep -i "^${pattern}" | head -1 || true)
+            if [ -n "$MATCH" ]; then
+              COVER_FILE="$MATCH"
+              echo "Found cover image by name: $COVER_FILE"
+              break
+            fi
+          done
+
+          # Fallback: use first image alphabetically
+          if [ -z "$COVER_FILE" ]; then
+            COVER_FILE=$(ls ./processed/thumb/ 2>/dev/null | sort | head -1)
+            echo "Using first image as cover: $COVER_FILE"
+          fi
+
+          if [ -z "$COVER_FILE" ]; then
+            echo "::warning::No images available for cover"
+            exit 0
+          fi
+
+          # Copy thumbnail to public/images/galleries/
+          mkdir -p public/images/galleries
+          COVER_DEST="public/images/galleries/${SLUG}-cover.webp"
+          cp "./processed/thumb/${COVER_FILE}" "$COVER_DEST"
+
+          # Set cover_image in YAML (Keystatic image field expects the filename only)
+          yq -i ".cover_image = \"${SLUG}-cover.webp\"" "$YAML_FILE"
+
+          echo "Set cover image: $COVER_DEST"
+
       - name: Update gallery YAML and commit
         if: steps.inputs.outputs.skip != 'true'
         run: |
@@ -312,7 +357,7 @@ jobs:
           # Commit and push
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$YAML_FILE"
+          git add "$YAML_FILE" public/images/galleries/
 
           if git diff --cached --quiet; then
             echo "::notice::No changes to commit (manifest unchanged)"
