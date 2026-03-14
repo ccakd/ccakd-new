@@ -380,6 +380,7 @@ jobs:
             echo "::notice::No changes to commit (manifest unchanged)"
           else
             git commit -m "chore: update photo manifest for gallery '${SLUG}'"
+            git pull --rebase
             git push
           fi
 
