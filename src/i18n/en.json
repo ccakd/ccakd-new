@@ -9,6 +9,7 @@
     "programs": "Programs",
     "gallery": "Gallery",
     "about": "About",
+    "newcomers": "Newcomers",
     "membership": "Membership",
     "login": "Login",
     "signup": "Sign Up"
@@ -58,6 +59,18 @@
     "history": "Our History",
     "executives": "Our Executives",
     "constitution": "Constitution"
+  },
+  "newcomers": {
+    "title": "Newcomers",
+    "subtitle": "Resources for New Arrivals",
+    "categories": {
+      "immigrant_services": "Immigrant Services",
+      "government": "Government Services",
+      "education": "Education",
+      "business": "Business Support"
+    },
+    "externalLink": "Opens in new tab",
+    "noResources": "No resources available yet."
   },
   "announcements": {
     "title": "Announcements",

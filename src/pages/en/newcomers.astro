@@ -1,0 +1,63 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+import { DocumentRenderer } from '@keystatic/core/renderer';
+import Layout from '../../components/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import NewcomerResourceCard from '../../components/NewcomerResourceCard.astro';
+import type { Locale } from '../../i18n/utils';
+import { t } from '../../i18n/utils';
+
+const locale: Locale = 'en';
+const strings = t(locale);
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const newcomers = await reader.singletons.newcomers.read();
+
+const welcomeBody = newcomers ? await (newcomers as any).welcome_en?.() : null;
+const resources = newcomers?.resources ?? [];
+
+const categoryOrder = ['immigrant_services', 'government', 'education', 'business'] as const;
+const groupedResources = categoryOrder
+  .map((cat) => ({
+    key: cat,
+    label: (strings.newcomers.categories as Record<string, string>)[cat],
+    items: resources.filter((r: any) => r.category === cat),
+  }))
+  .filter((group) => group.items.length > 0);
+---
+
+<Layout locale={locale} path="/newcomers" title={strings.newcomers.title}>
+  <PageHeader title={strings.newcomers.title} subtitle={strings.newcomers.subtitle} />
+
+  {welcomeBody && (
+    <section class="pt-6 pb-2 px-8">
+      <div class="max-w-[720px] mx-auto">
+        <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+          <DocumentRenderer document={welcomeBody} />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="pb-16 pt-6 px-8">
+    <div class="max-w-[1080px] mx-auto">
+      {groupedResources.length > 0 ? (
+        groupedResources.map((group) => (
+          <div class="mb-10">
+            <h2 class="font-display text-lg font-semibold mb-4 pl-3 border-l-[3px] border-accent">
+              {group.label}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {group.items.map((resource: any) => (
+                <NewcomerResourceCard locale={locale} resource={resource} />
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p class="text-porcelain-secondary">{strings.newcomers.noResources}</p>
+      )}
+    </div>
+  </section>
+</Layout>

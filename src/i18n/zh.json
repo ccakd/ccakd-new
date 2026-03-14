@@ -9,6 +9,7 @@
     "programs": "项目",
     "gallery": "相册",
     "about": "关于",
+    "newcomers": "新移民资源",
     "membership": "会员",
     "login": "登录",
     "signup": "注册"
@@ -58,6 +59,18 @@
     "history": "我们的历史",
     "executives": "理事会成员",
     "constitution": "章程"
+  },
+  "newcomers": {
+    "title": "新移民资源",
+    "subtitle": "新移民实用资源",
+    "categories": {
+      "immigrant_services": "移民服务",
+      "government": "政府服务",
+      "education": "教育",
+      "business": "商业支持"
+    },
+    "externalLink": "在新标签页中打开",
+    "noResources": "暂无资源。"
   },
   "announcements": {
     "title": "公告",

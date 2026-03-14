@@ -1,0 +1,100 @@
+resources:
+  - category: immigrant_services
+    icon: landmark
+    title_en: City of Kingston Immigration & Settlement
+    title_zh: 金斯顿市移民与安置信息
+    title_zhtw: 金斯頓市移民與安置資訊
+    description_en: Official city resources for newcomers including settlement support and community connections
+    description_zh: 金斯顿市官方新移民资源，包括安置支持和社区联系
+    description_zhtw: 金斯頓市官方新移民資源，包括安置支持和社區聯繫
+    url: https://www.cityofkingston.ca/residents/immigration-settlement
+  - category: immigrant_services
+    icon: hospital
+    title_en: KCHC Immigrant Services
+    title_zh: 金斯顿社区健康中心移民服务
+    title_zhtw: 金斯頓社區健康中心移民服務
+    description_en: Health and community programs for immigrants and refugees
+    description_zh: 为移民和难民提供的健康和社区项目
+    description_zhtw: 為移民和難民提供的健康和社區計畫
+    url: https://www.kchc.ca/immigrant-services/
+  - category: immigrant_services
+    icon: users
+    title_en: KCHC on Facebook
+    title_zh: 金斯顿社区健康中心 Facebook
+    title_zhtw: 金斯頓社區健康中心 Facebook
+    description_en: Community updates and events from KCHC immigrant services
+    description_zh: 金斯顿社区健康中心移民服务的社区动态和活动
+    description_zhtw: 金斯頓社區健康中心移民服務的社區動態和活動
+    url: https://www.facebook.com/KCHCImmigrantServices/
+  - category: immigrant_services
+    icon: handshake
+    title_en: Kingston Immigration Partnership
+    title_zh: 金斯顿移民伙伴关系
+    title_zhtw: 金斯頓移民夥伴關係
+    description_en: Collaborative initiative to make Kingston welcoming for newcomers
+    description_zh: 致力于让金斯顿成为新移民友好城市的合作倡议
+    description_zhtw: 致力於讓金斯頓成為新移民友善城市的合作倡議
+    url: https://www.kingstonimmigration.ca/
+  - category: government
+    icon: id-card
+    title_en: Apply for Social Insurance Number (SIN)
+    title_zh: 申请社会保险号码 (SIN)
+    title_zhtw: 申請社會保險號碼 (SIN)
+    description_en: Required for working in Canada — apply at Service Canada
+    description_zh: 在加拿大工作的必备证件——在Service Canada申请
+    description_zhtw: 在加拿大工作的必備證件——在Service Canada申請
+    url: https://www.canada.ca/en/employment-social-development/services/sin/apply.html
+  - category: government
+    icon: shield-check
+    title_en: Apply for Ontario Health Card (OHIP)
+    title_zh: 申请安大略省健康卡 (OHIP)
+    title_zhtw: 申請安大略省健康卡 (OHIP)
+    description_en: Ontario's public health insurance — covers doctor visits and hospital care
+    description_zh: 安大略省公共医疗保险——涵盖看诊和住院费用
+    description_zhtw: 安大略省公共醫療保險——涵蓋看診和住院費用
+    url: https://www.ontario.ca/page/apply-ohip-and-get-health-card
+  - category: education
+    icon: school
+    title_en: Limestone District School Board
+    title_zh: 石灰岩学区教育局
+    title_zhtw: 石灰岩學區教育局
+    description_en: Public English-language schools in the Kingston area
+    description_zh: 金斯顿地区公立英语学校
+    description_zhtw: 金斯頓地區公立英語學校
+    url: https://www.limestone.on.ca/
+  - category: education
+    icon: school
+    title_en: Algonquin & Lakeshore Catholic District School Board
+    title_zh: 阿尔冈昆与湖滨天主教学区教育局
+    title_zhtw: 阿爾岡昆與湖濱天主教學區教育局
+    description_en: Catholic schools serving the Kingston and surrounding region
+    description_zh: 服务金斯顿及周边地区的天主教学校
+    description_zhtw: 服務金斯頓及周邊地區的天主教學校
+    url: https://www.alcdsb.on.ca/
+  - category: education
+    icon: graduation-cap
+    title_en: Fraser Institute School Rankings
+    title_zh: 菲沙研究所学校排名
+    title_zhtw: 菲沙研究所學校排名
+    description_en: Compare school performance ratings across Ontario
+    description_zh: 比较安大略省各学校的表现评级
+    description_zhtw: 比較安大略省各學校的表現評級
+    url: https://www.compareschoolrankings.org/
+  - category: business
+    icon: briefcase
+    title_en: Start a Business (KEDCO)
+    title_zh: 创业支持 (KEDCO)
+    title_zhtw: 創業支持 (KEDCO)
+    description_en: Kingston Economic Development — resources for starting your own business
+    description_zh: 金斯顿经济发展中心——创业资源和支持
+    description_zhtw: 金斯頓經濟發展中心——創業資源和支持
+    url: https://www.kingstonecdev.com/
+  - category: business
+    icon: building-2
+    title_en: Greater Kingston Chamber of Commerce
+    title_zh: 大金斯顿商会
+    title_zhtw: 大金斯頓商會
+    description_en: Networking, advocacy, and support for local businesses
+    description_zh: 本地企业的网络、倡导和支持
+    description_zhtw: 本地企業的網絡、倡導和支持
+    url: https://www.kingstonchamber.ca/

@@ -9,6 +9,7 @@
     "programs": "項目",
     "gallery": "相冊",
     "about": "關於",
+    "newcomers": "新移民資源",
     "membership": "會員",
     "login": "登入",
     "signup": "註冊"
@@ -58,6 +59,18 @@
     "history": "我們的歷史",
     "executives": "理事會成員",
     "constitution": "章程"
+  },
+  "newcomers": {
+    "title": "新移民資源",
+    "subtitle": "新移民實用資源",
+    "categories": {
+      "immigrant_services": "移民服務",
+      "government": "政府服務",
+      "education": "教育",
+      "business": "商業支持"
+    },
+    "externalLink": "在新分頁中開啟",
+    "noResources": "暫無資源。"
   },
   "announcements": {
     "title": "公告",

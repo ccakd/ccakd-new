@@ -1,0 +1,71 @@
+---
+import {
+  Home, Hospital, Heart, School, GraduationCap, Briefcase,
+  Building2, Landmark, FileText, IdCard, ShieldCheck, Users,
+  Globe, Phone, MapPin, BookOpen, Handshake, Rocket, ExternalLink,
+} from 'lucide-astro';
+import type { Locale } from '../i18n/utils';
+import { t } from '../i18n/utils';
+import { localized } from '../lib/content';
+
+interface Props {
+  locale: Locale;
+  resource: Record<string, any>;
+}
+
+const { locale, resource } = Astro.props;
+const strings = t(locale);
+
+const title = localized(resource, 'title', locale) as string;
+const description = localized(resource, 'description', locale) as string;
+const url = resource.url as string;
+const icon = resource.icon as string;
+
+const icons: Record<string, any> = {
+  home: Home,
+  hospital: Hospital,
+  heart: Heart,
+  school: School,
+  'graduation-cap': GraduationCap,
+  briefcase: Briefcase,
+  'building-2': Building2,
+  landmark: Landmark,
+  'file-text': FileText,
+  'id-card': IdCard,
+  'shield-check': ShieldCheck,
+  users: Users,
+  globe: Globe,
+  phone: Phone,
+  'map-pin': MapPin,
+  'book-open': BookOpen,
+  handshake: Handshake,
+  rocket: Rocket,
+};
+
+const IconComponent = icons[icon] || Globe;
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group block bg-white border border-[#E8E8ED] rounded-xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+>
+  <div class="flex items-start gap-4">
+    <div class="shrink-0 w-11 h-11 rounded-full bg-red-50 flex items-center justify-center text-accent">
+      <IconComponent size={22} />
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-1.5">
+        <h3 class="font-display text-[0.92rem] font-semibold text-[#1D1D1F] group-hover:text-accent transition-colors leading-snug">
+          {title}
+        </h3>
+        <ExternalLink size={13} class="shrink-0 text-[#C7C7CC] group-hover:text-accent/60 transition-colors mt-0.5" />
+      </div>
+      {description && (
+        <p class="mt-1 text-[0.82rem] text-[#86868B] leading-relaxed">{description}</p>
+      )}
+    </div>
+  </div>
+  <span class="sr-only">{strings.newcomers.externalLink}</span>
+</a>
