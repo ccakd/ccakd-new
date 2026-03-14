@@ -18,7 +18,7 @@ const strings = t(locale);
       <form
         method="post"
         action="https://lists.ccakd.ca/subscription/form"
-        class="mt-6 inline-flex flex-col sm:flex-row gap-2"
+        class="listmonk-form mt-6 flex flex-col items-center gap-3 max-w-[400px] mx-auto"
       >
         <input type="hidden" name="nonce" />
         <input
@@ -26,16 +26,20 @@ const strings = t(locale);
           name="email"
           placeholder={strings.home.emailPlaceholder}
           required
-          class="px-5 py-2.5 border border-porcelain-border rounded-pill text-sm min-w-[280px] font-[inherit] text-porcelain-text bg-white focus:outline-none focus:border-accent"
+          class="w-full px-5 py-2.5 border border-porcelain-border rounded-pill text-sm font-[inherit] text-porcelain-text bg-white focus:outline-none focus:border-accent"
         />
-        <input type="hidden" name="l" value="LISTMONK_LIST_UUID_HERE" />
+        <input type="hidden" name="l" value="b3b5823a-20b2-43a7-b51d-8056fc336dfb" />
+        <div class="newsletter-altcha">
+          <altcha-widget challengeurl="https://lists.ccakd.ca/api/public/captcha/altcha"></altcha-widget>
+        </div>
         <button
           type="submit"
-          class="px-7 py-2.5 bg-accent text-white border-none rounded-pill font-medium text-sm cursor-pointer font-[inherit] hover:bg-accent-hover transition-colors"
+          class="w-full sm:w-auto px-7 py-2.5 bg-accent text-white border-none rounded-pill font-medium text-sm cursor-pointer font-[inherit] hover:bg-accent-hover transition-colors"
         >
           {strings.home.subscribe}
         </button>
       </form>
+      <script type="module" src="https://lists.ccakd.ca/public/static/altcha.umd.js" async defer></script>
     </div>
   </div>
 </section>
