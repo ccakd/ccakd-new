@@ -13,9 +13,11 @@ const { locale, heading, ctaLink, images } = Astro.props;
 const strings = t(locale);
 
 const defaultImages = [
-  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9921.jpg',
-  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09302.jpg',
-  'https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg',
+  '/images/hero/DH0A9921.webp',
+  '/images/hero/DH0A8079.webp',
+  '/images/hero/DH0A8147.webp',
+  '/images/hero/DH0A9712.webp',
+  '/images/hero/DSC09300.webp',
 ];
 const heroImages = images.length > 0 ? images : defaultImages;
 ---
