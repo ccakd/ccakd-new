@@ -307,6 +307,13 @@ jobs:
           echo "Generated manifest with $(echo "$MANIFEST" | jq 'length') photos"
           cat /tmp/manifest.json
 
+      - name: Pull latest before modifying YAML
+        if: steps.inputs.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --no-rebase
+
       - name: Auto-select cover image
         if: steps.inputs.outputs.skip != 'true'
         run: |
@@ -347,8 +354,8 @@ jobs:
           COVER_DEST="public/images/galleries/${SLUG}-cover.webp"
           cp "./processed/thumb/${COVER_FILE}" "$COVER_DEST"
 
-          # Set cover_image in YAML (Keystatic image field expects the filename only)
-          yq -i ".cover_image = \"${SLUG}-cover.webp\"" "$YAML_FILE"
+          # Set cover_image in YAML (Keystatic stores full publicPath)
+          yq -i ".cover_image = \"/images/galleries/${SLUG}-cover.webp\"" "$YAML_FILE"
 
           echo "Set cover image: $COVER_DEST"
 
@@ -357,11 +364,6 @@ jobs:
         run: |
           SLUG="${{ steps.inputs.outputs.slug }}"
           YAML_FILE="content/galleries/${SLUG}.yaml"
-
-          # Pull latest (translate job may have pushed translations to this same YAML)
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --no-rebase
 
           if [ ! -f "$YAML_FILE" ]; then
             echo "::error::Gallery file not found: $YAML_FILE"
