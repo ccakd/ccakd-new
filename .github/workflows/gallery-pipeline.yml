@@ -179,6 +179,9 @@ jobs:
             filename=$(basename "$img")
             local name="${filename%.*}"
 
+            # Auto-orient based on EXIF data (fixes sideways/upside-down phone photos)
+            mogrify -auto-orient "$img" 2>/dev/null
+
             # Full size: max 2000px wide, WebP q80, strip metadata
             cwebp -q 80 -resize 2000 0 -metadata none "$img" -o "./processed/full/${name}.webp" 2>/dev/null
 
