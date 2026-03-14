@@ -93,12 +93,21 @@ jobs:
             FEATURE_IMAGE=""
             if [ -n "$COVER_URL" ] && [ "$COVER_URL" != "null" ]; then
               mkdir -p public/images/announcements
-              IMG_FILE="${ANN_SLUG}-feature.jpg"
-              IMG_PATH="public/images/announcements/${IMG_FILE}"
+              TMP_IMG="/tmp/${ANN_SLUG}-feature"
 
-              if curl -sL -o "$IMG_PATH" "$COVER_URL"; then
-                echo "  Downloaded cover image"
+              if curl -sL -o "$TMP_IMG" "$COVER_URL"; then
+                # Detect actual format and use correct extension
+                MIME=$(file --mime-type -b "$TMP_IMG" 2>/dev/null)
+                case "$MIME" in
+                  image/png)  EXT="png" ;;
+                  image/webp) EXT="webp" ;;
+                  image/gif)  EXT="gif" ;;
+                  *)          EXT="jpg" ;;
+                esac
+                IMG_FILE="${ANN_SLUG}-feature.${EXT}"
+                mv "$TMP_IMG" "public/images/announcements/${IMG_FILE}"
                 FEATURE_IMAGE="$IMG_FILE"
+                echo "  Downloaded cover image (${MIME} → .${EXT})"
               else
                 echo "  Warning: Failed to download cover image"
               fi
