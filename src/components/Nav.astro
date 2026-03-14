@@ -51,8 +51,17 @@ const localeLabels: { code: Locale; label: string }[] = [
 {/* Frosted glass nav */}
 <nav class="sticky top-0 z-50 bg-white/85 backdrop-blur-[20px] backdrop-saturate-[180%] border-b border-black/[0.06]">
   <div class="max-w-[1080px] mx-auto px-8 flex items-center justify-between h-[52px]">
-    <a href={localePath(locale, '/')} class="flex items-center gap-2">
-      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD" class="h-8" />
+    <a href={localePath(locale, '/')} class="flex items-center gap-2.5 min-w-0 group">
+      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD" class="h-8 shrink-0" />
+      <span class="sm:hidden font-display text-[0.9rem] font-semibold text-porcelain-text tracking-[-0.01em]">CCAKD</span>
+      <div class="hidden sm:flex flex-col justify-center min-w-0">
+        <span class="font-display text-[0.78rem] font-semibold leading-[1.2] text-porcelain-text tracking-[-0.01em] group-hover:text-accent transition-colors duration-200">
+          {locale === 'zh' ? '京士顿区华人协会' : locale === 'zh-tw' ? '京士頓區華人協會' : 'Chinese Canadian Association'}
+        </span>
+        <span class="text-[0.62rem] text-porcelain-tertiary leading-tight tracking-[0.02em]">
+          {locale === 'zh' ? 'Chinese Canadian Assn. of Kingston & District' : locale === 'zh-tw' ? 'Chinese Canadian Assn. of Kingston & District' : 'of Kingston & District'}
+        </span>
+      </div>
     </a>
 
     {/* Desktop nav - pill style */}
