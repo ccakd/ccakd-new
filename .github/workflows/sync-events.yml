@@ -1,0 +1,193 @@
+name: Sync Events to Announcements
+
+on:
+  # Run alongside the deploy cron (every 6 hours)
+  schedule:
+    - cron: '0 */6 * * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Install yq
+        uses: mikefarah/yq@v4
+
+      - name: Fetch events and create announcements
+        env:
+          HIEVENTS_API_URL: ${{ secrets.HIEVENTS_API_URL }}
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_AI_ENDPOINT }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_AI_API_KEY }}
+        run: |
+          API_URL="${HIEVENTS_API_URL:-https://events.ccakd.ca/api}"
+          ORGANIZER_ID="1"
+          CREATED=0
+          UNPINNED=0
+
+          # Fetch upcoming/ongoing events
+          EVENTS=$(curl -s "${API_URL}/public/organizers/${ORGANIZER_ID}/events?per_page=50&sort_by=start_date&sort_direction=asc&includes[]=images")
+
+          if [ -z "$EVENTS" ] || [ "$(echo "$EVENTS" | jq -r '.data // empty')" = "" ]; then
+            echo "No events found or API error"
+            echo "$EVENTS" | head -5
+            exit 0
+          fi
+
+          # Get list of upcoming/ongoing event slugs
+          UPCOMING_SLUGS=$(echo "$EVENTS" | jq -r '.data[] | select(.lifecycle_status == "UPCOMING" or .lifecycle_status == "ONGOING") | .slug')
+
+          # --- Unpin announcements for events that are no longer upcoming ---
+          for yaml_file in content/announcements/*-announcement.yaml; do
+            [ -f "$yaml_file" ] || continue
+            ann_slug=$(basename "$yaml_file" .yaml)
+            event_slug="${ann_slug%-announcement}"
+
+            # Check if this event is still upcoming
+            if ! echo "$UPCOMING_SLUGS" | grep -qx "$event_slug"; then
+              # Check if currently pinned
+              is_pinned=$(yq '.pinned // false' "$yaml_file")
+              if [ "$is_pinned" = "true" ]; then
+                echo "Unpinning: $ann_slug (event no longer upcoming)"
+                yq -i '.pinned = false' "$yaml_file"
+                UNPINNED=$((UNPINNED + 1))
+              fi
+            fi
+          done
+
+          # --- Create announcements for new upcoming events ---
+          echo "$EVENTS" | jq -c '.data[] | select(.lifecycle_status == "UPCOMING" or .lifecycle_status == "ONGOING")' | while IFS= read -r event; do
+            EVENT_SLUG=$(echo "$event" | jq -r '.slug')
+            EVENT_ID=$(echo "$event" | jq -r '.id')
+            EVENT_TITLE=$(echo "$event" | jq -r '.title')
+            EVENT_DESC=$(echo "$event" | jq -r '.description // .description_preview // ""')
+            EVENT_START=$(echo "$event" | jq -r '.start_date')
+            EVENT_DATE=$(echo "$EVENT_START" | cut -d'T' -f1)
+            COVER_URL=$(echo "$event" | jq -r '(.images[] | select(.type == "EVENT_COVER") | .url) // (.images[0].url) // empty')
+
+            ANN_SLUG="${EVENT_SLUG}-announcement"
+            YAML_FILE="content/announcements/${ANN_SLUG}.yaml"
+            MDOC_DIR="content/announcements/${ANN_SLUG}"
+
+            # Skip if announcement already exists
+            if [ -f "$YAML_FILE" ]; then
+              echo "Skipping: $ANN_SLUG (already exists)"
+              continue
+            fi
+
+            echo "Creating announcement: $ANN_SLUG"
+
+            EVENT_URL="https://events.ccakd.ca/event/${EVENT_ID}/${EVENT_SLUG}"
+
+            # Download cover image if available
+            FEATURE_IMAGE=""
+            if [ -n "$COVER_URL" ] && [ "$COVER_URL" != "null" ]; then
+              mkdir -p public/images/announcements
+              IMG_FILE="${ANN_SLUG}-feature.jpg"
+              IMG_PATH="public/images/announcements/${IMG_FILE}"
+
+              if curl -sL -o "$IMG_PATH" "$COVER_URL"; then
+                echo "  Downloaded cover image"
+                FEATURE_IMAGE="$IMG_FILE"
+              else
+                echo "  Warning: Failed to download cover image"
+              fi
+            fi
+
+            # Generate announcement body with AI
+            BODY_EN=""
+            if [ -n "$AZURE_OPENAI_ENDPOINT" ] && [ -n "$AZURE_OPENAI_API_KEY" ]; then
+              RESPONSE=$(curl -s -X POST \
+                "${AZURE_OPENAI_ENDPOINT}/openai/deployments/gpt-5.4/chat/completions?api-version=2025-01-01-preview" \
+                -H "Content-Type: application/json" \
+                -H "api-key: ${AZURE_OPENAI_API_KEY}" \
+                -d "$(jq -n \
+                  --arg title "$EVENT_TITLE" \
+                  --arg date "$EVENT_DATE" \
+                  --arg desc "$EVENT_DESC" \
+                  --arg url "$EVENT_URL" \
+                  '{messages: [{role: "system", content: "You write short, warm, exciting community announcements for the Chinese Canadian Association of Kingston and District (CCAKD). Write in Markdoc format. No headings. 2-3 short paragraphs max. Always end with a registration/info link. Do not repeat the event title as a heading."}, {role: "user", content: ("Write an announcement for this event:\n\nEvent: " + $title + "\nDate: " + $date + "\nDescription: " + $desc + "\nEvent page: " + $url)}], max_completion_tokens: 512}')")
+
+              API_ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty' 2>/dev/null)
+              if [ -n "$API_ERROR" ]; then
+                echo "  Warning: AI error: $API_ERROR"
+              else
+                BODY_EN=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // empty')
+              fi
+            fi
+
+            # Fallback if AI unavailable
+            if [ -z "$BODY_EN" ]; then
+              BODY_EN="We're excited to invite you to **${EVENT_TITLE}**!
+
+${EVENT_DESC}
+
+[Register and learn more here](${EVENT_URL})."
+            fi
+
+            # Create YAML file using yq to safely handle special characters in title
+            echo '{}' > "$YAML_FILE"
+            yq -i ".title_en = $(echo "$EVENT_TITLE" | jq -Rs '.')" "$YAML_FILE"
+            yq -i '.title_zh = ""' "$YAML_FILE"
+            yq -i '.title_zhtw = ""' "$YAML_FILE"
+            yq -i ".date = \"${EVENT_DATE}\"" "$YAML_FILE"
+            yq -i '.pinned = true' "$YAML_FILE"
+
+            # Add feature image if downloaded
+            if [ -n "$FEATURE_IMAGE" ]; then
+              yq -i ".feature_image = \"${FEATURE_IMAGE}\"" "$YAML_FILE"
+            fi
+
+            # Create mdoc files
+            mkdir -p "$MDOC_DIR"
+            echo "$BODY_EN" > "${MDOC_DIR}/body_en.mdoc"
+            # Leave zh/zhtw empty for translate workflow to fill
+            touch "${MDOC_DIR}/body_zh.mdoc"
+            touch "${MDOC_DIR}/body_zhtw.mdoc"
+
+            CREATED=$((CREATED + 1))
+            echo "  Created: $YAML_FILE"
+          done
+
+          echo "CREATED=$CREATED" >> "$GITHUB_ENV"
+          echo "UNPINNED=$UNPINNED" >> "$GITHUB_ENV"
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/announcements/ public/images/announcements/
+
+          if git diff --cached --quiet; then
+            echo "::notice::No new event announcements to create"
+          else
+            git commit -m "chore: sync event announcements from hi.events"
+            git push
+          fi
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "## Event Sync Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Created | ${CREATED:-0} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Unpinned | ${UNPINNED:-0} |" >> "$GITHUB_STEP_SUMMARY"
+
+  # Translate new announcements and deploy
+  # (bot commits don't trigger translate via push, so call it explicitly)
+  translate:
+    needs: sync
+    uses: ./.github/workflows/translate.yml
+    secrets: inherit
