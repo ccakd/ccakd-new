@@ -4,14 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'content/announcements/**'
-      - 'content/programs/**'
-      - 'content/about/**'
-      - 'content/about.yaml'
-      - 'content/homepage/**'
-      - 'content/homepage.yaml'
-      - 'content/terms/**'
-      - 'content/terms.yaml'
+      - 'content/**'
 
   workflow_dispatch:
     inputs:
@@ -19,6 +12,10 @@ on:
         description: 'Specific content path to translate (e.g., content/announcements/my-post.yaml)'
         required: false
         type: string
+
+concurrency:
+  group: content-pipeline
+  cancel-in-progress: false
 
 permissions:
   contents: write

@@ -22,6 +22,10 @@ on:
     paths:
       - 'content/galleries/**'
 
+concurrency:
+  group: content-pipeline
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
