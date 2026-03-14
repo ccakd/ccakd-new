@@ -35,6 +35,10 @@ const historyBody = about ? (await (about as any).history_zh?.() || await (about
       {historyBody && (
         <div class="mb-12">
           <h2 class="font-display text-xl font-semibold mb-4">{strings.about.history}</h2>
+          <figure class="mb-6">
+            <img src="/images/about-history.webp" alt="CCAKD第一届年度大会，1978年11月" class="rounded-xl w-full" />
+            <figcaption class="text-[0.78rem] text-porcelain-secondary mt-2 text-center">CCAKD第一届年度大会，1978年11月</figcaption>
+          </figure>
           <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
             <DocumentRenderer document={historyBody} />
           </div>
