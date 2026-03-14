@@ -25,18 +25,18 @@ const localeLabels: { code: Locale; label: string }[] = [
 ];
 ---
 
-{/* Top bar */}
-<div data-topbar class="relative z-50 border-b border-white/10 text-[0.78rem] py-1 transition-all duration-300">
+{/* Utility top bar — thin, solid, clearly separate */}
+<div data-topbar class="topbar-strip border-b border-[#E8E8ED] text-[0.74rem] py-[3px]">
   <div class="max-w-[1080px] mx-auto px-8 flex justify-end items-center gap-3">
-    <a href="https://members.ccakd.ca/en/login" class="text-white/60 hover:text-white/90 transition-colors">{strings.nav.login}</a>
-    <a href="https://members.ccakd.ca/en/register" class="text-white/60 hover:text-white/90 transition-colors">{strings.nav.signup}</a>
+    <a href="https://members.ccakd.ca/en/login" class="text-[#999] hover:text-[#1D1D1F] transition-colors">{strings.nav.login}</a>
+    <a href="https://members.ccakd.ca/en/register" class="text-[#999] hover:text-[#1D1D1F] transition-colors">{strings.nav.signup}</a>
     <div class="flex gap-0.5 ml-3">
       {localeLabels.map(({ code, label }) => (
         <a
           href={localePath(code, currentPath)}
           class:list={[
-            'px-2.5 py-0.5 rounded-pill text-[0.72rem] font-medium transition-all',
-            code === locale ? 'lang-active bg-white/90 text-porcelain-text' : 'lang-inactive text-white/60 hover:bg-white/15',
+            'px-2.5 py-0.5 rounded-pill text-[0.7rem] font-medium transition-all',
+            code === locale ? 'bg-[#1D1D1F] text-white' : 'text-[#999] hover:bg-[#F5F5F7]',
           ]}
         >
           {label}
@@ -46,17 +46,17 @@ const localeLabels: { code: Locale; label: string }[] = [
   </div>
 </div>
 
-{/* Frosted glass nav — overlays hero for color bleed-through */}
-<nav class="sticky top-0 z-50 nav-frost border-b border-white/[0.12]">
+{/* Main nav — white frosted glass, hero colors bleed through on scroll */}
+<nav class="nav-frost sticky top-0 z-50 border-b border-[rgba(0,0,0,0.06)]">
   <div class="max-w-[1080px] mx-auto px-8 flex items-center justify-between h-[58px]">
     <a href={localePath(locale, '/')} class="flex items-center gap-3 min-w-0 group">
-      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD" class="nav-logo-img h-10 shrink-0 drop-shadow-sm" />
-      <span class="nav-mobile-name sm:hidden font-display text-[1.05rem] font-semibold text-white tracking-[-0.01em] drop-shadow-sm">CCAKD</span>
+      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD" class="h-10 shrink-0 drop-shadow-sm" />
+      <span class="sm:hidden font-display text-[1.05rem] font-semibold text-[#1D1D1F] tracking-[-0.01em]">CCAKD</span>
       <div class="hidden sm:flex flex-col justify-center min-w-0">
-        <span class="nav-logo-title font-display text-[0.92rem] font-semibold leading-[1.2] text-white tracking-[-0.01em] drop-shadow-sm">
+        <span class="font-display text-[0.92rem] font-semibold leading-[1.2] text-[#1D1D1F] tracking-[-0.01em] group-hover:text-accent transition-colors">
           {locale === 'zh' ? '京士顿区华人协会' : locale === 'zh-tw' ? '京士頓區華人協會' : 'Chinese Canadian Association'}
         </span>
-        <span class="nav-logo-sub text-[0.68rem] text-white/70 leading-tight tracking-[0.02em] drop-shadow-sm">
+        <span class="text-[0.68rem] text-[#999] leading-tight tracking-[0.02em]">
           {locale === 'zh' ? 'Chinese Canadian Assn. of Kingston & District' : locale === 'zh-tw' ? 'Chinese Canadian Assn. of Kingston & District' : 'of Kingston & District'}
         </span>
       </div>
@@ -68,8 +68,8 @@ const localeLabels: { code: Locale; label: string }[] = [
         <a
           href={localePath(locale, path)}
           class:list={[
-            'nav-link px-3.5 py-1.5 rounded-pill text-[0.84rem]',
-            currentPath === path ? 'nav-link-active bg-white/20 text-white font-medium' : 'text-white/75 hover:bg-white/10 hover:text-white',
+            'nav-pill px-3.5 py-1.5 rounded-pill text-[0.84rem] transition-all',
+            currentPath === path ? 'bg-accent-bg text-accent font-medium' : 'text-[#6E6E73] hover:bg-[#F5F5F7] hover:text-[#1D1D1F]',
           ]}
         >
           {label}
@@ -77,7 +77,7 @@ const localeLabels: { code: Locale; label: string }[] = [
       ))}
       <a
         href="https://members.ccakd.ca/en/"
-        class="nav-link px-3.5 py-1.5 rounded-pill text-[0.84rem] text-white/75 hover:bg-white/10 hover:text-white"
+        class="nav-pill px-3.5 py-1.5 rounded-pill text-[0.84rem] text-[#6E6E73] hover:bg-[#F5F5F7] hover:text-[#1D1D1F] transition-all"
         target="_blank"
       >
         {strings.nav.membership}
@@ -86,7 +86,7 @@ const localeLabels: { code: Locale; label: string }[] = [
 
     {/* Mobile hamburger */}
     <input type="checkbox" id="mobile-menu-toggle" class="hidden peer" />
-    <label for="mobile-menu-toggle" class="nav-mobile-label md:hidden cursor-pointer p-2 text-white">
+    <label for="mobile-menu-toggle" class="md:hidden cursor-pointer p-2 text-[#1D1D1F]">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
@@ -115,60 +115,38 @@ const localeLabels: { code: Locale; label: string }[] = [
 </nav>
 
 <style>
-  .nav-frost {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: saturate(180%) blur(24px);
-    -webkit-backdrop-filter: saturate(180%) blur(24px);
-    transition: background 0.35s ease, border-color 0.35s ease;
+  /* Utility bar — solid, always opaque */
+  .topbar-strip {
+    background: #FAFAFA;
   }
-  .nav-frost.nav-scrolled {
-    background: rgba(255, 255, 255, 0.88);
+
+  /* Nav — white frosted glass, lets hero colors bleed through */
+  .nav-frost {
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom-color: rgba(0, 0, 0, 0.06) !important;
-  }
-  /* Color transitions for all nav text elements */
-  .nav-frost :is(a, span, label) {
-    transition: color 0.35s ease, background-color 0.35s ease;
+    transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   }
 
-  /* Scrolled / no-hero light mode overrides */
-  :global(html.nav-light) .nav-link { color: #6E6E73; }
-  :global(html.nav-light) .nav-link:hover { background: #F5F5F7; color: #1D1D1F; }
-  :global(html.nav-light) .nav-link-active { background: #FEF2F0; color: #D04830; }
-  :global(html.nav-light) .nav-logo-title { color: #1D1D1F; filter: none; }
-  :global(html.nav-light) .nav-logo-title:hover { color: #D04830; }
-  :global(html.nav-light) .nav-logo-sub { color: #999; filter: none; }
-  :global(html.nav-light) .nav-mobile-label { color: #1D1D1F; }
-  :global(html.nav-light) .nav-mobile-name { color: #1D1D1F; filter: none; }
-  :global(html.nav-light) .nav-logo-img { filter: none; }
-
-  /* Top bar light mode */
-  .topbar-light { background: white; border-bottom-color: #E8E8ED !important; }
-  .topbar-light a { color: #999 !important; }
-  .topbar-light a:hover { color: #1D1D1F !important; }
-  .topbar-light .lang-active { background: #1D1D1F !important; color: white !important; }
-  .topbar-light .lang-inactive { color: #999 !important; }
-  .topbar-light .lang-inactive:hover { background: #F5F5F7 !important; }
+  /* When scrolled past hero — more opaque, subtle shadow */
+  .nav-frost.nav-solid {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.04);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
 </style>
 
 <script>
   const nav = document.querySelector('.nav-frost') as HTMLElement;
-  const topbar = document.querySelector('[data-topbar]') as HTMLElement;
   if (nav) {
     const heroEl = document.querySelector('.hero-section') as HTMLElement;
-    // No hero = immediately scrolled (light) mode
     if (!heroEl) {
-      nav.classList.add('nav-scrolled');
-      document.documentElement.classList.add('nav-light');
-      if (topbar) topbar.classList.add('topbar-light');
+      // No hero — solid nav immediately
+      nav.classList.add('nav-solid');
     } else {
-      const threshold = heroEl.offsetHeight - 120;
+      const threshold = heroEl.offsetHeight;
       function updateNav() {
-        const scrolled = window.scrollY > threshold;
-        nav.classList.toggle('nav-scrolled', scrolled);
-        document.documentElement.classList.toggle('nav-light', scrolled);
-        if (topbar) topbar.classList.toggle('topbar-light', scrolled);
+        nav.classList.toggle('nav-solid', window.scrollY > threshold);
       }
       window.addEventListener('scroll', updateNav, { passive: true });
       updateNav();

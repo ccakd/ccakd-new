@@ -20,14 +20,14 @@ const defaultImages = [
 const heroImages = images.length > 0 ? images : defaultImages;
 ---
 
-<section class="hero-section relative h-[448px] md:h-[568px] overflow-hidden bg-black -mt-[88px]">
+<section class="hero-section relative h-[360px] md:h-[480px] overflow-hidden bg-black">
   <div class="hero-track flex h-full">
     {heroImages.map((src) => (
       <div
         class="hero-slide min-w-full h-full bg-cover bg-center relative"
         style={`background-image:url('${src}')`}
       >
-        <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
       </div>
     ))}
   </div>
