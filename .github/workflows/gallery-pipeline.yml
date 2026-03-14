@@ -329,7 +329,7 @@ jobs:
 
           # Look for feature/hero image (case-insensitive)
           COVER_FILE=""
-          for pattern in feature hero; do
+          for pattern in feature hero cover; do
             MATCH=$(ls ./processed/thumb/ 2>/dev/null | grep -i "^${pattern}" | head -1 || true)
             if [ -n "$MATCH" ]; then
               COVER_FILE="$MATCH"
