@@ -4,7 +4,17 @@ on:
   push:
     branches: [main]
     paths:
-      - 'content/**'
+      - 'content/announcements/**'
+      - 'content/programs/**'
+      - 'content/about/**'
+      - 'content/about.yaml'
+      - 'content/homepage/**'
+      - 'content/homepage.yaml'
+      - 'content/terms/**'
+      - 'content/terms.yaml'
+
+  # Allow gallery pipeline to call this before image processing
+  workflow_call:
 
   workflow_dispatch:
     inputs:
@@ -12,10 +22,6 @@ on:
         description: 'Specific content path to translate (e.g., content/announcements/my-post.yaml)'
         required: false
         type: string
-
-concurrency:
-  group: content-pipeline
-  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -239,9 +245,9 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Processed $(wc -l < /tmp/changed_files.txt | tr -d ' ') changed files" >> "$GITHUB_STEP_SUMMARY"
 
-  # Deploy the site after translation (with or without new translations)
+  # Deploy after translation — but NOT when called from gallery pipeline (it deploys after image processing)
   deploy:
     needs: translate
-    if: needs.translate.result == 'success'
+    if: needs.translate.result == 'success' && github.event_name != 'workflow_call'
     uses: ./.github/workflows/deploy.yml
     secrets: inherit

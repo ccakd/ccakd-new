@@ -22,15 +22,17 @@ on:
     paths:
       - 'content/galleries/**'
 
-concurrency:
-  group: content-pipeline
-  cancel-in-progress: false
-
 permissions:
   contents: write
 
 jobs:
+  # Translate gallery titles first
+  translate:
+    uses: ./.github/workflows/translate.yml
+    secrets: inherit
+
   process-gallery:
+    needs: translate
     runs-on: ubuntu-latest
     # Prevent infinite loop: skip if the push was from the bot committing a manifest
     if: github.actor != 'github-actions[bot]'
