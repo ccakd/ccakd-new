@@ -15,6 +15,12 @@ on:
 
   # Allow gallery pipeline to call this before image processing
   workflow_call:
+    inputs:
+      skip_deploy:
+        description: 'Skip deploy (caller handles deploy)'
+        required: false
+        type: boolean
+        default: false
 
   workflow_dispatch:
     inputs:
@@ -245,9 +251,9 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Processed $(wc -l < /tmp/changed_files.txt | tr -d ' ') changed files" >> "$GITHUB_STEP_SUMMARY"
 
-  # Deploy after translation — but NOT when called from gallery pipeline (it deploys after image processing)
+  # Deploy after translation — skipped when caller handles deploy (e.g., gallery pipeline)
   deploy:
     needs: translate
-    if: needs.translate.result == 'success' && github.event_name != 'workflow_call'
+    if: needs.translate.result == 'success' && inputs.skip_deploy != true
     uses: ./.github/workflows/deploy.yml
     secrets: inherit

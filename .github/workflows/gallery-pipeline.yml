@@ -29,6 +29,8 @@ jobs:
   # Translate gallery titles first
   translate:
     uses: ./.github/workflows/translate.yml
+    with:
+      skip_deploy: true
     secrets: inherit
 
   process-gallery:
