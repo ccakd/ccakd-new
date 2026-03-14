@@ -50,21 +50,35 @@ const heroImages = images.length > 0 ? images : defaultImages;
   <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
     {heroImages.map((_, i) => (
       <span class:list={[
-        'block h-1.5 rounded-full',
+        'hero-dot block h-1.5 rounded-full transition-all duration-300',
         i === 0 ? 'w-5 bg-white/85' : 'w-1.5 bg-white/35',
       ]} />
     ))}
   </div>
 </section>
 
+<script>
+  const track = document.querySelector('.hero-track') as HTMLElement;
+  const dots = document.querySelectorAll('.hero-dot');
+  if (track) {
+    const slides = track.children.length;
+    let current = 0;
+    function advance() {
+      current = (current + 1) % slides;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('w-5', i === current);
+        dot.classList.toggle('bg-white/85', i === current);
+        dot.classList.toggle('w-1.5', i !== current);
+        dot.classList.toggle('bg-white/35', i !== current);
+      });
+    }
+    setInterval(advance, 5000);
+  }
+</script>
+
 <style>
   .hero-track {
-    animation: hero-slide 21s ease-in-out infinite;
-  }
-  @keyframes hero-slide {
-    0%, 28% { transform: translateX(0); }
-    33%, 61% { transform: translateX(-100%); }
-    66%, 94% { transform: translateX(-200%); }
-    100% { transform: translateX(0); }
+    transition: transform 0.8s ease-in-out;
   }
 </style>
