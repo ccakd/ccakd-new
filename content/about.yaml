@@ -1,21 +1,7 @@
-constitution_en_pdf: null
-constitution_zh_pdf: null
+constitution_en_pdf: /files/constitution_en_pdf.pdf
+constitution_zh_pdf: /files/constitution_zh_pdf.pdf
 executives:
-  - name: Jane Chen
+  - name: Arthur Zeng
     title_en: President
     title_zh: 会长
-    title_zhtw: 會長
-    email: president@ccakd.ca
-    photo: null
-  - name: Michael Wang
-    title_en: Vice President
-    title_zh: 副会长
-    title_zhtw: 副會長
-    email: vp@ccakd.ca
-    photo: null
-  - name: Sarah Li
-    title_en: Treasurer
-    title_zh: 财务
-    title_zhtw: 財務
-    email: treasurer@ccakd.ca
-    photo: null
+    title_zhtw: 会长
