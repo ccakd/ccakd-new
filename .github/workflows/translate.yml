@@ -4,7 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'content/**'
+      - 'content/announcements/**'
+      - 'content/programs/**'
+      - 'content/about/**'
+      - 'content/about.yaml'
+      - 'content/homepage/**'
+      - 'content/homepage.yaml'
+      - 'content/terms/**'
+      - 'content/terms.yaml'
 
   workflow_dispatch:
     inputs:
