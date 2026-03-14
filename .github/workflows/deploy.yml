@@ -1,11 +1,10 @@
 name: Deploy
 
 on:
-  # Trigger on push to main (content or code changes)
+  # Trigger on push to main (code/config changes only — content changes go through translate first)
   push:
     branches: [main]
     paths:
-      - 'content/**'
       - 'src/**'
       - 'public/**'
       - 'astro.config.mjs'
@@ -13,7 +12,7 @@ on:
       - 'package.json'
       - 'wrangler.json'
 
-  # Allow gallery pipeline to call this workflow after committing manifest
+  # Allow other workflows (translate, gallery-pipeline) to call this after their work is done
   workflow_call:
 
   # Scheduled rebuild every 6 hours for fresh hi.events data

@@ -234,3 +234,10 @@ jobs:
           echo "## Translation Results" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Processed $(wc -l < /tmp/changed_files.txt | tr -d ' ') changed files" >> "$GITHUB_STEP_SUMMARY"
+
+  # Deploy the site after translation (with or without new translations)
+  deploy:
+    needs: translate
+    if: needs.translate.result == 'success'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
