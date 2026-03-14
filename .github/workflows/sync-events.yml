@@ -128,11 +128,7 @@ jobs:
 
             # Fallback if AI unavailable
             if [ -z "$BODY_EN" ]; then
-              BODY_EN="We're excited to invite you to **${EVENT_TITLE}**!
-
-${EVENT_DESC}
-
-[Register and learn more here](${EVENT_URL})."
+              BODY_EN="We're excited to invite you to **${EVENT_TITLE}**!"$'\n\n'"${EVENT_DESC}"$'\n\n'"[Register and learn more here](${EVENT_URL})."
             fi
 
             # Create YAML file using yq to safely handle special characters in title
