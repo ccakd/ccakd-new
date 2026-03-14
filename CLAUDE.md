@@ -48,6 +48,19 @@ Deployment is automated via GitHub Actions: content changes in Keystatic trigger
 - `wrangler.json` — Cloudflare Workers deployment config
 - `.github/workflows/` — CI/CD pipelines for content deployment and image processing
 
+## CI/CD Workflows (`.github/workflows/`)
+
+- **`deploy.yml`** — Builds Astro + `wrangler deploy`. Triggered by push to main, `workflow_call`, cron (6h), manual dispatch.
+- **`gallery-pipeline.yml`** — GDrive → WebP → R2 → manifest commit → calls `deploy.yml` via `workflow_call`.
+- **`translate.yml`** — Auto-translates empty trilingual fields using Azure OpenAI gpt-5.4. Any-to-any direction (EN↔ZH↔ZH-TW).
+- All bot-triggered workflows guard against infinite loops with `if: github.actor != 'github-actions[bot]'`.
+- `GITHUB_TOKEN` pushes don't trigger other workflows — use `workflow_call` to chain (e.g., gallery → deploy).
+
+## Media
+
+- **R2 public URL:** `media.ccakd.ca` (Cloudflare R2 custom domain)
+- Gallery images stored at `galleries/{slug}/full/` and `galleries/{slug}/thumb/` on R2
+
 ## Content Model (Keystatic)
 
 - **Collections:** Announcements, Programs, Galleries
@@ -70,6 +83,9 @@ The plan file uses `- [x]`/`- [ ]` checkboxes to track completed steps. Check it
 
 ## Known Gotchas
 
+- **Homepage locale duplication:** `src/pages/{en,zh,zh-tw}/index.astro` are near-identical files that must be kept in sync. Changes to one must be replicated to all three.
+- **rclone + Google Drive Shared Drives:** Requires `team_drive = true` in rclone config. Service account must be added as Content Manager on the Shared Drive. Folder IDs may contain dots.
+- **HEIC images:** cwebp cannot read HEIC natively. Gallery pipeline pre-converts via `heif-convert` (from `libheif-examples`).
 - **React 19 + CF Workers:** `react-dom/server.browser` uses `MessageChannel` which doesn't exist in Workers. Fixed via Vite plugin in `astro.config.mjs` that redirects to `react-dom/server.edge`.
 - **Wrangler 4.x `.assetsignore`:** Must have `public/.assetsignore` containing `_worker.js` to prevent the worker bundle being uploaded as a public asset.
 - **Keystatic GitHub Auth requires a GitHub App (NOT an OAuth App).** OAuth Apps don't return `refresh_token`/`expires_in` which Keystatic's token schema requires. The GitHub App must have "Expire user authorization tokens" enabled. Callback URL: `https://<domain>/api/keystatic/github/oauth/callback`. Permissions: Contents (Read & Write).

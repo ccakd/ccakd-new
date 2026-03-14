@@ -84,6 +84,14 @@ jobs:
                 --arg text "$text" \
                 '{messages: [{role: "system", content: $prompt}, {role: "user", content: $text}], max_completion_tokens: 4096}')")
 
+            # Log errors from the API response
+            local error
+            error=$(echo "$response" | jq -r '.error.message // empty' 2>/dev/null)
+            if [ -n "$error" ]; then
+              echo "  ⚠ API error: $error" >&2
+              return 1
+            fi
+
             echo "$response" | jq -r '.choices[0].message.content // empty'
           }
 
@@ -150,6 +158,9 @@ jobs:
                   translated=$(translate_text "$source_val" "$source_lang" "$target_lang" "false")
                   if [ -n "$translated" ]; then
                     yq -i ".${target_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
+                    echo "    ✓ $target_field translated"
+                  else
+                    echo "    ✗ $target_field translation returned empty"
                   fi
                 fi
               done
@@ -192,6 +203,9 @@ jobs:
                     translated=$(translate_text "$source_content" "$source_lang" "$target_lang" "true")
                     if [ -n "$translated" ]; then
                       echo "$translated" > "$target_mdoc"
+                      echo "    ✓ ${base_name}_${target_lang}.mdoc translated"
+                    else
+                      echo "    ✗ ${base_name}_${target_lang}.mdoc translation returned empty"
                     fi
                   fi
                 done
