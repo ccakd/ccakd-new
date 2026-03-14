@@ -36,7 +36,7 @@ const localeLabels: { code: Locale; label: string }[] = [
           href={localePath(code, currentPath)}
           class:list={[
             'px-2.5 py-0.5 rounded-pill text-[0.7rem] font-medium transition-all',
-            code === locale ? 'bg-[#1D1D1F] text-white' : 'text-[#999] hover:bg-[#F5F5F7]',
+            code === locale ? 'text-accent font-semibold border-b-2 border-accent rounded-none' : 'text-[#999] hover:text-[#6E6E73]',
           ]}
         >
           {label}
@@ -120,16 +120,24 @@ const localeLabels: { code: Locale; label: string }[] = [
     background: #FAFAFA;
   }
 
-  /* Nav — white frosted glass, lets hero colors bleed through */
+  /* Nav — white frosted glass with subtle breathing color tint */
   .nav-frost {
-    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    animation: nav-breathe 6s ease-in-out infinite;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
   }
 
-  /* When scrolled past hero — more opaque, subtle shadow */
+  @keyframes nav-breathe {
+    0%, 100% { background: rgba(255, 252, 250, 0.82); }
+    25% { background: rgba(255, 248, 244, 0.84); }
+    50% { background: rgba(255, 250, 240, 0.82); }
+    75% { background: rgba(252, 248, 250, 0.83); }
+  }
+
+  /* When scrolled past hero — stop breathing, solid white frost */
   .nav-frost.nav-solid {
+    animation: none;
     background: rgba(255, 255, 255, 0.92);
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.04);
     border-bottom-color: rgba(0, 0, 0, 0.08);
