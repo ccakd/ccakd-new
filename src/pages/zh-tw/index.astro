@@ -31,6 +31,21 @@ const events = await getUpcomingEvents(3);
 
 const allPrograms = await reader.collections.programs.all();
 const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
+
+const allGalleries = await reader.collections.galleries.all();
+const recentGalleries = allGalleries
+  .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime());
+const galleryPhotos: { thumbUrl: string; fullUrl: string }[] = [];
+for (const g of recentGalleries) {
+  try {
+    const manifest = JSON.parse(g.entry.photo_manifest || '[]');
+    for (const p of manifest) {
+      if (galleryPhotos.length >= 6) break;
+      galleryPhotos.push({ thumbUrl: p.thumbUrl, fullUrl: p.fullUrl });
+    }
+  } catch {}
+  if (galleryPhotos.length >= 6) break;
+}
 ---
 
 <Layout locale={locale} path="/">
@@ -89,6 +104,33 @@ const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
           {activePrograms.map(({ entry }) => (
             <ProgramCard locale={locale} entry={entry} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* Gallery */}
+  {galleryPhotos.length > 0 && (
+    <section class="py-16 px-8 bg-porcelain-section">
+      <div class="max-w-[1080px] mx-auto">
+        <div class="flex items-baseline justify-between mb-8">
+          <h2 class="font-display text-2xl font-semibold">{strings.home.gallery}</h2>
+          <a href={localePath(locale, '/gallery')} class="text-accent text-[0.84rem] font-medium hover:underline">
+            {strings.home.viewAllAlbums} &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" style="grid-template-rows: 170px 170px;">
+          {galleryPhotos.map((photo, i) => (
+            <a
+              href={photo.fullUrl}
+              target="_blank"
+              class:list={[
+                'rounded-[10px] overflow-hidden bg-porcelain-section bg-cover bg-center transition-all duration-300 hover:opacity-90 hover:scale-[1.01]',
+                i === 0 && 'col-span-2 row-span-2',
+              ]}
+              style={`background-image:url('${photo.thumbUrl}')`}
+            />
           ))}
         </div>
       </div>
