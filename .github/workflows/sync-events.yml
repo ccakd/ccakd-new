@@ -150,7 +150,7 @@ jobs:
 
             # Add feature image if downloaded
             if [ -n "$FEATURE_IMAGE" ]; then
-              yq -i ".feature_image = \"${FEATURE_IMAGE}\"" "$YAML_FILE"
+              yq -i ".feature_image = \"/images/announcements/${FEATURE_IMAGE}\"" "$YAML_FILE"
             fi
 
             # Create mdoc files
