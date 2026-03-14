@@ -4,4 +4,72 @@ executives:
   - name: Arthur Zeng
     title_en: President
     title_zh: 会长
-    title_zhtw: 会长
+    title_zhtw: 會長
+  - name: Qanpeng Yang
+    title_en: Co-Vice President / Publication Coordinator
+    title_zh: 联合副会长 / 出版协调员
+    title_zhtw: 聯合副會長 / 出版協調員
+  - name: Yan Ke
+    title_en: Co-Vice President / Volunteer Coordinator
+    title_zh: 联合副会长 / 志愿者协调员
+    title_zhtw: 聯合副會長 / 志願者協調員
+  - name: Ying Zhan
+    title_en: Secretary
+    title_zh: 秘书
+    title_zhtw: 秘書
+  - name: Erin Deng
+    title_en: Treasurer
+    title_zh: 财务
+    title_zhtw: 財務
+  - name: Ta-Fang Huang
+    title_en: Sports Coordinator
+    title_zh: 体育协调员
+    title_zhtw: 體育協調員
+  - name: Yan Deng
+    title_en: Events Coordinator
+    title_zh: 活动协调员
+    title_zhtw: 活動協調員
+  - name: Fulan Zhang
+    title_en: Social Services Coordinator
+    title_zh: 社会服务协调员
+    title_zhtw: 社會服務協調員
+  - name: Ming Liu
+    title_en: Cultural Coordinator
+    title_zh: 文化协调员
+    title_zhtw: 文化協調員
+  - name: Hay Boon Mak
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Gayle Seto
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Ruth Tan
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Ted Hsu
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Yu Jier Kou
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Yan Chen
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Meilan Fan
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Wenjue Knutsen
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
+  - name: Jun Zhang
+    title_en: Member at Large
+    title_zh: 理事
+    title_zhtw: 理事
