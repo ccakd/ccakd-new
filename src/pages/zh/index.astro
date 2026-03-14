@@ -34,18 +34,10 @@ const activePrograms = allPrograms.filter((p) => p.entry.active).slice(0, 3);
 
 const allGalleries = await reader.collections.galleries.all();
 const recentGalleries = allGalleries
-  .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime());
-const galleryPhotos: { thumbUrl: string; fullUrl: string }[] = [];
-for (const g of recentGalleries) {
-  try {
-    const manifest = JSON.parse(g.entry.photo_manifest || '[]');
-    for (const p of manifest) {
-      if (galleryPhotos.length >= 6) break;
-      galleryPhotos.push({ thumbUrl: p.thumbUrl, fullUrl: p.fullUrl });
-    }
-  } catch {}
-  if (galleryPhotos.length >= 6) break;
-}
+  .filter((g) => g.entry.cover_image)
+  .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime())
+  .slice(0, 6)
+  .map((g) => ({ slug: g.slug, cover: g.entry.cover_image, title: localized(g.entry as any, 'title', locale) }));
 ---
 
 <Layout locale={locale} path="/">
@@ -111,7 +103,7 @@ for (const g of recentGalleries) {
   )}
 
   {/* Gallery */}
-  {galleryPhotos.length > 0 && (
+  {recentGalleries.length > 0 && (
     <section class="py-16 px-8 bg-porcelain-section">
       <div class="max-w-[1080px] mx-auto">
         <div class="flex items-baseline justify-between mb-8">
@@ -121,16 +113,20 @@ for (const g of recentGalleries) {
           </a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" style="grid-template-rows: 170px 170px;">
-          {galleryPhotos.map((photo, i) => (
+          {recentGalleries.map((g, i) => (
             <a
-              href={photo.fullUrl}
-              target="_blank"
+              href={localePath(locale, `/gallery/${g.slug}`)}
               class:list={[
-                'rounded-[10px] overflow-hidden bg-porcelain-section bg-cover bg-center transition-all duration-300 hover:opacity-90 hover:scale-[1.01]',
+                'relative rounded-[10px] overflow-hidden bg-porcelain-section bg-cover bg-center transition-all duration-300 hover:opacity-90 hover:scale-[1.01] group',
                 i === 0 && 'col-span-2 row-span-2',
               ]}
-              style={`background-image:url('${photo.thumbUrl}')`}
-            />
+              style={`background-image:url('${g.cover}')`}
+            >
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span class="absolute bottom-2 left-3 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                {g.title}
+              </span>
+            </a>
           ))}
         </div>
       </div>
