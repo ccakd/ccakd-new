@@ -77,6 +77,13 @@ jobs:
             SLUG=$(basename "$CHANGED" .yaml)
             echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
 
+            # Skip if the file was deleted
+            if [ ! -f "$CHANGED" ]; then
+              echo "Gallery file was deleted. Skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
             # Read gdrive_link from the YAML and extract folder ID
             GDRIVE_LINK=$(yq '.gdrive_link // ""' "$CHANGED")
             if [ -z "$GDRIVE_LINK" ] || [ "$GDRIVE_LINK" = "null" ]; then
