@@ -1,0 +1,79 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../../keystatic.config';
+import { DocumentRenderer } from '@keystatic/core/renderer';
+import Layout from '../../../components/Layout.astro';
+import type { Locale } from '../../../i18n/utils';
+import { t, localePath } from '../../../i18n/utils';
+import { localized } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const slugs = await reader.collections.programs.list();
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const locale: Locale = 'zh';
+const strings = t(locale);
+const { slug } = Astro.params;
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const entry = await reader.collections.programs.read(slug!);
+if (!entry) return Astro.redirect(localePath(locale, '/programs'));
+
+const title = localized(entry as Record<string, any>, 'title', locale);
+const schedule = localized(entry as Record<string, any>, 'schedule', locale);
+const location = localized(entry as Record<string, any>, 'location', locale);
+const fee = localized(entry as Record<string, any>, 'fee', locale);
+const bodyKey = locale === 'zh-tw' ? 'description_zhtw' : `description_${locale}`;
+const body = await (entry as any)[bodyKey]?.();
+const fallbackBody = body || await (entry as any).description_en?.();
+---
+
+<Layout locale={locale} path={`/programs/${slug}`} title={title}>
+  <article class="py-16 px-8">
+    <div class="max-w-[720px] mx-auto">
+      <a href={localePath(locale, '/programs')} class="text-accent text-sm font-medium hover:underline mb-6 inline-block">
+        &larr; {strings.programs.backToPrograms}
+      </a>
+      {entry.feature_image && (
+        <div
+          class="h-56 -mx-4 mb-8 bg-porcelain-section bg-cover bg-center rounded-2xl"
+          style={`background-image:url('${entry.feature_image}')`}
+        />
+      )}
+      <h1 class="font-display text-3xl font-semibold tracking-tight mt-2 mb-8">{title}</h1>
+
+      <div class="grid gap-4 mb-8">
+        {schedule && (
+          <div class="flex items-start gap-3">
+            <span class="text-porcelain-tertiary text-sm font-medium min-w-[70px]">{strings.programs.schedule}</span>
+            <span class="text-porcelain-text text-sm">{schedule}</span>
+          </div>
+        )}
+        {location && (
+          <div class="flex items-start gap-3">
+            <span class="text-porcelain-tertiary text-sm font-medium min-w-[70px]">{strings.programs.location}</span>
+            <span class="text-porcelain-text text-sm">{location}</span>
+          </div>
+        )}
+        {fee && (
+          <div class="flex items-start gap-3">
+            <span class="text-porcelain-tertiary text-sm font-medium min-w-[70px]">{strings.programs.fee}</span>
+            <span class="text-porcelain-text text-sm">{fee}</span>
+          </div>
+        )}
+        {entry.contact && (
+          <div class="flex items-start gap-3">
+            <span class="text-porcelain-tertiary text-sm font-medium min-w-[70px]">{strings.programs.contact}</span>
+            <span class="text-porcelain-text text-sm">{entry.contact}</span>
+          </div>
+        )}
+      </div>
+
+      <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+        {fallbackBody && <DocumentRenderer document={fallbackBody} />}
+      </div>
+    </div>
+  </article>
+</Layout>

@@ -21,8 +21,8 @@ const active = allPrograms.filter((p) => p.entry.active);
     <div class="max-w-[1080px] mx-auto">
       {active.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {active.map(({ entry }) => (
-            <ProgramCard locale={locale} entry={entry} />
+          {active.map(({ slug, entry }) => (
+            <ProgramCard locale={locale} slug={slug} entry={entry} />
           ))}
         </div>
       ) : (

@@ -45,7 +45,12 @@
   "programs": {
     "title": "Programs",
     "subtitle": "Activities and services for our community",
-    "moreInfo": "More Info"
+    "moreInfo": "More Info",
+    "schedule": "Schedule",
+    "location": "Location",
+    "contact": "Contact",
+    "fee": "Fee",
+    "backToPrograms": "Programs"
   },
   "gallery": {
     "title": "Gallery",

@@ -1,19 +1,22 @@
 ---
 import type { Locale } from '../i18n/utils';
+import { localePath } from '../i18n/utils';
 import { localized } from '../lib/content';
 
 interface Props {
   locale: Locale;
+  slug: string;
   entry: Record<string, any>;
 }
 
-const { locale, entry } = Astro.props;
+const { locale, slug, entry } = Astro.props;
 const title = localized(entry, 'title', locale);
 const schedule = localized(entry, 'schedule', locale);
 const location = localized(entry, 'location', locale);
+const href = localePath(locale, `/programs/${slug}`);
 ---
 
-<article class="bg-white rounded-2xl border border-porcelain-border p-7 hover:border-accent transition-all">
+<a href={href} class="block bg-white rounded-2xl border border-porcelain-border p-7 hover:border-accent transition-all">
   {entry.feature_image && (
     <div
       class="h-40 -mx-7 -mt-7 mb-5 bg-porcelain-section bg-cover bg-center rounded-t-2xl"
@@ -23,4 +26,4 @@ const location = localized(entry, 'location', locale);
   <h3 class="font-display text-[1.02rem] font-semibold text-porcelain-text mb-1">{title}</h3>
   {schedule && <p class="text-porcelain-secondary text-[0.84rem]">{schedule}</p>}
   {location && <p class="text-porcelain-tertiary text-[0.82rem] mt-1">{location}</p>}
-</article>
+</a>

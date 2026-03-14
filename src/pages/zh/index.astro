@@ -94,8 +94,8 @@ const recentGalleries = allGalleries
           </a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {activePrograms.map(({ entry }) => (
-            <ProgramCard locale={locale} entry={entry} />
+          {activePrograms.map(({ slug, entry }) => (
+            <ProgramCard locale={locale} slug={slug} entry={entry} />
           ))}
         </div>
       </div>
