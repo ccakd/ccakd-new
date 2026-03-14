@@ -111,6 +111,7 @@ jobs:
             fi
 
             # --- Translate YAML text fields ---
+            # Find all trilingual field groups by looking for _en suffix
             EN_FIELDS=$(yq 'keys | .[]' "$yaml_file" 2>/dev/null | grep '_en$' || true)
 
             for en_field in $EN_FIELDS; do
@@ -122,59 +123,78 @@ jobs:
               zh_val=$(yq ".${zh_field} // \"\"" "$yaml_file" 2>/dev/null)
               zhtw_val=$(yq ".${zhtw_field} // \"\"" "$yaml_file" 2>/dev/null)
 
-              # Skip if English is empty or if it's a slug field (contains nested value)
-              if [ "$en_val" = "null" ] || [ -z "$en_val" ]; then
-                continue
+              # Helper to check if a value is empty
+              is_empty() { [ -z "$1" ] || [ "$1" = "null" ] || [ "$1" = "''" ]; }
+
+              # Determine the source language (first non-empty field)
+              source_lang=""
+              source_val=""
+              if ! is_empty "$en_val"; then
+                source_lang="en"; source_val="$en_val"
+              elif ! is_empty "$zh_val"; then
+                source_lang="zh"; source_val="$zh_val"
+              elif ! is_empty "$zhtw_val"; then
+                source_lang="zhtw"; source_val="$zhtw_val"
+              else
+                continue  # All empty, skip
               fi
 
-              # Translate EN→ZH if zh is empty
-              if [ -z "$zh_val" ] || [ "$zh_val" = "null" ] || [ "$zh_val" = "''" ]; then
-                echo "  Translating $en_field → $zh_field"
-                translated=$(translate_text "$en_val" "en" "zh" "false")
-                if [ -n "$translated" ]; then
-                  yq -i ".${zh_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
-                fi
-              fi
+              # Translate to each empty target
+              for target_lang in en zh zhtw; do
+                [ "$target_lang" = "$source_lang" ] && continue
+                target_field="${base}_${target_lang}"
+                target_val=$(yq ".${target_field} // \"\"" "$yaml_file" 2>/dev/null)
 
-              # Translate EN→ZH-TW if zhtw is empty
-              if [ -z "$zhtw_val" ] || [ "$zhtw_val" = "null" ] || [ "$zhtw_val" = "''" ]; then
-                echo "  Translating $en_field → $zhtw_field"
-                translated=$(translate_text "$en_val" "en" "zhtw" "false")
-                if [ -n "$translated" ]; then
-                  yq -i ".${zhtw_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
+                if is_empty "$target_val"; then
+                  echo "  Translating ${base}_${source_lang} → $target_field"
+                  translated=$(translate_text "$source_val" "$source_lang" "$target_lang" "false")
+                  if [ -n "$translated" ]; then
+                    yq -i ".${target_field} = $(echo "$translated" | jq -Rs '.')" "$yaml_file"
+                  fi
                 fi
-              fi
+              done
             done
 
             # --- Translate .mdoc document fields ---
             if [ -d "$entry" ]; then
-              for en_mdoc in "$entry"/*_en.mdoc; do
-                [ -f "$en_mdoc" ] || continue
-                base_name=$(basename "$en_mdoc" _en.mdoc)
-
-                zh_mdoc="${entry}/${base_name}_zh.mdoc"
-                zhtw_mdoc="${entry}/${base_name}_zhtw.mdoc"
-
-                en_content=$(cat "$en_mdoc")
-                [ -z "$en_content" ] && continue
-
-                # Translate EN→ZH if zh mdoc is empty or missing
-                if [ ! -f "$zh_mdoc" ] || [ ! -s "$zh_mdoc" ]; then
-                  echo "  Translating ${base_name}_en.mdoc → ${base_name}_zh.mdoc"
-                  translated=$(translate_text "$en_content" "en" "zh" "true")
-                  if [ -n "$translated" ]; then
-                    echo "$translated" > "$zh_mdoc"
-                  fi
+              # Collect unique base names from all mdoc files (not just _en)
+              MDOC_BASES=()
+              for mdoc_file in "$entry"/*_en.mdoc "$entry"/*_zh.mdoc "$entry"/*_zhtw.mdoc; do
+                [ -f "$mdoc_file" ] || continue
+                base_name=$(basename "$mdoc_file" | sed -E 's/_(en|zh|zhtw)\.mdoc$//')
+                if [[ ! " ${MDOC_BASES[*]} " =~ " ${base_name} " ]]; then
+                  MDOC_BASES+=("$base_name")
                 fi
+              done
 
-                # Translate EN→ZH-TW if zhtw mdoc is empty or missing
-                if [ ! -f "$zhtw_mdoc" ] || [ ! -s "$zhtw_mdoc" ]; then
-                  echo "  Translating ${base_name}_en.mdoc → ${base_name}_zhtw.mdoc"
-                  translated=$(translate_text "$en_content" "en" "zhtw" "true")
-                  if [ -n "$translated" ]; then
-                    echo "$translated" > "$zhtw_mdoc"
+              for base_name in "${MDOC_BASES[@]}"; do
+                # Find the source language (first non-empty mdoc)
+                source_lang=""
+                source_content=""
+                for lang in en zh zhtw; do
+                  mdoc_path="${entry}/${base_name}_${lang}.mdoc"
+                  if [ -f "$mdoc_path" ] && [ -s "$mdoc_path" ]; then
+                    source_lang="$lang"
+                    source_content=$(cat "$mdoc_path")
+                    break
                   fi
-                fi
+                done
+
+                [ -z "$source_lang" ] && continue  # All empty, skip
+
+                # Translate to each missing target
+                for target_lang in en zh zhtw; do
+                  [ "$target_lang" = "$source_lang" ] && continue
+                  target_mdoc="${entry}/${base_name}_${target_lang}.mdoc"
+
+                  if [ ! -f "$target_mdoc" ] || [ ! -s "$target_mdoc" ]; then
+                    echo "  Translating ${base_name}_${source_lang}.mdoc → ${base_name}_${target_lang}.mdoc"
+                    translated=$(translate_text "$source_content" "$source_lang" "$target_lang" "true")
+                    if [ -n "$translated" ]; then
+                      echo "$translated" > "$target_mdoc"
+                    fi
+                  fi
+                done
               done
             fi
 
