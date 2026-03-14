@@ -55,7 +55,7 @@ function keystatic() {
 export default defineConfig({
   site: "https://ccakd.ca",
   // Astro 5 removed 'hybrid' mode. Use 'static' (default prerender) with
-  // per-page `export const prerender = false` for SSR routes (Keystatic admin, /api/translate).
+  // per-page `export const prerender = false` for SSR routes (Keystatic admin).
   output: "static",
   adapter: cloudflare(),
   integrations: [react(), tailwind(), keystatic(), sitemap()],
