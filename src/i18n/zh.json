@@ -33,6 +33,7 @@
   },
   "events": {
     "title": "活动",
+    "subtitle": "社区聚会与庆祝活动",
     "upcoming": "即将举行",
     "ongoing": "进行中",
     "ended": "已结束",
@@ -42,14 +43,17 @@
   },
   "programs": {
     "title": "项目",
+    "subtitle": "为社区提供的活动和服务",
     "moreInfo": "了解更多"
   },
   "gallery": {
     "title": "相册",
+    "subtitle": "活动与社区生活的精彩瞬间",
     "photos": "张照片"
   },
   "about": {
-    "title": "关于",
+    "title": "关于我们",
+    "subtitle": "自1974年起，连接家庭、弘扬文化",
     "purpose": "我们的宗旨",
     "history": "我们的历史",
     "executives": "理事会成员",
@@ -57,6 +61,7 @@
   },
   "announcements": {
     "title": "公告",
+    "subtitle": "CCAKD 的新闻和动态",
     "readMore": "阅读更多",
     "postedOn": "发布于"
   },

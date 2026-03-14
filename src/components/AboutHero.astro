@@ -1,0 +1,32 @@
+---
+/**
+ * Hero image header for the About page.
+ * Shows a community photo with overlaid title text.
+ */
+interface Props {
+  title: string;
+  subtitle?: string;
+  image: string;
+}
+
+const { title, subtitle, image } = Astro.props;
+---
+
+<div class="relative h-[260px] md:h-[340px] overflow-hidden bg-black">
+  <div
+    class="absolute inset-0 bg-cover bg-center"
+    style={`background-image: url('${image}')`}
+  >
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+  </div>
+  <div class="relative z-10 h-full flex items-end">
+    <div class="max-w-[1080px] w-full mx-auto px-8 pb-8">
+      <h1 class="font-display text-3xl md:text-[2.4rem] font-semibold tracking-tight text-white drop-shadow-md">
+        {title}
+      </h1>
+      {subtitle && (
+        <p class="mt-2 text-white/80 text-[0.95rem] max-w-[480px] drop-shadow-sm">{subtitle}</p>
+      )}
+    </div>
+  </div>
+</div>

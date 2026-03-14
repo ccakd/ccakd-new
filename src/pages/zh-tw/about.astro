@@ -3,6 +3,7 @@ import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 import Layout from '../../components/Layout.astro';
+import AboutHero from '../../components/AboutHero.astro';
 import ExecutiveCard from '../../components/ExecutiveCard.astro';
 import type { Locale } from '../../i18n/utils';
 import { t } from '../../i18n/utils';
@@ -18,9 +19,9 @@ const historyBody = about ? (await (about as any).history_zhtw?.() || await (abo
 ---
 
 <Layout locale={locale} path="/about" title={strings.about.title}>
+  <AboutHero title={strings.about.title} subtitle={strings.about.subtitle} image="/images/about-hero.webp" />
   <section class="py-16 px-8">
     <div class="max-w-[720px] mx-auto">
-      <h1 class="font-display text-3xl font-semibold tracking-tight mb-10">{strings.about.title}</h1>
 
       {purposeBody && (
         <div class="mb-12">

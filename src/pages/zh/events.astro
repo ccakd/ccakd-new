@@ -1,5 +1,6 @@
 ---
 import Layout from '../../components/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import EventDetailCard from '../../components/EventDetailCard.astro';
 import type { Locale } from '../../i18n/utils';
 import { t } from '../../i18n/utils';
@@ -11,9 +12,9 @@ const events = await getAllEvents();
 ---
 
 <Layout locale={locale} path="/events" title={strings.events.title}>
-  <section class="py-16 px-8">
+  <PageHeader title={strings.events.title} subtitle={strings.events.subtitle} />
+  <section class="pb-16 pt-6 px-8">
     <div class="max-w-[1080px] mx-auto">
-      <h1 class="font-display text-3xl font-semibold tracking-tight mb-10">{strings.events.title}</h1>
       {events.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (

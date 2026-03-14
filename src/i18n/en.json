@@ -33,6 +33,7 @@
   },
   "events": {
     "title": "Events",
+    "subtitle": "Community gatherings and celebrations",
     "upcoming": "Upcoming",
     "ongoing": "Ongoing",
     "ended": "Ended",
@@ -42,14 +43,17 @@
   },
   "programs": {
     "title": "Programs",
+    "subtitle": "Activities and services for our community",
     "moreInfo": "More Info"
   },
   "gallery": {
     "title": "Gallery",
+    "subtitle": "Moments from our events and community life",
     "photos": "photos"
   },
   "about": {
-    "title": "About",
+    "title": "About Us",
+    "subtitle": "Connecting families and celebrating culture since 1974",
     "purpose": "Our Purpose",
     "history": "Our History",
     "executives": "Our Executives",
@@ -57,6 +61,7 @@
   },
   "announcements": {
     "title": "Announcements",
+    "subtitle": "News and updates from CCAKD",
     "readMore": "Read More",
     "postedOn": "Posted"
   },
