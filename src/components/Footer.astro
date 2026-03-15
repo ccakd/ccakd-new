@@ -11,14 +11,14 @@ const strings = t(locale);
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer-gold py-8 px-8 text-white/70 text-sm">
+<footer class="footer-gold py-8 px-8 text-sm">
   <div class="max-w-[1080px] mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-    <p class="text-white/50">&copy; {year} {strings.footer.copyright}</p>
+    <p class="text-[#5C4A2A]/70">&copy; {year} {strings.footer.copyright}</p>
     <div class="flex items-center gap-6">
-      <a href={localePath(locale, '/terms')} class="text-white/70 hover:text-white transition-colors">
+      <a href={localePath(locale, '/terms')} class="text-[#5C4A2A]/80 hover:text-[#3A2E18] transition-colors">
         {strings.footer.terms}
       </a>
-      <a href="mailto:info@ccakd.ca" class="text-white/70 hover:text-white transition-colors">
+      <a href="mailto:info@ccakd.ca" class="text-[#5C4A2A]/80 hover:text-[#3A2E18] transition-colors">
         info@ccakd.ca
       </a>
     </div>
