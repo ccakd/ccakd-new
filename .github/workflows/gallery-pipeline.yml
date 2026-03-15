@@ -349,15 +349,11 @@ jobs:
             exit 0
           fi
 
-          # Copy thumbnail to public/images/galleries/
-          mkdir -p public/images/galleries
-          COVER_DEST="public/images/galleries/${SLUG}-cover.webp"
-          cp "./processed/thumb/${COVER_FILE}" "$COVER_DEST"
+          # Set cover_image to R2 full URL (no local file needed)
+          R2_COVER_URL="https://media.ccakd.ca/galleries/${SLUG}/full/${COVER_FILE}"
+          yq -i ".cover_image = \"${R2_COVER_URL}\"" "$YAML_FILE"
 
-          # Set cover_image in YAML (Keystatic stores full publicPath)
-          yq -i ".cover_image = \"/images/galleries/${SLUG}-cover.webp\"" "$YAML_FILE"
-
-          echo "Set cover image: $COVER_DEST"
+          echo "Set cover image: $R2_COVER_URL"
 
       - name: Update gallery YAML and commit
         if: steps.inputs.outputs.skip != 'true'
@@ -381,7 +377,7 @@ jobs:
           cat "$YAML_FILE"
 
           # Commit and push
-          git add "$YAML_FILE" public/images/galleries/
+          git add "$YAML_FILE"
 
           if git diff --cached --quiet; then
             echo "::notice::No changes to commit (manifest unchanged)"

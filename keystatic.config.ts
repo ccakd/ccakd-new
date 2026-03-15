@@ -1,4 +1,5 @@
 import { config, collection, singleton, fields } from '@keystatic/core';
+import { coverImageField } from './src/lib/keystatic/cover-image-field';
 
 export default config({
   storage: import.meta.env.DEV
@@ -106,11 +107,7 @@ export default config({
           description: 'Paste the shared Google Drive folder URL. The folder must be shared with the CCAKD service account.',
         }),
         date: fields.date({ label: 'Event Date', validation: { isRequired: true } }),
-        cover_image: fields.image({
-          label: 'Cover Image',
-          directory: 'public/images/galleries',
-          publicPath: '/images/galleries/',
-        }),
+        cover_image: coverImageField('Cover Image'),
         r2_folder: fields.text({
           label: 'R2 Folder (auto-populated)',
           description: 'DO NOT EDIT — set automatically by the gallery pipeline.',
