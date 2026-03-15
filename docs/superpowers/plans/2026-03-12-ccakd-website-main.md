@@ -99,21 +99,21 @@ ccakd-new/
 - Create: `src/styles/global.css`
 - Create: `public/robots.txt`
 
-- [ ] **Step 1: Initialize Astro project with dependencies**
+- [x] **Step 1: Initialize Astro project with dependencies**
 
 ```bash
 cd /Users/wanpeng.yang/personal-projects/ccakd-new
 npm create astro@latest . -- --template minimal --no-git --no-install --typescript strict
 ```
 
-- [ ] **Step 2: Install all dependencies**
+- [x] **Step 2: Install all dependencies**
 
 ```bash
 npm install @astrojs/cloudflare @astrojs/react @astrojs/tailwind @astrojs/sitemap @keystatic/core @keystatic/astro react react-dom tailwindcss photoswipe
 npm install -D @types/react @types/react-dom wrangler
 ```
 
-- [ ] **Step 3: Configure astro.config.mjs**
+- [x] **Step 3: Configure astro.config.mjs**
 
 ```javascript
 import { defineConfig } from 'astro/config';
@@ -136,7 +136,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 4: Configure wrangler.json**
+- [x] **Step 4: Configure wrangler.json**
 
 ```json
 {
@@ -150,7 +150,7 @@ export default defineConfig({
 }
 ```
 
-- [ ] **Step 5: Configure tailwind.config.mjs**
+- [x] **Step 5: Configure tailwind.config.mjs**
 
 ```javascript
 /** @type {import('tailwindcss').Config} */
@@ -168,7 +168,7 @@ export default {
 };
 ```
 
-- [ ] **Step 6: Create global.css with Tailwind directives**
+- [x] **Step 6: Create global.css with Tailwind directives**
 
 ```css
 @tailwind base;
@@ -176,7 +176,7 @@ export default {
 @tailwind utilities;
 ```
 
-- [ ] **Step 7: Create robots.txt**
+- [x] **Step 7: Create robots.txt**
 
 ```
 User-agent: *
@@ -185,7 +185,7 @@ Allow: /
 Sitemap: https://ccakd.ca/sitemap-index.xml
 ```
 
-- [ ] **Step 8: Create .gitignore**
+- [x] **Step 8: Create .gitignore**
 
 ```
 node_modules/
@@ -196,7 +196,7 @@ dist/
 .env
 ```
 
-- [ ] **Step 9: Create .dev.vars for local environment variables**
+- [x] **Step 9: Create .dev.vars for local environment variables**
 
 ```
 AZURE_AI_ENDPOINT=https://your-endpoint.openai.azure.com
@@ -207,14 +207,14 @@ KEYSTATIC_GITHUB_CLIENT_SECRET=
 KEYSTATIC_SECRET=
 ```
 
-- [ ] **Step 10: Create placeholder favicon**
+- [x] **Step 10: Create placeholder favicon**
 
 Create `public/favicon.svg`:
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y="28" font-size="28">🏮</text></svg>
 ```
 
-- [ ] **Step 11: Verify build**
+- [x] **Step 11: Verify build**
 
 ```bash
 npm run build
@@ -223,7 +223,7 @@ Expected: Build succeeds (may warn about no pages yet, that's fine)
 
 Note: `npm create astro` may prompt about existing files — use `--yes` flag if needed, or run in a clean state.
 
-- [ ] **Step 12: Commit**
+- [x] **Step 12: Commit**
 
 ```bash
 git init
@@ -717,7 +717,7 @@ npm run dev
 ```
 Open `http://localhost:4321/keystatic` — verify the CMS dashboard shows Announcements, Programs, Galleries collections and Homepage, About, Terms singletons.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add keystatic.config.ts src/pages/keystatic/ content/ public/images/ public/files/
@@ -1227,11 +1227,11 @@ User selected **Theme G (Porcelain)** — Apple.cn-inspired minimalism with red 
 
 Applied Porcelain theme: updated `tailwind.config.mjs` (colors, fonts, pill radius), `global.css` (base styles, component classes), `Layout.astro` (Google Fonts), `Nav.astro` (frosted glass pill nav with logo), `Footer.astro` (light border-only style).
 
-- [ ] **Step 4: Update Layout.astro with font imports**
+- [x] **Step 4: Update Layout.astro with font imports**
 
 Add Google Fonts `<link>` tags for the selected fonts in the `<head>`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tailwind.config.mjs src/styles/global.css src/components/Layout.astro
@@ -1541,14 +1541,14 @@ Create `src/pages/zh/index.astro` and `src/pages/zh-tw/index.astro` — identica
 - `src/pages/zh/index.astro`
 - `src/pages/zh-tw/index.astro`
 
-- [ ] **Step 8: Verify homepage**
+- [x] **Step 8: Verify homepage**
 
 ```bash
 npm run dev
 ```
 Verify all sections render with sample/empty content. Test all 3 locales.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/components/Hero.astro src/components/AnnouncementCard.astro src/components/EventCard.astro src/components/ProgramCard.astro src/components/NewsletterSignup.astro src/pages/

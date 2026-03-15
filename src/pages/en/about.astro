@@ -24,9 +24,9 @@ const historyBody = about ? await (about as any).history_en?.() : null;
     <div class="max-w-[720px] mx-auto">
 
       {purposeBody && (
-        <div class="mb-12">
-          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.purpose}</h2>
-          <div class="prose prose-lg max-w-none prose-headings:font-display prose-a:text-accent">
+        <div class="mb-16">
+          <h2 class="font-display text-2xl md:text-3xl font-semibold mb-6">{strings.about.purpose}</h2>
+          <div class="purpose-items">
             <DocumentRenderer document={purposeBody} />
           </div>
         </div>
@@ -34,7 +34,7 @@ const historyBody = about ? await (about as any).history_en?.() : null;
 
       {historyBody && (
         <div class="mb-12">
-          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.history}</h2>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold mb-6">{strings.about.history}</h2>
           <figure class="mb-6">
             <img src="/images/about-history.webp" alt="CCAKD 1st Annual General Meeting, November 1978" class="rounded-xl w-full" />
             <figcaption class="text-[0.78rem] text-porcelain-secondary mt-2 text-center">CCAKD 1st Annual General Meeting, November 1978</figcaption>
@@ -47,7 +47,7 @@ const historyBody = about ? await (about as any).history_en?.() : null;
 
       {about?.constitution_en_pdf && (
         <div class="mb-12">
-          <h2 class="font-display text-xl font-semibold mb-4">{strings.about.constitution}</h2>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold mb-4">{strings.about.constitution}</h2>
           <a href={about.constitution_en_pdf} target="_blank" class="inline-block px-5 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors">
             Download PDF &rarr;
           </a>
@@ -59,7 +59,7 @@ const historyBody = about ? await (about as any).history_en?.() : null;
   {about?.executives && about.executives.length > 0 && (
     <section class="py-16 px-8 bg-porcelain-section">
       <div class="max-w-[1080px] mx-auto">
-        <h2 class="font-display text-xl font-semibold mb-6">{strings.about.executives}</h2>
+        <h2 class="font-display text-2xl md:text-3xl font-semibold mb-6">{strings.about.executives}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {about.executives.map((exec: any) => (
             <ExecutiveCard locale={locale} executive={exec} />
@@ -69,3 +69,34 @@ const historyBody = about ? await (about as any).history_en?.() : null;
     </section>
   )}
 </Layout>
+
+<style>
+  .purpose-items :global(p) {
+    position: relative;
+    background: linear-gradient(135deg, #FEF2F0 0%, #fff 60%);
+    border-left: 3px solid #D04830;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #1D1D1F;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .purpose-items :global(p:hover) {
+    box-shadow: 0 4px 16px rgba(208, 72, 48, 0.08);
+    transform: translateX(2px);
+  }
+  .purpose-items :global(p strong) {
+    display: block;
+    font-family: 'Noto Serif SC', 'Noto Serif TC', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #D04830;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.01em;
+  }
+  .purpose-items :global(p em) {
+    font-style: normal;
+  }
+</style>
