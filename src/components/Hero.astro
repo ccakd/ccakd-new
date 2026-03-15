@@ -29,20 +29,20 @@ const heroImages = images.length > 0 ? images : defaultImages;
         class="hero-slide min-w-full h-full bg-cover bg-center relative"
         style={`background-image:url('${src}')`}
       >
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+        <div class="absolute inset-0 hero-gradient" />
       </div>
     ))}
   </div>
   <div class="absolute bottom-0 left-0 right-0 z-10 max-w-[1080px] mx-auto px-8 pb-10 md:pb-14 text-white">
-    <h1 class="font-display text-3xl md:text-[2.8rem] font-semibold leading-tight max-w-[520px] tracking-tight">
+    <h1 class="font-display text-3xl md:text-[2.8rem] font-semibold leading-tight max-w-[520px] tracking-tight hero-heading">
       {heading}
     </h1>
-    <p class="text-sm md:text-base opacity-85 font-light mt-2 max-w-[420px]">
+    <p class="text-sm md:text-base opacity-95 font-light mt-2 max-w-[420px] hero-subtitle">
       {strings.home.heroSubtitle}
     </p>
     <a
       href={ctaLink}
-      class="inline-block mt-5 px-6 py-2.5 bg-white text-porcelain-text rounded-pill font-medium text-sm hover:bg-white/90 transition-all"
+      class="inline-block mt-5 px-6 py-2.5 bg-white text-porcelain-text rounded-pill font-medium text-sm hover:bg-white/90 transition-all shadow-md"
     >
       {strings.home.becomeMember} &rarr;
     </a>
@@ -80,5 +80,25 @@ const heroImages = images.length > 0 ? images : defaultImages;
 <style>
   .hero-track {
     transition: transform 0.8s ease-in-out;
+  }
+  .hero-gradient {
+    background: linear-gradient(
+      to bottom,
+      transparent 20%,
+      rgba(0,0,0,0.1) 35%,
+      rgba(0,0,0,0.4) 60%,
+      rgba(0,0,0,0.72) 85%,
+      rgba(0,0,0,0.8) 100%
+    );
+  }
+  .hero-heading {
+    text-shadow:
+      0 1px 3px rgba(0,0,0,0.5),
+      0 4px 16px rgba(0,0,0,0.3);
+  }
+  .hero-subtitle {
+    text-shadow:
+      0 1px 2px rgba(0,0,0,0.6),
+      0 2px 8px rgba(0,0,0,0.4);
   }
 </style>
