@@ -156,7 +156,7 @@ jobs:
 
           echo "Downloading images from GDrive folder: $FOLDER_ID"
           rclone copy "gdrive,root_folder_id=$FOLDER_ID:" ./raw_images \
-            --include "*.{jpg,jpeg,png,heic,JPG,JPEG,PNG,HEIC}" \
+            --include "*.{jpg,jpeg,png,heic,tif,tiff,JPG,JPEG,PNG,HEIC,TIF,TIFF}" \
             --progress
 
           COUNT=$(find ./raw_images -type f | wc -l)
@@ -184,7 +184,7 @@ jobs:
           done
 
           # Build a file list (flatten any nested structure, handle spaces in names)
-          find ./raw_images -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) > /tmp/image_list.txt
+          find ./raw_images -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.tif' -o -iname '*.tiff' \) > /tmp/image_list.txt
 
           echo "Processing $(wc -l < /tmp/image_list.txt) images..."
 
