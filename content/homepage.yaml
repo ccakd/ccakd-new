@@ -1,9 +1,9 @@
 hero_images:
-  - /images/hero/DH0A9921.webp
-  - /images/hero/DH0A8079.webp
-  - /images/hero/DH0A8147.webp
-  - /images/hero/DH0A9712.webp
-  - /images/hero/DSC09300.webp
+  - /images/hero/hero_images/0.webp
+  - /images/hero/hero_images/1.webp
+  - /images/hero/hero_images/2.webp
+  - /images/hero/hero_images/3.webp
+  - /images/hero/hero_images/4.webp
 hero_heading_en: Connecting Families, Celebrating Culture
 hero_heading_zh: 连接家庭，弘扬文化
 hero_heading_zhtw: 連結家庭，弘揚文化
