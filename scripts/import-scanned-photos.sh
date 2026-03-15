@@ -270,14 +270,20 @@ while IFS= read -r folder_name; do
 
   # ── Write gallery YAML ───────────────────────────────────────────────
   echo "  Writing $yaml_file"
+
+  # Escape single quotes for YAML (double them: ' → '')
+  yaml_title="${title//\'/\'\'}"
+  yaml_cover="${cover_url//\'/\'\'}"
+  yaml_manifest=$(echo "$manifest" | python3 -c "import sys,json; m=json.dumps(json.loads(sys.stdin.read()),separators=(',',':')); print(m.replace(\"'\",\"''\"))" 2>/dev/null || echo "$manifest")
+
   cat > "$yaml_file" <<YAML
-title_en: '${title}'
+title_en: '${yaml_title}'
 title_zh: ''
 title_zhtw: ''
 date: '${date}'
-cover_image: '${cover_url}'
+cover_image: '${yaml_cover}'
 r2_folder: galleries/${slug}
-photo_manifest: '$(echo "$manifest" | python3 -c "import sys,json; print(json.dumps(json.loads(sys.stdin.read()),separators=(',',':')))" 2>/dev/null || echo "$manifest")'
+photo_manifest: '${yaml_manifest}'
 YAML
 
   echo "  Done: $photo_count photos"
