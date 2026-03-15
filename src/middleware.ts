@@ -8,8 +8,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (contentType.includes('text/html')) {
       const html = await response.text();
       const patched = html.replace(
-        /<link rel="icon"[^>]*>/,
-        '<link rel="icon" href="/favicon.ico">'
+        '</head>',
+        '<link rel="icon" href="/keystatic-favicon.ico">\n</head>'
       );
       return new Response(patched, {
         status: response.status,
