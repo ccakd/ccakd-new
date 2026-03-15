@@ -45,12 +45,21 @@ const historyBody = about ? (await (about as any).history_zh?.() || await (about
         </div>
       )}
 
-      {about?.constitution_zh_pdf && (
+      {(about?.constitution_en_pdf || about?.constitution_zh_pdf) && (
         <div class="mb-12">
           <h2 class="font-display text-2xl md:text-3xl font-semibold mb-4">{strings.about.constitution}</h2>
-          <a href={about.constitution_zh_pdf} target="_blank" class="inline-block px-5 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors">
-            下载 PDF &rarr;
-          </a>
+          <div class="flex flex-wrap gap-3">
+            {about.constitution_zh_pdf && (
+              <a href={about.constitution_zh_pdf} target="_blank" class="inline-block px-5 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors">
+                中文 PDF &rarr;
+              </a>
+            )}
+            {about.constitution_en_pdf && (
+              <a href={about.constitution_en_pdf} target="_blank" class="inline-block px-5 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors">
+                English PDF &rarr;
+              </a>
+            )}
+          </div>
         </div>
       )}
     </div>
