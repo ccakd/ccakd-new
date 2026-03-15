@@ -49,8 +49,8 @@ const heroImages = images.length > 0 ? images : defaultImages;
   </div>
   <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
     {heroImages.map((_, i) => (
-      <span class:list={[
-        'hero-dot block h-1.5 rounded-full transition-all duration-300',
+      <button data-slide={i} class:list={[
+        'hero-dot block h-1.5 rounded-full transition-all duration-300 cursor-pointer p-0 border-0',
         i === 0 ? 'w-5 bg-white/85' : 'w-1.5 bg-white/35',
       ]} />
     ))}
@@ -63,8 +63,10 @@ const heroImages = images.length > 0 ? images : defaultImages;
   if (track) {
     const slides = track.children.length;
     let current = 0;
-    function advance() {
-      current = (current + 1) % slides;
+    let timer = setInterval(advance, 5000);
+
+    function goTo(index: number) {
+      current = index;
       track.style.transform = `translateX(-${current * 100}%)`;
       dots.forEach((dot, i) => {
         dot.classList.toggle('w-5', i === current);
@@ -73,7 +75,19 @@ const heroImages = images.length > 0 ? images : defaultImages;
         dot.classList.toggle('bg-white/35', i !== current);
       });
     }
-    setInterval(advance, 5000);
+
+    function advance() {
+      goTo((current + 1) % slides);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const index = Number((dot as HTMLElement).dataset.slide);
+        goTo(index);
+        clearInterval(timer);
+        timer = setInterval(advance, 5000);
+      });
+    });
   }
 </script>
 
