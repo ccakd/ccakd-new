@@ -1,5 +1,22 @@
 import { defineMiddleware } from 'astro:middleware';
 
-export const onRequest = defineMiddleware((_context, next) => {
-  return next();
+export const onRequest = defineMiddleware(async (context, next) => {
+  const response = await next();
+
+  if (context.url.pathname.startsWith('/keystatic')) {
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('text/html')) {
+      const html = await response.text();
+      const patched = html.replace(
+        /<link rel="icon"[^>]*>/,
+        '<link rel="icon" href="/favicon.ico">'
+      );
+      return new Response(patched, {
+        status: response.status,
+        headers: response.headers,
+      });
+    }
+  }
+
+  return response;
 });
