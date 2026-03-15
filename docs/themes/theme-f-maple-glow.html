@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme F — Maple Glow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #C85040;
+    --accent-soft: #E07060;
+    --accent-bg: #FDF4F2;
+    --warm: #D89848;
+    --warm-light: #FBF0DC;
+    --sage: #6B8C6B;
+    --sage-light: #EFF5EF;
+    --dark: #1E1C1A;
+    --text: #484240;
+    --text-light: #908680;
+    --border: #EEEBE6;
+    --bg: #FEFEFD;
+    --bg-soft: #F9F7F4;
+    --white: #FFFFFF;
+
+    --font-display: 'Instrument Serif', 'Noto Sans SC', 'Noto Sans TC', Georgia, serif;
+    --font-body: 'DM Sans', 'Noto Sans SC', 'Noto Sans TC', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); color: var(--text); background: var(--bg); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+  /* ===== TOP BAR ===== */
+  .topbar { background: var(--dark); padding: 0.3rem 0; font-size: 0.78rem; }
+  .topbar .w { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+  .topbar a { color: #999; text-decoration: none; font-weight: 500; }
+  .topbar a:hover { color: #ddd; }
+  .lang { display: flex; gap: 0.25rem; border-left: 1px solid #444; padding-left: 0.75rem; margin-left: 0.5rem; }
+  .lang a { padding: 0.12rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.72rem; transition: all 0.15s; }
+  .lang a.on { background: var(--accent); color: #fff; }
+  .lang a:not(.on) { color: #777; }
+  .lang a:not(.on):hover { color: #ccc; }
+
+  /* ===== NAV ===== */
+  nav { background: var(--white); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); }
+  nav .w { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { font-family: var(--font-display); font-size: 1.4rem; color: var(--dark); text-decoration: none; }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.85rem;
+    padding: 0.35rem 0.75rem; border-radius: 6px; transition: all 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--bg-soft); }
+  .nav-links a.on { color: var(--accent); background: var(--accent-bg); }
+
+  /* ===== HERO ===== */
+  .hero { position: relative; height: 420px; overflow: hidden; }
+  .hero-carousel { display: flex; height: 100%; animation: pan 18s ease-in-out infinite; }
+  .hero-frame {
+    min-width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    position: relative;
+  }
+  .hero-frame::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+  }
+  @keyframes pan {
+    0%, 30% { transform: translateX(0); }
+    33%, 63% { transform: translateX(-100%); }
+    66%, 96% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+  }
+  .hero-text {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 2.5rem;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: 2.8rem; color: white;
+    line-height: 1.1; text-shadow: 0 1px 4px rgba(0,0,0,0.2); max-width: 500px;
+  }
+  .hero-sub { color: rgba(255,255,255,0.85); font-size: 0.95rem; margin-top: 0.5rem; font-weight: 300; max-width: 400px; }
+  .hero-cta {
+    display: inline-block; margin-top: 1.25rem;
+    padding: 0.6rem 1.5rem; background: white; color: var(--dark);
+    border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;
+    transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .hero-cta:hover { background: var(--accent-bg); color: var(--accent); }
+  .hero-nav {
+    position: absolute; bottom: 1rem; right: 1.5rem; z-index: 3;
+    display: flex; gap: 0.35rem;
+  }
+  .hero-nav span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); }
+  .hero-nav span.on { background: white; width: 18px; border-radius: 3px; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 3.5rem 1.5rem; }
+  .w { max-width: 1100px; margin: 0 auto; }
+  .sh { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.75rem; }
+  .sh h2 { font-family: var(--font-display); font-size: 1.65rem; color: var(--dark); }
+  .sh a {
+    color: var(--text-light); text-decoration: none; font-weight: 500; font-size: 0.82rem;
+    display: flex; align-items: center; gap: 0.3rem; transition: color 0.15s;
+  }
+  .sh a:hover { color: var(--accent); }
+  .alt { background: var(--bg-soft); }
+
+  /* ===== ANNOUNCEMENT CARDS ===== */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; }
+  .card {
+    background: var(--white); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border); transition: all 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.04); border-color: #e0dbd4; }
+  .card-img { height: 145px; background: var(--bg-soft); background-size: cover; background-position: center; }
+  .card-body { padding: 1.15rem; }
+  .card-date { font-size: 0.72rem; color: var(--text-light); font-weight: 500; margin-bottom: 0.35rem; }
+  .card-body h3 { font-family: var(--font-display); font-size: 1.08rem; color: var(--dark); margin-bottom: 0.3rem; line-height: 1.25; }
+  .card-body p { color: var(--text-light); font-size: 0.83rem; line-height: 1.5; }
+  .tag {
+    display: inline-block; margin-top: 0.5rem; padding: 0.12rem 0.5rem;
+    background: var(--sage-light); color: var(--sage); border-radius: 4px; font-size: 0.7rem; font-weight: 600;
+  }
+
+  /* ===== EVENTS ===== */
+  .evs { display: flex; flex-direction: column; gap: 0.6rem; }
+  .ev {
+    display: grid; grid-template-columns: 64px 1fr; gap: 1rem;
+    background: var(--white); border-radius: 10px; padding: 1.15rem;
+    border: 1px solid var(--border); transition: all 0.2s; align-items: start;
+  }
+  .ev:hover { border-color: var(--accent-soft); }
+  .ev-d {
+    width: 56px; height: 56px; border-radius: 10px; background: var(--accent);
+    color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ev-d .d { font-size: 1.2rem; font-weight: 700; line-height: 1; }
+  .ev-d .m { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; margin-top: 0.1rem; }
+  .ev-info h3 { font-family: var(--font-display); font-size: 1.02rem; color: var(--dark); margin-bottom: 0.2rem; }
+  .ev-info p { color: var(--text-light); font-size: 0.82rem; }
+  .ev-info .loc { font-size: 0.76rem; color: var(--text-light); margin-top: 0.3rem; }
+
+  /* ===== PROGRAMS ===== */
+  .progs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; }
+  .prog {
+    background: var(--white); border-radius: 10px; padding: 1.4rem;
+    border: 1px solid var(--border); transition: all 0.2s;
+  }
+  .prog:hover { border-color: var(--warm); }
+  .prog-ic {
+    width: 40px; height: 40px; border-radius: 8px; background: var(--warm-light);
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 0.75rem;
+  }
+  .prog h3 { font-family: var(--font-display); font-size: 1.02rem; color: var(--dark); margin-bottom: 0.3rem; }
+  .prog p { color: var(--text-light); font-size: 0.82rem; line-height: 1.5; }
+
+  /* ===== GALLERY ===== */
+  .gal {
+    display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: 140px 140px; gap: 0.5rem;
+  }
+  .gi {
+    border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.2s;
+    background-size: cover; background-position: center; background-color: var(--bg-soft);
+  }
+  .gi:hover { opacity: 0.9; }
+  .gi:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gi:nth-child(2) { grid-column: span 2; }
+
+  /* ===== NEWSLETTER ===== */
+  .nl {
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2.5rem;
+  }
+  .nl-left h2 { font-family: var(--font-display); font-size: 1.35rem; color: var(--dark); }
+  .nl-left p { color: var(--text-light); font-size: 0.88rem; margin-top: 0.25rem; }
+  .nl-form { display: flex; gap: 0.5rem; }
+  .nl-form input {
+    padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 0.88rem; min-width: 230px; font-family: var(--font-body); color: var(--text);
+  }
+  .nl-form input:focus { outline: none; border-color: var(--accent); }
+  .nl-form button {
+    padding: 0.6rem 1.5rem; background: var(--accent); color: white; border: none; border-radius: 6px;
+    font-weight: 600; font-size: 0.85rem; cursor: pointer; font-family: var(--font-body); transition: background 0.15s;
+  }
+  .nl-form button:hover { background: var(--accent-soft); }
+
+  /* ===== FOOTER ===== */
+  footer { background: var(--dark); color: #888; padding: 2rem 1.5rem; font-size: 0.82rem; }
+  footer .w { display: flex; justify-content: space-between; align-items: center; }
+  footer a { color: #aaa; text-decoration: none; }
+  footer a:hover { color: var(--warm); }
+  .fl { display: flex; gap: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .hero { height: 340px; }
+    .hero h1 { font-size: 2rem; }
+    .cards, .progs { grid-template-columns: 1fr; }
+    .ev { grid-template-columns: 52px 1fr; }
+    .gal { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 120px); }
+    .gal .gi:nth-child(1) { grid-column: span 2; }
+    .gal .gi:nth-child(2) { grid-column: span 1; }
+    .nl { flex-direction: column; text-align: center; padding: 1.75rem; }
+    .nl-form { flex-direction: column; }
+    .nl-form input { min-width: 100%; }
+    .nav-links { display: none; }
+    footer .w { flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="w"><a href="#">Login</a><a href="#">Sign Up</a><div class="lang"><a href="#" class="on">EN</a><a href="#">简体</a><a href="#">繁體</a></div></div></div>
+
+<nav><div class="w">
+  <a href="#" class="logo">CCAKD</a>
+  <div class="nav-links">
+    <a href="#" class="on">Home</a><a href="#">Events</a><a href="#">Programs</a><a href="#">Gallery</a><a href="#">About</a><a href="#">Membership</a>
+  </div>
+</div></nav>
+
+<section class="hero">
+  <div class="hero-carousel">
+    <div class="hero-frame" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div>
+    <div class="hero-frame" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09301.jpg')"></div>
+    <div class="hero-frame" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg')"></div>
+  </div>
+  <div class="hero-text">
+    <h1>Chinese Canadian Association of Kingston</h1>
+    <p class="hero-sub">Connecting families, celebrating culture, and building community since 1977.</p>
+    <a href="#" class="hero-cta">Become a Member →</a>
+  </div>
+  <div class="hero-nav"><span class="on"></span><span></span><span></span></div>
+</section>
+
+<section><div class="w">
+  <div class="sh"><h2>Announcements</h2><a href="#">View All →</a></div>
+  <div class="cards">
+    <div class="card"><div class="card-img" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div><div class="card-body"><div class="card-date">March 10, 2026</div><h3>2026 Annual General Meeting Notice</h3><p>All members are invited to our AGM on March 28th.</p><span class="tag">Important</span></div></div>
+    <div class="card"><div class="card-img" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A0955.jpg')"></div><div class="card-body"><div class="card-date">March 5, 2026</div><h3>Scholarship Applications Now Open</h3><p>Scholarships for graduating students of Chinese heritage.</p><span class="tag">Scholarship</span></div></div>
+    <div class="card"><div class="card-img" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2025/08/DH0A1237.jpg')"></div><div class="card-body"><div class="card-date">February 28, 2026</div><h3>Lunar New Year Celebration Recap</h3><p>Thank you to everyone who came out!</p><span class="tag">Community</span></div></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="w">
+  <div class="sh"><h2>Upcoming Events</h2><a href="#">See All Events →</a></div>
+  <div class="evs">
+    <div class="ev"><div class="ev-d"><span class="d">28</span><span class="m">Mar</span></div><div class="ev-info"><h3>Annual General Meeting 2026</h3><p>Election of new executives, financial reports, and community planning.</p><div class="loc">📍 Kingston Community Centre</div></div></div>
+    <div class="ev"><div class="ev-d"><span class="d">12</span><span class="m">Apr</span></div><div class="ev-info"><h3>Spring Dumpling Making Workshop</h3><p>Learn to wrap and cook traditional dumplings — all ages welcome!</p><div class="loc">📍 St. Lawrence College</div></div></div>
+    <div class="ev"><div class="ev-d"><span class="d">03</span><span class="m">May</span></div><div class="ev-info"><h3>Asian Heritage Month Opening Gala</h3><p>Performances, food, and a keynote speaker.</p><div class="loc">📍 Grand Theatre, Kingston</div></div></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="sh"><h2>Programs</h2><a href="#">See All →</a></div>
+  <div class="progs">
+    <div class="prog"><div class="prog-ic">🀄</div><h3>Mahjong Social Club</h3><p>Weekly casual mahjong games. All skill levels welcome.</p></div>
+    <div class="prog"><div class="prog-ic">📚</div><h3>Chinese Language Classes</h3><p>Mandarin and Cantonese for children and adults.</p></div>
+    <div class="prog"><div class="prog-ic">🎨</div><h3>Cultural Arts Workshop</h3><p>Calligraphy, painting, papercutting, and more.</p></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="w">
+  <div class="sh"><h2>Gallery</h2><a href="#">View All Albums →</a></div>
+  <div class="gal">
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09301.jpg')"></div>
+    <div class="gi" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2025/08/DH0A1237.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/20240225_132618.jpg')"></div>
+    <div class="gi" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2023/12/3F1A1878-拷贝-scaled.jpg')"></div>
+    <div class="gi" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2023/09/IMG_4675-scaled.jpg')"></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="nl">
+    <div class="nl-left"><h2>Subscribe To Our Newsletter</h2><p>Monthly updates on events and programs to your inbox.</p></div>
+    <form class="nl-form" onsubmit="return false"><input type="email" placeholder="Your Email" /><button>Subscribe</button></form>
+  </div>
+</div></section>
+
+<footer><div class="w"><p>&copy; 2026 Chinese Canadian Association of Kingston and District</p><div class="fl"><a href="#">Terms</a><a href="#">info@ccakd.ca</a></div></div></footer>
+
+</body>
+</html>

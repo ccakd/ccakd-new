@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme D — Lantern Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C83C32;
+    --red-soft: #E8655C;
+    --red-bg: #FEF5F4;
+    --gold: #D4A843;
+    --gold-light: #F5E6C4;
+    --charcoal: #2C2421;
+    --text: #4A3F3A;
+    --text-light: #8C7E76;
+    --border: #F0EBE6;
+    --bg: #FDFCFB;
+    --bg-alt: #FAF7F4;
+    --white: #FFFFFF;
+
+    --font-display: 'DM Serif Display', 'Noto Sans SC', 'Noto Sans TC', Georgia, serif;
+    --font-body: 'Source Sans 3', 'Noto Sans SC', 'Noto Sans TC', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); color: var(--text); background: var(--bg); line-height: 1.65; }
+
+  /* ===== TOP BAR ===== */
+  .topbar { background: var(--charcoal); padding: 0.3rem 0; font-size: 0.78rem; }
+  .topbar .w { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+  .topbar a { color: #aaa; text-decoration: none; }
+  .topbar a:hover { color: #fff; }
+  .lang { display: flex; gap: 0.2rem; border-left: 1px solid #555; padding-left: 0.75rem; margin-left: 0.5rem; }
+  .lang a { padding: 0.1rem 0.45rem; border-radius: 3px; font-weight: 600; font-size: 0.72rem; }
+  .lang a.on { background: var(--red); color: #fff; }
+  .lang a:not(.on) { color: #888; }
+
+  /* ===== NAV ===== */
+  nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  nav .w { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-family: var(--font-display); font-size: 1.3rem; color: var(--red); text-decoration: none; }
+  .nav-links { display: flex; gap: 1.8rem; }
+  .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.on { color: var(--red); }
+
+  /* ===== HERO CAROUSEL ===== */
+  .hero { position: relative; height: 440px; overflow: hidden; }
+  .hero-slides { display: flex; height: 100%; animation: slide 20s ease-in-out infinite; }
+  .hero-slide {
+    min-width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    position: relative;
+  }
+  .hero-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%); }
+  @keyframes slide {
+    0%, 28% { transform: translateX(0); }
+    33%, 61% { transform: translateX(-100%); }
+    66%, 94% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+  }
+  .hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+    max-width: 1140px; margin: 0 auto; padding: 0 1.5rem 3rem;
+    color: white;
+  }
+  .hero h1 { font-family: var(--font-display); font-size: 2.6rem; line-height: 1.15; text-shadow: 0 1px 8px rgba(0,0,0,0.3); max-width: 550px; }
+  .hero p { margin-top: 0.6rem; font-size: 1rem; opacity: 0.9; font-weight: 300; max-width: 450px; }
+  .hero-btn {
+    display: inline-block; margin-top: 1.25rem;
+    padding: 0.7rem 1.8rem; background: var(--red); color: white;
+    border-radius: 5px; text-decoration: none; font-weight: 600; font-size: 0.88rem;
+    transition: all 0.2s; box-shadow: 0 2px 10px rgba(200,60,50,0.3);
+  }
+  .hero-btn:hover { background: var(--red-soft); transform: translateY(-1px); }
+  .hero-dots {
+    position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 3;
+    display: flex; gap: 0.5rem;
+  }
+  .hero-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); }
+  .hero-dots span.on { background: white; width: 20px; border-radius: 4px; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 3.5rem 1.5rem; }
+  .w { max-width: 1140px; margin: 0 auto; }
+  .sh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .sh h2 { font-family: var(--font-display); font-size: 1.65rem; color: var(--charcoal); }
+  .sh a { color: var(--red); text-decoration: none; font-weight: 600; font-size: 0.85rem; }
+  .sh a:hover { text-decoration: underline; }
+  .alt { background: var(--bg-alt); }
+
+  /* ===== ANNOUNCEMENT CARDS ===== */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .card {
+    background: var(--white); border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border); transition: all 0.25s;
+  }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.05); transform: translateY(-2px); }
+  .card-img {
+    height: 160px; background: var(--bg-alt);
+    display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
+    background-size: cover; background-position: center;
+  }
+  .card-body { padding: 1.25rem; }
+  .card-date { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.35rem; }
+  .card-body h3 { font-family: var(--font-display); font-size: 1.08rem; color: var(--charcoal); margin-bottom: 0.35rem; }
+  .card-body p { color: var(--text-light); font-size: 0.87rem; line-height: 1.55; }
+  .tag { display: inline-block; margin-top: 0.6rem; padding: 0.15rem 0.55rem; background: var(--red-bg); color: var(--red); border-radius: 3px; font-size: 0.72rem; font-weight: 600; }
+
+  /* ===== EVENT LIST ===== */
+  .events { display: flex; flex-direction: column; gap: 0.75rem; }
+  .ev {
+    display: flex; background: var(--white); border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border); transition: all 0.25s;
+  }
+  .ev:hover { border-color: #ddd5cd; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  .ev-date {
+    min-width: 72px; background: var(--red); color: white;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.75rem;
+  }
+  .ev-date .m { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.85; }
+  .ev-date .d { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+  .ev-body { padding: 1rem 1.25rem; flex: 1; }
+  .ev-body h3 { font-family: var(--font-display); font-size: 1rem; color: var(--charcoal); margin-bottom: 0.2rem; }
+  .ev-body p { color: var(--text-light); font-size: 0.84rem; }
+  .ev-loc { color: var(--text-light); font-size: 0.78rem; margin-top: 0.3rem; }
+
+  /* ===== PROGRAMS ===== */
+  .progs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .prog {
+    background: var(--white); border-radius: 8px; padding: 1.5rem;
+    border: 1px solid var(--border); transition: all 0.25s;
+  }
+  .prog:hover { border-color: var(--gold-light); }
+  .prog-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+  .prog h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--charcoal); margin-bottom: 0.35rem; }
+  .prog p { color: var(--text-light); font-size: 0.85rem; line-height: 1.55; }
+
+  /* ===== GALLERY ===== */
+  .gal { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 160px 160px; gap: 0.6rem; }
+  .gi {
+    border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.3s;
+    background-size: cover; background-position: center; background-color: var(--bg-alt);
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--text-light);
+  }
+  .gi:hover { opacity: 0.9; transform: scale(1.01); }
+  .gi:first-child { grid-column: span 2; grid-row: span 2; font-size: 2.5rem; }
+
+  /* ===== NEWSLETTER ===== */
+  .nl {
+    background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+    padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  }
+  .nl h2 { font-family: var(--font-display); font-size: 1.4rem; color: var(--charcoal); }
+  .nl p { color: var(--text-light); margin-top: 0.3rem; font-size: 0.9rem; max-width: 380px; }
+  .nl-form { display: flex; gap: 0.5rem; }
+  .nl-form input {
+    padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 5px;
+    font-size: 0.9rem; min-width: 240px; font-family: var(--font-body); color: var(--text);
+  }
+  .nl-form input:focus { outline: none; border-color: var(--red); }
+  .nl-form button {
+    padding: 0.7rem 1.5rem; background: var(--red); color: white; border: none; border-radius: 5px;
+    font-weight: 600; font-size: 0.88rem; cursor: pointer; font-family: var(--font-body); transition: background 0.2s;
+  }
+  .nl-form button:hover { background: var(--red-soft); }
+
+  /* ===== FOOTER ===== */
+  footer { background: var(--charcoal); color: #999; padding: 2rem 1.5rem; font-size: 0.85rem; }
+  footer .w { display: flex; justify-content: space-between; align-items: center; }
+  footer a { color: #bbb; text-decoration: none; }
+  footer a:hover { color: var(--gold-light); }
+  .fl { display: flex; gap: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .hero { height: 340px; }
+    .hero h1 { font-size: 1.8rem; }
+    .cards, .progs { grid-template-columns: 1fr; }
+    .gal { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 120px); }
+    .gal .gi:first-child { grid-column: span 2; }
+    .nl { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    .nl-form { flex-direction: column; }
+    .nl-form input { min-width: 100%; }
+    .nav-links { display: none; }
+    footer .w { flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="w"><a href="#">Login</a><a href="#">Sign Up</a><div class="lang"><a href="#" class="on">EN</a><a href="#">简体</a><a href="#">繁體</a></div></div></div>
+
+<nav><div class="w">
+  <a href="#" class="logo">CCAKD</a>
+  <div class="nav-links">
+    <a href="#" class="on">Home</a><a href="#">Events</a><a href="#">Programs</a><a href="#">Gallery</a><a href="#">About</a><a href="#">Membership</a>
+  </div>
+</div></nav>
+
+<section class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09301.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg')"></div>
+  </div>
+  <div class="hero-content">
+    <h1>Welcome to the Chinese Canadian Association of Kingston</h1>
+    <p>Connecting families, celebrating culture, and building community since 1977.</p>
+    <a href="#" class="hero-btn">Become a Member →</a>
+  </div>
+  <div class="hero-dots"><span class="on"></span><span></span><span></span></div>
+</section>
+
+<section><div class="w">
+  <div class="sh"><h2>Announcements</h2><a href="#">View All →</a></div>
+  <div class="cards">
+    <div class="card"><div class="card-img" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div><div class="card-body"><div class="card-date">March 10, 2026</div><h3>2026 Annual General Meeting Notice</h3><p>All members are invited to attend our AGM on March 28th at the Kingston Community Centre.</p><span class="tag">Important</span></div></div>
+    <div class="card"><div class="card-img" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A0955.jpg')"></div><div class="card-body"><div class="card-date">March 5, 2026</div><h3>Scholarship Applications Now Open</h3><p>CCAKD is proud to offer scholarships for graduating students of Chinese heritage.</p><span class="tag">Scholarship</span></div></div>
+    <div class="card"><div class="card-img" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2025/08/DH0A1237.jpg')"></div><div class="card-body"><div class="card-date">February 28, 2026</div><h3>Lunar New Year Celebration Recap</h3><p>Thank you to everyone who attended our biggest celebration yet!</p><span class="tag">Community</span></div></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="w">
+  <div class="sh"><h2>Upcoming Events</h2><a href="#">See All Events →</a></div>
+  <div class="events">
+    <div class="ev"><div class="ev-date"><span class="m">Mar</span><span class="d">28</span></div><div class="ev-body"><h3>Annual General Meeting 2026</h3><p>Election of new executives, financial reports, and community planning.</p><div class="ev-loc">📍 Kingston Community Centre</div></div></div>
+    <div class="ev"><div class="ev-date"><span class="m">Apr</span><span class="d">12</span></div><div class="ev-body"><h3>Spring Dumpling Making Workshop</h3><p>A fun, hands-on event for all ages. Learn to wrap and cook traditional dumplings!</p><div class="ev-loc">📍 St. Lawrence College Kitchen Lab</div></div></div>
+    <div class="ev"><div class="ev-date"><span class="m">May</span><span class="d">03</span></div><div class="ev-body"><h3>Asian Heritage Month Opening Gala</h3><p>Kick off Asian Heritage Month with performances, food, and a keynote speaker.</p><div class="ev-loc">📍 Grand Theatre, Kingston</div></div></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="sh"><h2>Programs</h2><a href="#">See All →</a></div>
+  <div class="progs">
+    <div class="prog"><div class="prog-icon">🀄</div><h3>Mahjong Social Club</h3><p>Weekly casual mahjong games. All skill levels welcome.</p></div>
+    <div class="prog"><div class="prog-icon">📚</div><h3>Chinese Language Classes</h3><p>Mandarin and Cantonese for children and adults.</p></div>
+    <div class="prog"><div class="prog-icon">🎨</div><h3>Cultural Arts Workshop</h3><p>Calligraphy, painting, papercutting, and more.</p></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="w">
+  <div class="sh"><h2>Gallery</h2><a href="#">View All Albums →</a></div>
+  <div class="gal">
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9593.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09301.jpg')"></div>
+    <div class="gi" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2025/08/DH0A1237.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg')"></div>
+    <div class="gi" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/20240225_132618.jpg')"></div>
+    <div class="gi" style="background-image:url('https://www.ccakd.ca/wp-content/uploads/2023/12/3F1A1878-拷贝-scaled.jpg')"></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="nl">
+    <div><h2>Subscribe To Our Newsletter</h2><p>Get monthly updates on events and programs directly to your inbox.</p></div>
+    <form class="nl-form" onsubmit="return false"><input type="email" placeholder="Your Email" /><button>Subscribe</button></form>
+  </div>
+</div></section>
+
+<footer><div class="w"><p>&copy; 2026 Chinese Canadian Association of Kingston and District</p><div class="fl"><a href="#">Terms</a><a href="#">info@ccakd.ca</a></div></div></footer>
+
+</body>
+</html>

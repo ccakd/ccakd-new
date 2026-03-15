@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option B — Floating Color Orbs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #D04830;
+    --accent-bg: #FEF2F0;
+    --text: #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-tertiary: #999;
+    --border: #E8E8ED;
+    --pill: 30px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', system-ui, sans-serif; color: var(--text); background: #fff; }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    background: #FAFAFA;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.74rem;
+    padding: 3px 0;
+  }
+  .topbar .w { max-width: 1080px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; }
+  .topbar a { color: var(--text-tertiary); text-decoration: none; }
+  .topbar a:hover { color: var(--text); }
+  .lang { display: flex; gap: 0.2rem; margin-left: 0.75rem; }
+  .lang a { padding: 0.15rem 0.6rem; border-radius: var(--pill); font-weight: 500; font-size: 0.7rem; }
+  .lang a.on { background: var(--text); color: #fff; }
+  .lang a:not(.on) { color: var(--text-tertiary); }
+
+  /* ===== NAV — OPTION B: FLOATING COLOR ORBS ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    overflow: hidden;
+    transition: background 0.4s ease;
+  }
+
+  /* Orb 1 — warm coral */
+  nav::before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 120px;
+    background: radial-gradient(ellipse, rgba(208, 72, 48, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -20px;
+    left: 15%;
+    animation: orb-float-1 8s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Orb 2 — golden amber */
+  nav::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    background: radial-gradient(ellipse, rgba(218, 165, 70, 0.10) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -10px;
+    right: 20%;
+    animation: orb-float-2 10s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Third orb via a child element */
+  .nav-orb {
+    position: absolute;
+    width: 160px;
+    height: 90px;
+    background: radial-gradient(ellipse, rgba(180, 100, 60, 0.09) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -15px;
+    left: 55%;
+    animation: orb-float-3 12s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 0;
+  }
+
+  nav.nav-solid::before,
+  nav.nav-solid::after,
+  nav.nav-solid .nav-orb {
+    opacity: 0;
+  }
+
+  nav.nav-solid {
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 1px 12px rgba(0,0,0,0.04);
+  }
+
+  @keyframes orb-float-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, 8px) scale(1.1); }
+    66% { transform: translate(-30px, -5px) scale(0.95); }
+  }
+
+  @keyframes orb-float-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40% { transform: translate(-80px, 6px) scale(1.15); }
+    70% { transform: translate(40px, -4px) scale(0.9); }
+  }
+
+  @keyframes orb-float-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, 10px) scale(1.05); }
+    50% { transform: translate(-40px, -3px) scale(1.1); }
+    75% { transform: translate(20px, 5px) scale(0.95); }
+  }
+
+  nav .w { max-width: 1080px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: relative; z-index: 1; }
+  .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .logo img { height: 40px; }
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-title { font-family: 'Noto Serif SC', serif; font-size: 0.92rem; font-weight: 600; color: var(--text); line-height: 1.2; letter-spacing: -0.01em; }
+  .logo-sub { font-size: 0.68rem; color: var(--text-tertiary); line-height: 1.3; letter-spacing: 0.02em; }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.84rem; padding: 0.35rem 0.85rem; border-radius: var(--pill); transition: all 0.2s; }
+  .nav-links a:hover { background: #F5F5F7; color: var(--text); }
+  .nav-links a.on { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+
+  /* ===== HERO ===== */
+  .hero { position: relative; height: 480px; overflow: hidden; background: #000; }
+  .hero-track { display: flex; height: 100%; animation: slide 21s ease-in-out infinite; }
+  .hero-slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
+  .hero-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%); }
+  @keyframes slide {
+    0%, 28% { transform: translateX(0); }
+    33%, 61% { transform: translateX(-100%); }
+    66%, 94% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+  }
+  .hero-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 0 2rem 3.5rem; color: white; }
+  .hero h1 { font-family: 'Noto Serif SC', serif; font-size: 2.8rem; font-weight: 600; line-height: 1.15; max-width: 520px; letter-spacing: -0.02em; }
+  .hero p { font-size: 1rem; opacity: 0.85; font-weight: 300; margin-top: 0.6rem; }
+  .hero-btn { display: inline-block; margin-top: 1.5rem; padding: 0.65rem 1.6rem; background: white; color: var(--text); border-radius: var(--pill); text-decoration: none; font-weight: 500; font-size: 0.85rem; }
+  .dots { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; gap: 6px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); display: block; }
+  .dots i.on { width: 20px; border-radius: 3px; background: rgba(255,255,255,0.85); }
+
+  /* Filler */
+  .filler { padding: 4rem 2rem; max-width: 1080px; margin: 0 auto; }
+  .filler h2 { font-family: 'Noto Serif SC', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+  .filler p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; }
+  .badge { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--accent); color: white; padding: 0.6rem 1.2rem; border-radius: var(--pill); font-size: 0.85rem; font-weight: 500; z-index: 100; box-shadow: 0 4px 20px rgba(208,72,48,0.3); }
+</style>
+</head>
+<body>
+
+<div class="badge">Option B — Floating Orbs</div>
+
+<div class="topbar">
+  <div class="w">
+    <a href="#">Login</a>
+    <a href="#">Sign Up</a>
+    <div class="lang"><a class="on" href="#">EN</a><a href="#">简体</a><a href="#">繁體</a></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-orb"></div>
+  <div class="w">
+    <a href="#" class="logo">
+      <img src="https://lists.ccakd.ca/uploads/ccakd_logo_100.png" alt="CCAKD">
+      <div class="logo-text">
+        <span class="logo-title">Chinese Canadian Association</span>
+        <span class="logo-sub">of Kingston & District</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="on" href="#">Home</a>
+      <a href="#">Events</a>
+      <a href="#">Programs</a>
+      <a href="#">Gallery</a>
+      <a href="#">About</a>
+      <a href="#">Membership</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-track">
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2026/02/DH0A9921.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/09/DSC09302.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://ccakdwordpressmedia.blob.core.windows.net/clouduploads/2025/08/DH0A8147.jpg')"></div>
+  </div>
+  <div class="hero-content">
+    <h1>Connecting Families, Celebrating Culture</h1>
+    <p>Connecting families, celebrating culture, and building community in Kingston since 1977.</p>
+    <a href="#" class="hero-btn">Become a Member &rarr;</a>
+  </div>
+  <div class="dots"><i class="on"></i><i></i><i></i></div>
+</div>
+
+<div class="filler">
+  <h2>Announcements</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+</div>
+
+<script>
+  const nav = document.querySelector('nav');
+  const hero = document.querySelector('.hero');
+  if (nav && hero) {
+    const threshold = hero.offsetHeight;
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('nav-solid', window.scrollY > threshold);
+    }, { passive: true });
+  }
+</script>
+</body>
+</html>
