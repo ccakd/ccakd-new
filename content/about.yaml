@@ -5,14 +5,14 @@ executives:
     title_en: President
     title_zh: 会长
     title_zhtw: 會長
-  - name: ꓪanpeng Yang
-    title_en: Co-Vice President / Publication Coordinator
-    title_zh: 联合副会长 / 出版协调员
-    title_zhtw: 聯合副會長 / 出版協調員
   - name: Yan Ke
     title_en: Co-Vice President / Volunteer Coordinator
     title_zh: 联合副会长 / 志愿者协调员
     title_zhtw: 聯合副會長 / 志願者協調員
+  - name: ꓪanpeng Yang
+    title_en: Co-Vice President / Publication Coordinator
+    title_zh: 联合副会长 / 出版协调员
+    title_zhtw: 聯合副會長 / 出版協調員
   - name: Ying Zhan
     title_en: Secretary
     title_zh: 秘书
