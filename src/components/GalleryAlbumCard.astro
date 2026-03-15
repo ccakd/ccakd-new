@@ -24,10 +24,14 @@ const dateStr = new Date(entry.date).toLocaleDateString(
   class="group block bg-white rounded-2xl border border-porcelain-border overflow-hidden hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all"
 >
   {entry.cover_image ? (
-    <div
-      class="h-56 bg-porcelain-section bg-cover bg-center group-hover:scale-[1.03] transition-transform duration-300"
-      style={`background-image:url('${entry.cover_image}')`}
-    />
+    <div class="h-56 bg-porcelain-section overflow-hidden">
+      <img
+        src={entry.cover_image}
+        alt={title}
+        loading="lazy"
+        class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
+      />
+    </div>
   ) : (
     <div class="h-56 bg-porcelain-section flex items-center justify-center text-porcelain-tertiary text-4xl">
       📷
