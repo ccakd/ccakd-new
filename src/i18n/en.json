@@ -30,7 +30,10 @@
     "newsletterDesc": "Monthly updates on events and programs delivered to your inbox.",
     "subscribe": "Subscribe",
     "emailPlaceholder": "Your Email",
-    "socialLinks": "Connect With Us"
+    "socialLinks": "Connect With Us",
+    "donateTitle": "Support Our Community",
+    "donateDesc": "Your contribution helps us continue organizing events, cultural programs, and services for Kingston's Chinese Canadian community.",
+    "donateButton": "Donate"
   },
   "events": {
     "title": "Events",

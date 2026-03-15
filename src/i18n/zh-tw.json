@@ -30,7 +30,10 @@
     "newsletterDesc": "每月將活動和項目資訊直接發送到您的信箱。",
     "subscribe": "訂閱",
     "emailPlaceholder": "您的信箱",
-    "socialLinks": "關注我們"
+    "socialLinks": "關注我們",
+    "donateTitle": "支持我們的社區",
+    "donateDesc": "您的捐款幫助我們繼續為京士頓華人社區舉辦活動、文化項目和各類服務。",
+    "donateButton": "捐款"
   },
   "events": {
     "title": "活動",

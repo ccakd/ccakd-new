@@ -30,7 +30,10 @@
     "newsletterDesc": "每月将活动和项目信息直接发送到您的邮箱。",
     "subscribe": "订阅",
     "emailPlaceholder": "您的邮箱",
-    "socialLinks": "关注我们"
+    "socialLinks": "关注我们",
+    "donateTitle": "支持我们的社区",
+    "donateDesc": "您的捐款帮助我们继续为京士顿华人社区举办活动、文化项目和各类服务。",
+    "donateButton": "捐款"
   },
   "events": {
     "title": "活动",

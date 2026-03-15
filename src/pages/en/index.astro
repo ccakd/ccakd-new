@@ -140,6 +140,22 @@ const recentGalleries = allGalleries
   {/* Newsletter */}
   <NewsletterSignup locale={locale} />
 
+  {/* Donate */}
+  <section class="py-14 px-8">
+    <div class="max-w-[520px] mx-auto text-center">
+      <h2 class="font-display text-xl font-semibold text-porcelain-text mb-2">{strings.home.donateTitle}</h2>
+      <p class="text-porcelain-secondary text-sm leading-relaxed mb-5">{strings.home.donateDesc}</p>
+      <a
+        href="https://donate.stripe.com/cNi4gAewT21A8Npd6T2VG03"
+        target="_blank"
+        rel="noopener"
+        class="inline-block px-6 py-2.5 bg-accent text-white rounded-pill text-sm font-medium hover:bg-accent-hover transition-colors"
+      >
+        {strings.home.donateButton} &rarr;
+      </a>
+    </div>
+  </section>
+
   {/* Social Links */}
   <SocialLinks locale={locale} />
 </Layout>
